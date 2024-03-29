@@ -1,0 +1,38 @@
+package creative.design.carrotbow.service;
+
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import creative.design.carrotbow.security.jwt.JwtUtils;
+import creative.design.carrotbow.security.jwt.RefreshToken;
+import creative.design.carrotbow.security.jwt.TokenRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class UserService {
+
+    private final TokenRepository tokenRepository;
+    private final JwtUtils jwtUtils;
+
+    public void logOut(String username){
+        tokenRepository.deleteAllByUsername(username);
+    }
+
+    public void saveRefreshToken(String refreshToken, String username){
+        tokenRepository.save(new RefreshToken(refreshToken, username));
+    }
+
+    public String refreshAccessToken(String refreshToken){
+        RefreshToken token = tokenRepository.findByToken(refreshToken).orElseThrow(() -> new JWTVerificationException("invalid or expired token"));
+        String username = jwtUtils.getUsernameFromToken(refreshToken, jwtUtils.REFRESH);
+
+        if(username==null){
+            tokenRepository.delete(token);
+            throw new JWTVerificationException("expired token");
+        }
+
+        return jwtUtils.generateAccessToken(username);
+    }
+}
