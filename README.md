@@ -33,8 +33,8 @@ Authorization: Bearer ${accessToken value}
 ### 응답
 200_ok  
 {
-  "accessToken": accessToken value,
-  "refreshToken": refreshToken value
+  "accessToken": ${accessToken value},
+  "refreshToken": ${refreshToken value}
 }
 
 
@@ -53,13 +53,13 @@ text: "logout success"
 ### POST /profile/user
 - body  
 {
-    "refreshToken": refreshToken value
+    "refreshToken": ${refreshToken value}
 }
 
 ### 응답 
 200_ok
 {
-    "accessToken": accessToken value
+    "accessToken": ${accessToken value}
 }
 
 ### Exception 
