@@ -63,16 +63,16 @@ text: "logout success"
 }
 
 ### Exception 
-request body에 refreshToken 값이 없을 경우   
-401_Unauthorized
+request body에 refreshToken 값이 없을 경우    
+401_Unauthorized   
 {
     "error": "Unauthorized",
     "message": "can't find refreshToken",
     "status": 401
 }   
 
-refreshToken이 만료됐을 경우
-401_unauthorized
+refreshToken이 만료됐을 경우   
+401_unauthorized   
 {
     "error": "Unauthorized",
     "message": "expried token",
