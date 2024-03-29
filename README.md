@@ -33,8 +33,8 @@ Authorization: Bearer ${accessToken value}
 ### 응답
 200_ok  
 {
-  "accessToken": ${accessToken value},
-  "refreshToken": ${refreshToken value}
+  "accessToken": `${accessToken value}`,
+  "refreshToken": `${refreshToken value}`
 }
 
 
