@@ -57,7 +57,7 @@ text: "logout success"
 }
 
 ### 응답 
-200_ok
+200_ok   
 {
     "accessToken": ${accessToken value}
 }
