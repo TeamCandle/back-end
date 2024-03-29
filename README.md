@@ -10,7 +10,7 @@
 Authorization: Bearer ${accessToken value}
 
 ### 응답 
-헤더에 Authorization이 없을 경우
+헤더에 Authorization이 없을 경우  
 401_Unauthorized  
   {
     "error": "Unauthorized",
@@ -19,7 +19,7 @@ Authorization: Bearer ${accessToken value}
   }
 
 유효하지 않은 accessToken일 경우   
-401_Unauthorizaed
+401_Unauthorizaed  
   {
     "error": "Unauthorized",
     "message": "Invalid or expried token",
