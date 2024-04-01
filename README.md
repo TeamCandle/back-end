@@ -3,7 +3,7 @@
 
 # API 명세
 
-## Domain 
+## Host
 ### `http://52.79.83.190`
 
 모든 요청은 헤더에 Authorization을 포함 해야함 (로그아웃, accessToken 재발급 제외)   
@@ -28,7 +28,7 @@ Authorization: Bearer ${accessToken value}
 
 
 ## 로그인
-### GET /profile/user
+### GET /user/login/kakao
 
 ### 응답
 200_ok  
