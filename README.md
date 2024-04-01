@@ -4,7 +4,7 @@
 # API 명세
 
 ## Host
-### `http://52.79.83.190`
+### `http://13.209.220.187`
 
 모든 요청은 헤더에 Authorization을 포함 해야함 (로그아웃, accessToken 재발급 제외)   
 Authorization: Bearer ${accessToken value}
