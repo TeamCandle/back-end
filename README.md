@@ -50,7 +50,7 @@ text: "logout success"
 
 
 ## accessToken 재발급 
-### POST /profile/user
+### POST /user/accessToken
 - body  
 {
     "refreshToken": ${refreshToken value}
