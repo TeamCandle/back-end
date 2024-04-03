@@ -84,7 +84,7 @@ refreshToken이 만료됐을 경우
 
 
 ## 유저 프로필 정보
-### POST /profile/user   
+### GET /profile/user   
 
 ### 응답
 200_ok   
