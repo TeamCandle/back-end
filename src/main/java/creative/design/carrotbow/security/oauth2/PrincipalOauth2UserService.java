@@ -1,10 +1,11 @@
 package creative.design.carrotbow.security.oauth2;
 
 import creative.design.carrotbow.domain.User;
-import creative.design.carrotbow.repository.UserRepository;
+import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.security.oauth2.provider.KakaoUserInfo;
 import creative.design.carrotbow.security.oauth2.provider.Oauth2UserInfo;
+import creative.design.carrotbow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -12,7 +13,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -54,7 +54,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oauth2UserInfo.getProviderId();
         String username = provider+"_"+providerId;
 
-        User userEntity = userRepository.findByUsername(username).orElse(null);
+        User userEntity = userService.findReadUser(username);
 
         if(userEntity==null){
             String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
@@ -69,10 +69,19 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             userEntity = User.builder().username(username).password(password).email(email)
                     .role(role).phNum(phNum).name(name).gender(gender).birthYear(birthYear).provider(provider).providerId(providerId)
                     .build();
-            userRepository.save(userEntity);
+            userService.registerUser(userEntity);
         }
 
-        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+        return new PrincipalDetails(
+                AuthenticationUser.builder()
+                        .id(userEntity.getId())
+                        .username(userEntity.getUsername())
+                        .password(userEntity.getPassword())
+                        .email(userEntity.getEmail())
+                        .role(userEntity.getRole())
+                        .provider(userEntity.getProvider())
+                        .providerId(userEntity.getProviderId()).build()
+                , oAuth2User.getAttributes());
     }
 }
 

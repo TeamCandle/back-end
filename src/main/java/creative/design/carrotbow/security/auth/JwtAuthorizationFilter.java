@@ -3,8 +3,8 @@ package creative.design.carrotbow.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import creative.design.carrotbow.domain.User;
-import creative.design.carrotbow.repository.UserRepository;
 import creative.design.carrotbow.security.jwt.JwtUtils;
+import creative.design.carrotbow.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,12 +20,12 @@ import java.util.Map;
 
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private UserRepository userRepository;
+    private UserService userService;
     private JwtUtils jwtUtils;
 
 
-    public JwtAuthorizationFilter(UserRepository userRepository, JwtUtils jwtUtils) {
-        this.userRepository = userRepository;
+    public JwtAuthorizationFilter(UserService userService, JwtUtils jwtUtils) {
+        this.userService = userService;
         this.jwtUtils = jwtUtils;
     }
 
@@ -52,8 +52,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 response.getWriter().write(mapper.writeValueAsString(body));
             }
             else {
-                User userEntity = userRepository.findByUsername(username).get();
-                PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+                User userEntity = userService.findReadUser(username);
+                PrincipalDetails principalDetails = new PrincipalDetails(
+                        AuthenticationUser.builder()
+                                .id(userEntity.getId())
+                                .username(userEntity.getUsername())
+                                .password(userEntity.getPassword())
+                                .email(userEntity.getEmail())
+                                .role(userEntity.getRole())
+                                .provider(userEntity.getProvider())
+                                .providerId(userEntity.getProviderId())
+                                .build());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 filterChain.doFilter(request, response);

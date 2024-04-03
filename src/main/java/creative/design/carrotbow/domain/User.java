@@ -33,9 +33,9 @@ public class User {
     private String name;
     private String gender;
     private int birthYear;
-
     private String phNum;
     private String description;
+    private String image;
 
     @CreationTimestamp
     private LocalDateTime CreateDate;
@@ -55,5 +55,13 @@ public class User {
         this.gender = gender;
         this.birthYear = birthYear;
         this.phNum = phNum;
+    }
+
+    public void changeDescription(String description){
+        this.description = description;
+    }
+
+    public void changeImage(String imae){
+        this.image = image;
     }
 }

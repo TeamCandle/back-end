@@ -10,11 +10,11 @@ public class UserProfileDto {
     private String gender;
     private int age;
     private String description;
-    private String image;
+    private byte[] image;
 
 
     @Builder
-    public UserProfileDto(String name, String gender, int age, String description, String image) {
+    public UserProfileDto(String name, String gender, int age, String description, byte[] image) {
         this.name = name;
         this.gender = gender;
         this.age = age;

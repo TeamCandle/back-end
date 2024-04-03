@@ -2,7 +2,6 @@ package creative.design.carrotbow.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import creative.design.carrotbow.repository.UserRepository;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.security.oauth2.AuthenticationFailureHandler;
 import creative.design.carrotbow.security.oauth2.AuthenticationSuccessHandler;
@@ -31,9 +30,8 @@ public class SecurityConfig {
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserService userService;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -49,7 +47,7 @@ public class SecurityConfig {
                         .failureHandler(new AuthenticationFailureHandler())
                         .userInfoEndpoint(endpoint ->
                                 endpoint.userService(principalOauth2UserService)))
-                .addFilterBefore(new JwtAuthorizationFilter(userRepository, jwtUtils), OAuth2LoginAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(userService, jwtUtils), OAuth2LoginAuthenticationFilter.class)
                 .exceptionHandling(handling ->
                         handling
                                 .authenticationEntryPoint((request, response, authException) ->{

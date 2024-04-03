@@ -1,15 +1,16 @@
 package creative.design.carrotbow.controller;
 
-import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.dto.UserProfileDto;
-import creative.design.carrotbow.repository.UserRepository;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
+import creative.design.carrotbow.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class ProfileController {
 
-    private final UserRepository userRepository;
+    private final ProfileService profileService;
 
     @GetMapping({"","/"})
     @ResponseBody
@@ -30,15 +31,16 @@ public class ProfileController {
     @ResponseBody
     public UserProfileDto getUserProfile(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        User user = principalDetails.getUser();
+        return profileService.getUserProfile(principalDetails.getUser());
+    }
 
-        int age = LocalDate.now().getYear() - user.getBirthYear() + 1;
+    @PostMapping("/profile/user")
+    public void handleTextData(@RequestBody String description, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        profileService.changeUserDescription(principalDetails.getUser(), description);
+    }
 
-        return UserProfileDto
-                .builder()
-                .name(user.getName())
-                .gender(user.getGender())
-                .age(age)
-                .description(user.getDescription()).build();
+    @PostMapping(value = "/profile/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void handleImageData(@RequestPart("image") MultipartFile image, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        profileService.changeUserImage(principalDetails.getUser(), image);
     }
 }

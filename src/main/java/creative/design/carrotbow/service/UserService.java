@@ -1,6 +1,8 @@
 package creative.design.carrotbow.service;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import creative.design.carrotbow.domain.User;
+import creative.design.carrotbow.repository.UserRepository;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.security.jwt.RefreshToken;
 import creative.design.carrotbow.security.jwt.TokenRepository;
@@ -13,8 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JwtUtils jwtUtils;
+
+
+    @Transactional(readOnly = true)
+    public User findReadUser(String username){
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    public User findUser(Long id){
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public void registerUser(User user){
+        userRepository.save(user);
+    }
 
     public void logOut(String username){
         tokenRepository.deleteAllByUsername(username);

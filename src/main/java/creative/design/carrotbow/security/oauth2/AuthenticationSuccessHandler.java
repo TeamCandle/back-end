@@ -1,6 +1,7 @@
 package creative.design.carrotbow.security.oauth2;
 
 import creative.design.carrotbow.domain.User;
+import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.service.UserService;
@@ -27,7 +28,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        User user = principalDetails.getUser();
+        AuthenticationUser user = principalDetails.getUser();
 
         String accessToken = jwtUtils.generateAccessToken(user.getUsername());
         String refreshToken = jwtUtils.generateRefreshToken(user.getUsername());

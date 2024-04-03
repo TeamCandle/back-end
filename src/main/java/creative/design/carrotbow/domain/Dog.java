@@ -16,7 +16,8 @@ public class Dog {
 
     private String name;
     private String gender;
-    private Boolean Neutered;
+
+    private Boolean neutered;
     private String age;
     private Integer size;
     private Integer weight;
@@ -36,7 +37,7 @@ public class Dog {
     public Dog(String name, String gender, Boolean neutered, String age, Integer size, Integer weight, String breed, String description, User owner) {
         this.name = name;
         this.gender = gender;
-        Neutered = neutered;
+        neutered = neutered;
         this.age = age;
         this.size = size;
         this.weight = weight;

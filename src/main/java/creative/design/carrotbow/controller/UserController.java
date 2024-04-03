@@ -59,7 +59,7 @@ public class UserController {
         String accessToken = userService.refreshAccessToken(refreshToken);
 
         Map<String, String> token = new HashMap<>();
-        token.put("accessToken", "Bearer " + accessToken);
+        token.put("accessToken", accessToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(token);
 
