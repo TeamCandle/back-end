@@ -25,6 +25,7 @@ public class S3Service {
 
     public String saveUserImage(String username, MultipartFile image){
         try {
+
             String objectKey = "users/" + username + "/profile." + getExtension(image.getOriginalFilename());
 
             ObjectMetadata metadata= new ObjectMetadata();
@@ -35,6 +36,7 @@ public class S3Service {
             metadata.addUserMetadata("uploadDate", new Date().toString());
 
             s3Client.putObject(bucket,objectKey,image.getInputStream(),metadata);
+            System.out.println("save!");
             return objectKey;
 
         } catch (IOException e) {
@@ -44,6 +46,11 @@ public class S3Service {
     }
 
     public byte[] loadImage(String objectKey){
+
+        if(objectKey==null){
+            return null;
+        }
+
         GetObjectRequest getObjectRequest = new GetObjectRequest(bucket, objectKey);
 
         byte[] imageBytes;
@@ -59,6 +66,13 @@ public class S3Service {
     }
 
     public void deleteImage(String objectKey){
+
+        if(objectKey==null){
+            return;
+        }
+
+        System.out.println("delete!");
+
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, objectKey);
         s3Client.deleteObject(deleteObjectRequest);
     }

@@ -2,6 +2,7 @@ package creative.design.carrotbow.security.jwt;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,10 +12,10 @@ import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class TokenRepository {
 
-    private final EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
     public Long save(RefreshToken refreshToken){
         em.persist(refreshToken);

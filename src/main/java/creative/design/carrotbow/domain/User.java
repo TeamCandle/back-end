@@ -61,7 +61,7 @@ public class User {
         this.description = description;
     }
 
-    public void changeImage(String imae){
+    public void changeImage(String image){
         this.image = image;
     }
 }

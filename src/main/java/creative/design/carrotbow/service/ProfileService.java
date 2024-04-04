@@ -2,7 +2,10 @@ package creative.design.carrotbow.service;
 
 import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.dto.UserProfileDto;
+import creative.design.carrotbow.repository.UserRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ public class ProfileService {
 
     private final S3Service s3Service;
     private final UserService userService;
+
 
     public UserProfileDto getUserProfile(AuthenticationUser authenticationUser){
 
@@ -38,16 +42,18 @@ public class ProfileService {
 
     @Transactional
     public void changeUserDescription(AuthenticationUser authenticationUser, String description){
-        User user  = userService.findUser(authenticationUser.getId());
+        User user = userService.findUser(authenticationUser.getId());
         user.changeDescription(description);
     }
+
+
 
     @Transactional
     public void changeUserImage(AuthenticationUser authenticationUser, MultipartFile image){
         User user  = userService.findUser(authenticationUser.getId());
+        s3Service.deleteImage(user.getImage());
         String objectKey = s3Service.saveUserImage(user.getUsername(), image);
 
-        s3Service.deleteImage(user.getImage());
         user.changeImage(objectKey);
     }
 

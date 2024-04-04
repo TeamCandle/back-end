@@ -3,6 +3,8 @@ package creative.design.carrotbow.repository;
 
 import creative.design.carrotbow.domain.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
@@ -22,10 +24,7 @@ public class UserRepository {
     }
 
     public Optional<User> findById(Long id){
-        return em.createQuery("select u from User u where u.id =:id", User.class)
-                .setParameter("id", id)
-                .getResultList().stream()
-                .findFirst();
+        return Optional.ofNullable(em.find(User.class, id));
     }
 
     public Optional<User> findByUsername(String username){
