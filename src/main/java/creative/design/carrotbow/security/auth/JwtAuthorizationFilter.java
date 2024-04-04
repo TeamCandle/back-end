@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 response.getWriter().write(mapper.writeValueAsString(body));
             }
             else {
-                User userEntity = userService.findReadUser(username);
+                User userEntity = userService.findRead(username);
                 PrincipalDetails principalDetails = new PrincipalDetails(
                         AuthenticationUser.builder()
                                 .id(userEntity.getId())
@@ -60,8 +60,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                 .password(userEntity.getPassword())
                                 .email(userEntity.getEmail())
                                 .role(userEntity.getRole())
-                                .provider(userEntity.getProvider())
-                                .providerId(userEntity.getProviderId())
                                 .build());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);

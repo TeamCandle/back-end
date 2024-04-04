@@ -17,20 +17,25 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+
     private final JwtUtils jwtUtils;
 
 
     @Transactional(readOnly = true)
-    public User findReadUser(String username){
+    public User findRead(String username){
         return userRepository.findByUsername(username).orElse(null);
     }
 
-    public User findUser(Long id){
+    @Transactional(readOnly = true)
+    public User findReadWithDogs(String username){
+        return userRepository.findByUsernameWithDogs(username).orElse(null);
+    }
 
+    public User find(Long id){
         return userRepository.findById(id).orElse(null);
     }
 
-    public void registerUser(User user){
+    public void register(User user){
         userRepository.save(user);
     }
 
@@ -44,7 +49,7 @@ public class UserService {
 
     public String refreshAccessToken(String refreshToken){
         RefreshToken token = tokenRepository.findByToken(refreshToken).orElseThrow(() -> new JWTVerificationException("invalid or expired token"));
-        String username = jwtUtils.getUsernameFromToken(refreshToken, jwtUtils.REFRESH);
+        String username = jwtUtils.getUsernameFromToken(refreshToken, JwtUtils.REFRESH);
 
         if(username==null){
             tokenRepository.delete(token);

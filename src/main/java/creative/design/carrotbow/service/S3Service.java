@@ -26,6 +26,10 @@ public class S3Service {
     public String saveUserImage(String username, MultipartFile image){
         try {
 
+            if(image==null){
+                return null;
+            }
+
             String objectKey = "users/" + username + "/profile." + getExtension(image.getOriginalFilename());
 
             ObjectMetadata metadata= new ObjectMetadata();
@@ -36,7 +40,31 @@ public class S3Service {
             metadata.addUserMetadata("uploadDate", new Date().toString());
 
             s3Client.putObject(bucket,objectKey,image.getInputStream(),metadata);
-            System.out.println("save!");
+            return objectKey;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String saveDogImage(String username, String dogName, MultipartFile image){
+        try {
+
+            if(image==null){
+                return null;
+            }
+
+            String objectKey = "users/" + username + "/dogs/"+ dogName + "/profile." + getExtension(image.getOriginalFilename());
+
+            ObjectMetadata metadata= new ObjectMetadata();
+            metadata.setContentType(image.getContentType());
+            metadata.setContentLength(image.getSize());
+
+            metadata.addUserMetadata("username", username);
+            metadata.addUserMetadata("uploadDate", new Date().toString());
+
+            s3Client.putObject(bucket,objectKey,image.getInputStream(),metadata);
             return objectKey;
 
         } catch (IOException e) {
@@ -70,8 +98,6 @@ public class S3Service {
         if(objectKey==null){
             return;
         }
-
-        System.out.println("delete!");
 
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, objectKey);
         s3Client.deleteObject(deleteObjectRequest);

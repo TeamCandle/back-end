@@ -1,9 +1,6 @@
 package creative.design.carrotbow.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +24,7 @@ public class User {
     private String password;
     private String email;
     private String role;
-    private String provider;
-    private String providerId;
+
 
     private String name;
     private String gender;
@@ -40,17 +36,15 @@ public class User {
     @CreationTimestamp
     private LocalDateTime CreateDate;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Dog> dogs = new ArrayList<>();
+    @OneToMany(mappedBy = "owner",  cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private final List<Dog> dogs = new ArrayList<>();
 
     @Builder
-    public User(String username, String password, String email, String role, String provider, String providerId, String name, String gender, int birthYear, String phNum) {
+    public User(String username, String password, String email, String role, String name, String gender, int birthYear, String phNum) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
         this.name = name;
         this.gender = gender;
         this.birthYear = birthYear;

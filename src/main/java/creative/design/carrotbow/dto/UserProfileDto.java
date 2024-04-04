@@ -3,6 +3,8 @@ package creative.design.carrotbow.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 
 @Data
 public class UserProfileDto {
@@ -12,13 +14,15 @@ public class UserProfileDto {
     private String description;
     private byte[] image;
 
+    private ArrayList<ListDogDto> dogList;
 
     @Builder
-    public UserProfileDto(String name, String gender, int age, String description, byte[] image) {
+    public UserProfileDto(String name, String gender, int age, String description, byte[] image, ArrayList<ListDogDto> dogList) {
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.description = description;
         this.image = image;
+        this.dogList = dogList;
     }
 }

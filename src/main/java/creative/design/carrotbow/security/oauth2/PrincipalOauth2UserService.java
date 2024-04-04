@@ -6,7 +6,7 @@ import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.security.oauth2.provider.KakaoUserInfo;
 import creative.design.carrotbow.security.oauth2.provider.Oauth2UserInfo;
 import creative.design.carrotbow.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,22 +17,22 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-        System.out.println("clientRegistration: " + userRequest.getClientRegistration());
+        //System.out.println("clientRegistration: " + userRequest.getClientRegistration());
 
-        System.out.println("accessToken: " + userRequest.getAccessToken().getTokenValue());
+        //System.out.println("accessToken: " + userRequest.getAccessToken().getTokenValue());
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        System.out.println("loadUser().getAttributes: " + oAuth2User.getAttributes());
+        //System.out.println("loadUser().getAttributes: " + oAuth2User.getAttributes());
 
         Oauth2UserInfo oauth2UserInfo = null;
 
@@ -54,9 +54,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oauth2UserInfo.getProviderId();
         String username = provider+"_"+providerId;
 
-        User userEntity = userService.findReadUser(username);
+        User user = userService.findRead(username);
 
-        if(userEntity==null){
+        if(user==null){
             String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
             String email = oauth2UserInfo.getEmail();
             String phNum = oauth2UserInfo.getPhoneNumber();
@@ -66,21 +66,20 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
             String role = "ROLE_USER";
 
-            userEntity = User.builder().username(username).password(password).email(email)
-                    .role(role).phNum(phNum).name(name).gender(gender).birthYear(birthYear).provider(provider).providerId(providerId)
+            user = User.builder().username(username).password(password).email(email)
+                    .role(role).phNum(phNum).name(name).gender(gender).birthYear(birthYear)
                     .build();
-            userService.registerUser(userEntity);
+
+            userService.register(user);
         }
 
         return new PrincipalDetails(
                 AuthenticationUser.builder()
-                        .id(userEntity.getId())
-                        .username(userEntity.getUsername())
-                        .password(userEntity.getPassword())
-                        .email(userEntity.getEmail())
-                        .role(userEntity.getRole())
-                        .provider(userEntity.getProvider())
-                        .providerId(userEntity.getProviderId()).build()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .password(user.getPassword())
+                        .email(user.getEmail())
+                        .role(user.getRole()).build()
                 , oAuth2User.getAttributes());
     }
 }
