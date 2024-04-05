@@ -163,6 +163,17 @@ text: "success change"
 }
 
 
+잘못된 ID일 경우   
+400_bad request   
+{
+  
+    "error": "bad request",
+    "message": "can't find dog",
+    "status": 400
+}   
+
+
+
 ## 애견 프로필 등록
 ### POST /profile/dog
 - content-type: multipart/form-data
@@ -308,3 +319,13 @@ required 값이 입력이 안됐거나 잘못된 값일 경우
 ### 응답
 200_ok   
 text: "success change"  
+
+
+잘못된 ID일 경우   
+400_bad request   
+{
+  
+    "error": "bad request",
+    "message": "can't find dog",
+    "status": 400
+}   
