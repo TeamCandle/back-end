@@ -130,12 +130,13 @@ text: "success change"
 ### PATCH /profile/user 
 - content-type: multipart/form-data
      
-  boundary---------  
+  -----------------  
   Content-Disposition: form-data; name="image"; filename=%{file name}  
   Content-Type: image/jpeg
 
-  ${binary data}  
-  boundary---------
+  ${binary data}
+  
+  -----------------
 
 ### 응답
 200_ok   
@@ -160,4 +161,63 @@ text: "success change"
     "description": 설명,
     "image": 이미지(base 64 byte code)
 }
+
+
+## 애견 프로필 등록
+### POST /profile/dog
+- content-type: multipart/form-data
+  
+  ----------------  
+  Content-Disposition: form-data; name="name"
+  
+  ${name value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="gender"
+
+  ${gender value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="neutered"
+
+  ${neutered value}
+  
+  ----------------
+  Content-Disposition: form-data; name="age"
+
+  ${age value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="size"
+
+  ${size value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="weight"
+
+  ${weight value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="breed"
+
+  ${breed value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="description"
+
+  ${description calue}
+  
+  ----------------
+  Content-Disposition: form-data; name="image"; filename=%{file name}  
+  Content-Type: image/jpeg
+
+  ${binary data}
+  
+  -----------------
+
+### 응답
+200_ok  
+
+
+
 
