@@ -306,8 +306,8 @@ text: "success change"
 
     {
         "message": ${에러 메시지},
-        "field": ${잘못된 필드}
-        "rejectedValue": ${거부된 값(입력된 값)}.
+        "field": ${잘못된 필드},
+        "rejectedValue": ${거부된 값(입력된 값)},
         "code": ${에러 종류}
       }
 ]
