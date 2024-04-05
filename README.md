@@ -13,6 +13,7 @@ Authorization: Bearer ${accessToken value}
 헤더에 Authorization이 없을 경우  
 401_Unauthorized  
   {
+    
     "error": "Unauthorized",
     "message": "Not logged in",
     "status": 401
@@ -21,6 +22,7 @@ Authorization: Bearer ${accessToken value}
 유효하지 않은 accessToken일 경우   
 401_Unauthorizaed  
   {
+    
     "error": "Unauthorized",
     "message": "Invalid or expried token",
     "status": 401
@@ -33,8 +35,9 @@ Authorization: Bearer ${accessToken value}
 ### 응답
 200_ok  
 {
-  "accessToken": `${accessToken value}`,
-  "refreshToken": `${refreshToken value}`
+  
+  "accessToken": `${accessToken value}`,  
+  "refreshToken": `${refreshToken value}`  
 }
 
 
@@ -59,6 +62,7 @@ text: "logout success"
 ### 응답 
 200_ok   
 {
+  
     "accessToken": ${accessToken value}
 }
 
@@ -66,6 +70,7 @@ text: "logout success"
 request body에 refreshToken 값이 없을 경우    
 401_Unauthorized   
 {
+  
     "error": "Unauthorized",
     "message": "can't find refreshToken",
     "status": 401
@@ -74,6 +79,7 @@ request body에 refreshToken 값이 없을 경우
 refreshToken이 만료됐을 경우   
 401_unauthorized   
 {
+  
     "error": "Unauthorized",
     "message": "expried token",
     "status": 401
@@ -88,13 +94,24 @@ refreshToken이 만료됐을 경우
 
 ### 응답
 200_ok   
-{
+{  
+  
     "name": 이름,
     "gender": 성별,
     "age": 나이,
-    "description": 설명 (현재 null),
-    "image": 이미지 (현재 null)
-}
+    "description": 설명,
+    "image": 이미지(base 64 byte code),  
+    애견 리스트
+    "dogList": [    
+        {  
+            "id": 애견 id(조회시 이용)
+            "name: 이름,
+            "gender": 성별, 
+            "image": 이미지(base 64 byte code)
+        },  
+        ...  
+    ]  
+}  
 
 
 
