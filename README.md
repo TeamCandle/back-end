@@ -300,7 +300,7 @@ text: "success change"
 
 
 
-### multipart/form-data 입력에서 required 값이 입력이 안됐거나 잘못된 값일 경우 응답
+### ! multipart/form-data 입력에서 required 값이 입력이 안됐거나 잘못된 값일 경우 응답
 에러 리스트 
 [ 
 
