@@ -114,5 +114,32 @@ refreshToken이 만료됐을 경우
 }  
 
 
+## 유저 프로필 설명 변경
+### PATCH /profile/user 
+- body  
+{
+  "description": ${description value}
+}
+
+### 응답
+200_ok   
+text: "success change"   
+
+
+## 유저 프로필 이미지 변경
+### PATCH /profile/user 
+- content-type: multipart/form-data
+     
+  boundary---------  
+  Content-Disposition: form-data; name="image"; filename=%{file name}  
+  Content-Type: image/jpeg
+
+  ${binary data}  
+  boundary---------
+
+
+### 응답
+200_ok   
+text: "success change"   
 
 
