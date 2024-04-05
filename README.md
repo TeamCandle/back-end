@@ -224,7 +224,7 @@ text: "success change"
 
 
 ## 애견 프로필 변경
-### POST /profile/dog
+### PATCH /profile/dog
 - content-type: multipart/form-data
 
   ----------------  
@@ -282,7 +282,29 @@ text: "success change"
   
   -----------------
 
-
 ### 응답
 200_ok   
 text: "success change"   
+
+required 값이 입력이 안됐거나 잘못된 값일 경우 
+에러 리스트 
+[ 
+
+    {
+        "defaultMessage": ${에러 메시지},
+        "field": ${잘못된 필드}
+        "rejectedValue": ${거부된 값(입력된 값)}.
+        "code": ${에러 종류}
+      }
+]
+
+▶ 에러가 났을 경우 거부된 값을 적절한 필드에 채우고 에러메시지와 함께 입력폼 재반환 (현재는 에러 메시지가 유효하지 않음)
+
+
+
+## 애견 프로필 삭제
+### DELETE /profile/dog?id=${애견 id}
+
+### 응답
+200_ok   
+text: "success change"  
