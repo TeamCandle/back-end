@@ -1,6 +1,6 @@
 package creative.design.carrotbow.domain;
 
-import creative.design.carrotbow.dto.DogRequestDto;
+import creative.design.carrotbow.dto.DogRequestForm;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +17,10 @@ public class Dog {
 
     private String name;
     private String gender;
-    private Boolean neutered;
-    private Integer age;
-    private Integer size;
-    private Integer weight;
+    private boolean neutered;
+    private int age;
+    private float size;
+    private float weight;
     private String breed;
     private String description;
 
@@ -35,11 +35,11 @@ public class Dog {
         owner.getDogs().add(this);
     }
 
-    public void changeAttr(DogRequestDto dogEdition, String image){
+    public void changeAttr(DogRequestForm dogEdition, String image){
         this.name = dogEdition.getName();
         this.age = dogEdition.getAge();
         this.gender = dogEdition.getGender();
-        this.neutered = dogEdition.getNeutered();
+        this.neutered = dogEdition.isNeutered();
         this.breed = dogEdition.getBreed();
         this.size = dogEdition.getSize();
         this.weight = dogEdition.getWeight();
@@ -48,7 +48,7 @@ public class Dog {
     }
 
     @Builder
-    public Dog(String name, String gender, Boolean neutered, Integer age, Integer size, Integer weight, String breed, String description, String image) {
+    public Dog(String name, String gender, boolean neutered, int age, float size, float weight, String breed, String description, String image) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;

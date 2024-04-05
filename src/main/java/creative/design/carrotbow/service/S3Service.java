@@ -1,10 +1,8 @@
 package creative.design.carrotbow.service;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +24,7 @@ public class S3Service {
     public String saveUserImage(String username, MultipartFile image){
         try {
 
-            if(image==null){
+            if(image.isEmpty()){
                 return null;
             }
 
@@ -51,7 +49,7 @@ public class S3Service {
     public String saveDogImage(String username, String dogName, MultipartFile image){
         try {
 
-            if(image==null){
+            if(image.isEmpty()){
                 return null;
             }
 
@@ -82,12 +80,14 @@ public class S3Service {
         GetObjectRequest getObjectRequest = new GetObjectRequest(bucket, objectKey);
 
         byte[] imageBytes;
-
         S3Object ImageObject = s3Client.getObject(getObjectRequest);
+
+
         try {
             imageBytes = IOUtils.toByteArray(ImageObject.getObjectContent());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
 
         return imageBytes;

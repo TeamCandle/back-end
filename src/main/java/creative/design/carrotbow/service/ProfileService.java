@@ -1,9 +1,10 @@
 package creative.design.carrotbow.service;
 
+import com.amazonaws.AmazonClientException;
 import creative.design.carrotbow.domain.Dog;
 import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.dto.DogProfileDto;
-import creative.design.carrotbow.dto.DogRequestDto;
+import creative.design.carrotbow.dto.DogRequestForm;
 import creative.design.carrotbow.dto.ListDogDto;
 import creative.design.carrotbow.dto.UserProfileDto;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
@@ -30,7 +31,6 @@ public class ProfileService {
 
         User user = userService.findReadWithDogs(authenticationUser.getUsername());
 
-        byte[] image = s3Service.loadImage(user.getImage());
         int age = LocalDate.now().getYear() - user.getBirthYear() + 1;
         List<Dog> dogs = user.getDogs();
 
@@ -51,7 +51,7 @@ public class ProfileService {
                 .gender(user.getGender())
                 .age(age)
                 .description(user.getDescription())
-                .image(image)
+                .image(s3Service.loadImage(user.getImage()))
                 .dogList(dogList)
                 .build();
     }
@@ -76,17 +76,21 @@ public class ProfileService {
 
 
     @Transactional
-    public void registerDogProfile(AuthenticationUser authenticationUser, DogRequestDto dogRegister){
+    public void registerDogProfile(AuthenticationUser authenticationUser, DogRequestForm dogRegister){
 
         User owner = userService.findRead(authenticationUser.getUsername());
 
         String objectKey = s3Service.saveDogImage(owner.getUsername(), dogRegister.getName(), dogRegister.getImage());
 
+        System.out.println(dogRegister.getImage()==null?"true":"false");
+        System.out.println(dogRegister.getImage());
+        System.out.println(objectKey);
+
         Dog dog = Dog.builder()
                 .name(dogRegister.getName())
                 .age(dogRegister.getAge())
                 .gender(dogRegister.getGender())
-                .neutered(dogRegister.getNeutered())
+                .neutered(dogRegister.isNeutered())
                 .size(dogRegister.getSize())
                 .weight(dogRegister.getWeight())
                 .breed(dogRegister.getBreed())
@@ -100,13 +104,14 @@ public class ProfileService {
 
 
     public DogProfileDto getDogProfile(Long id){
-        Dog dog = dogService.find(id);
+        Dog dog = dogService.findWithUser(id);
 
         return DogProfileDto.builder()
+                .owner(dog.getOwner().getName())
                 .name(dog.getName())
                 .age(dog.getAge())
                 .gender(dog.getGender())
-                .neutered(dog.getNeutered())
+                .neutered(dog.isNeutered())
                 .breed(dog.getBreed())
                 .size(dog.getSize())
                 .weight(dog.getWeight())
@@ -116,8 +121,8 @@ public class ProfileService {
     }
 
     @Transactional
-    public void changeDogProfile(DogRequestDto dogEdition){
-        Dog dog = dogService.findWithUser(dogEdition.getId());
+    public void changeDogProfile(DogRequestForm dogEdition){
+        Dog dog = dogService.find(dogEdition.getId());
         s3Service.deleteImage(dog.getImage());
         String objectKey = s3Service.saveDogImage(dog.getOwner().getUsername(), dogEdition.getName(), dogEdition.getImage());
         dog.changeAttr(dogEdition, objectKey);
@@ -125,6 +130,8 @@ public class ProfileService {
 
     @Transactional
     public void deleteDogProfile(Long id){
+        Dog dog = dogService.find(id);
+        s3Service.deleteImage(dog.getImage());
         dogService.delete(id);
     }
 }

@@ -10,17 +10,17 @@ public class DogProfileDto {
     private String name;
     private String owner;
     private String gender;
-    private Boolean neutered;
-    private Integer age;
-    private Integer size;
-    private Integer weight;
+    private boolean neutered;
+    private int age;
+    private float size;
+    private float weight;
     private String breed;
     private String description;
 
     private byte[] image;
 
     @Builder
-    public DogProfileDto(String name, String owner, String gender, Boolean neutered, Integer age, Integer size, Integer weight, String breed, String description, byte[] image) {
+    public DogProfileDto(String name, String owner, String gender, boolean neutered, int age, float size, float weight, String breed, String description, byte[] image) {
         this.name = name;
         this.owner = owner;
         this.gender = gender;
