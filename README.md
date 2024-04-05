@@ -137,9 +137,27 @@ text: "success change"
   ${binary data}  
   boundary---------
 
-
 ### 응답
 200_ok   
 text: "success change"   
 
+
+## 애견 프로필 조회
+### GET /profile/dog?id=${애견 id} 
+
+### 응답
+200_ok   
+{
+
+    "name": 이름,
+    "owner": 주인이름,
+    "gender": 성별,
+    "neutered": 중성화 여부,
+    "age": 나이,
+    "size": 크기
+    "weight": 무게,
+    "breed": 견종,
+    "description": 설명,
+    "image": 이미지(base 64 byte code)
+}
 
