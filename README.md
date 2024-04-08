@@ -132,7 +132,7 @@ text: "success change"
      
   -----------------  
   Content-Disposition: form-data; name="image"; filename=%{file name}  
-  Content-Type: image/jpeg
+  Content-Type: image
 
   ${binary data}
   
@@ -220,7 +220,7 @@ text: "success change"
   
   ----------------
   Content-Disposition: form-data; name="image"; filename=%{file name}  
-  Content-Type: image/jpeg
+  Content-Type: image
 
   ${binary data}
   
@@ -287,7 +287,7 @@ text: "success change"
   
   ----------------
   Content-Disposition: form-data; name="image"; filename=%{file name}  
-  Content-Type: image/jpeg
+  Content-Type: image
 
   ${binary data}
   
