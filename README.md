@@ -321,7 +321,7 @@ text: "success change"
 
 ### 응답
 200_ok   
-text: "success change"  
+text: "success delete"  
 
 
 잘못된 ID일 경우   
