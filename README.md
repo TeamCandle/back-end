@@ -56,6 +56,7 @@ text: "logout success"
 ### POST /user/accessToken
 - body  
 {
+
     "refreshToken": ${refreshToken value}
 }
 
@@ -332,3 +333,28 @@ text: "success delete"
     "message": "can't find dog",
     "status": 400
 }   
+
+
+
+## 애견 프로필 삭제
+### POST /requirement
+- body  
+400_bad request   
+{
+
+    "dogId": 애견 ID,
+    "careType": 케어 타입, ("WALKING"-산책, "BOARDING"-돌봄, "GROOMING"-외견 케어, "PLAYTIME"-놀아주기, "ETC"-기타)
+    "careTime": 케어 시간 , (YYYY-MM-DDTHH:mm:ssZ)
+    "careLocation": {
+      "x": 경도,
+      "y": 위도
+    },
+    "description": "설명"
+}
+
+### 응답
+200_ok   
+{
+  id: 등록 id
+}
+
