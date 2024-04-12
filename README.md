@@ -13,6 +13,7 @@ Authorization: Bearer ${accessToken value}
 헤더에 Authorization이 없을 경우  
 401_Unauthorized  
   {
+    
     "error": "Unauthorized",
     "message": "Not logged in",
     "status": 401
@@ -21,6 +22,7 @@ Authorization: Bearer ${accessToken value}
 유효하지 않은 accessToken일 경우   
 401_Unauthorizaed  
   {
+    
     "error": "Unauthorized",
     "message": "Invalid or expried token",
     "status": 401
@@ -33,8 +35,9 @@ Authorization: Bearer ${accessToken value}
 ### 응답
 200_ok  
 {
-  "accessToken": `${accessToken value}`,
-  "refreshToken": `${refreshToken value}`
+  
+  "accessToken": `${accessToken value}`,  
+  "refreshToken": `${refreshToken value}`  
 }
 
 
@@ -59,6 +62,7 @@ text: "logout success"
 ### 응답 
 200_ok   
 {
+  
     "accessToken": ${accessToken value}
 }
 
@@ -66,6 +70,7 @@ text: "logout success"
 request body에 refreshToken 값이 없을 경우    
 401_Unauthorized   
 {
+  
     "error": "Unauthorized",
     "message": "can't find refreshToken",
     "status": 401
@@ -74,6 +79,7 @@ request body에 refreshToken 값이 없을 경우
 refreshToken이 만료됐을 경우   
 401_unauthorized   
 {
+  
     "error": "Unauthorized",
     "message": "expried token",
     "status": 401
@@ -88,14 +94,241 @@ refreshToken이 만료됐을 경우
 
 ### 응답
 200_ok   
-{
+{  
+  
     "name": 이름,
     "gender": 성별,
     "age": 나이,
-    "description": 설명 (현재 null),
-    "image": 이미지 (현재 null)
+    "description": 설명,
+    "image": 이미지(base 64 byte code),  
+    애견 리스트
+    "dogList": [    
+        {  
+            "id": 애견 id(조회시 이용)
+            "name: 이름,
+            "gender": 성별, 
+            "image": 이미지(base 64 byte code)
+        },  
+        ...  
+    ]  
+}  
+
+
+## 유저 프로필 설명 변경
+### PATCH /profile/user 
+- body  
+{
+  "description": ${description value}
+}
+
+### 응답
+200_ok   
+text: "success change"   
+
+
+## 유저 프로필 이미지 변경
+### PATCH /profile/user 
+- content-type: multipart/form-data
+     
+  -----------------  
+  Content-Disposition: form-data; name="image"; filename=%{file name}  
+  Content-Type: image
+
+  ${binary data}
+  
+  -----------------
+
+### 응답
+200_ok   
+text: "success change"   
+
+
+## 애견 프로필 조회
+### GET /profile/dog?id=${애견 id} 
+
+### 응답
+200_ok   
+{
+
+    "name": 이름,
+    "owner": 주인이름,
+    "gender": 성별,
+    "neutered": 중성화 여부,
+    "age": 나이,
+    "size": 크기
+    "weight": 무게,
+    "breed": 견종,
+    "description": 설명,
+    "image": 이미지(base 64 byte code)
 }
 
 
+잘못된 ID일 경우   
+400_bad request   
+{
+  
+    "error": "bad request",
+    "message": "can't find dog",
+    "status": 400
+}   
 
 
+
+## 애견 프로필 등록
+### POST /profile/dog
+- content-type: multipart/form-data
+  
+  ----------------  
+  Content-Disposition: form-data; name="name"
+  
+  ${name value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="gender"
+
+  ${gender value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="neutered"
+
+  ${neutered value}
+  
+  ----------------
+  Content-Disposition: form-data; name="age"
+
+  ${age value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="size"
+
+  ${size value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="weight"
+
+  ${weight value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="breed"
+
+  ${breed value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="description"
+
+  ${description calue}
+  
+  ----------------
+  Content-Disposition: form-data; name="image"; filename=%{file name}  
+  Content-Type: image
+
+  ${binary data}
+  
+  -----------------
+
+### 응답
+200_ok   
+{
+
+    "id": ${애견 id}
+}
+
+
+## 애견 프로필 변경
+### PATCH /profile/dog
+- content-type: multipart/form-data
+
+  ----------------  
+  Content-Disposition: form-data; name="id"
+  
+  ${애견 id} :required
+  
+  ----------------
+  
+  ----------------  
+  Content-Disposition: form-data; name="name"
+  
+  ${name value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="gender"
+
+  ${gender value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="neutered"
+
+  ${neutered value}
+  
+  ----------------
+  Content-Disposition: form-data; name="age"
+
+  ${age value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="size"
+
+  ${size value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="weight"
+
+  ${weight value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="breed"
+
+  ${breed value} :required
+  
+  ----------------
+  Content-Disposition: form-data; name="description"
+
+  ${description calue}
+  
+  ----------------
+  Content-Disposition: form-data; name="image"; filename=%{file name}  
+  Content-Type: image
+
+  ${binary data}
+  
+  -----------------
+
+### 응답
+200_ok   
+text: "success change"   
+
+
+
+
+### ◆ multipart/form-data 입력에서 required 값이 입력이 안됐거나 잘못된 값일 경우 응답
+에러 리스트 
+[ 
+
+    {
+        "message": ${에러 메시지},
+        "field": ${잘못된 필드},
+        "rejectedValue": ${거부된 값(입력된 값)},
+        "code": ${에러 종류}
+      }
+]
+
+▶ 에러가 났을 경우 거부된 값을 적절한 필드에 채우고 에러메시지와 함께 입력폼 재반환 (현재는 에러 메시지가 유효하지 않음)
+
+
+
+## 애견 프로필 삭제
+### DELETE /profile/dog?id=${애견 id}
+
+### 응답
+200_ok   
+text: "success delete"  
+
+
+잘못된 ID일 경우   
+400_bad request   
+{
+  
+    "error": "bad request",
+    "message": "can't find dog",
+    "status": 400
+}   
