@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString
 @NoArgsConstructor
 public class User {
 

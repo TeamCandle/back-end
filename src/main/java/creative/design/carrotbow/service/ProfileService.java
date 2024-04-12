@@ -27,9 +27,9 @@ public class ProfileService {
     private final DogService dogService;
 
 
-    public UserProfileDto getUserProfile(AuthenticationUser authenticationUser){
+    public UserProfileDto getUserProfile(String username){
 
-        User user = userService.findReadWithDogs(authenticationUser.getUsername());
+        User user = userService.findReadWithDogs(username);
 
         int age = LocalDate.now().getYear() - user.getBirthYear() + 1;
         List<Dog> dogs = user.getDogs();
@@ -76,7 +76,7 @@ public class ProfileService {
 
 
     @Transactional
-    public void registerDogProfile(AuthenticationUser authenticationUser, DogRequestForm dogRegister){
+    public Long registerDogProfile(AuthenticationUser authenticationUser, DogRequestForm dogRegister){
 
         User owner = userService.findRead(authenticationUser.getUsername());
 
@@ -98,7 +98,7 @@ public class ProfileService {
                 .image(objectKey)
                 .build();
 
-        dogService.register(owner, dog);
+        return dogService.register(owner, dog);
     }
 
 

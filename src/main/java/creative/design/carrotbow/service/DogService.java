@@ -2,7 +2,7 @@ package creative.design.carrotbow.service;
 
 import creative.design.carrotbow.domain.Dog;
 import creative.design.carrotbow.domain.User;
-import creative.design.carrotbow.exception.DogNotFoundException;
+import creative.design.carrotbow.error.NotFoundException;
 import creative.design.carrotbow.repository.DogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,10 +26,10 @@ public class DogService {
     }
 
     public Dog findWithUser(Long id){
-        return dogRepository.findByIdWithUser(id).orElseThrow(()->new DogNotFoundException("can't find dog id:"+id));
+        return dogRepository.findByIdWithUser(id).orElseThrow(()->new NotFoundException("can't find dog. id:"+id));
     }
 
     public Dog find(Long id){
-        return dogRepository.findById(id).orElseThrow(()->new DogNotFoundException("can't find dog id:"+id));
+        return dogRepository.findById(id).orElseThrow(()->new NotFoundException("can't find dog. id:"+id));
     }
 }
