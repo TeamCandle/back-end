@@ -90,8 +90,8 @@ refreshToken이 만료됐을 경우
 ▶ expried token 토큰의 경우 클라이언트 단에서는 로그아웃 진행후 이용자에게 다시 로그인을 요청한다.
 
 
-## 유저 프로필 정보
-### GET /profile/user   
+## 내 프로필 정보
+### GET /profile/user/me  
 
 ### 응답
 200_ok   
@@ -113,6 +113,31 @@ refreshToken이 만료됐을 경우
         ...  
     ]  
 }  
+
+## 유저 프로필 정보
+### GET /profile/user?useranme=${username}
+
+### 응답
+200_ok   
+{  
+  
+    "name": 이름,
+    "gender": 성별,
+    "age": 나이,
+    "description": 설명,
+    "image": 이미지(base 64 byte code),  
+    애견 리스트
+    "dogList": [    
+        {  
+            "id": 애견 id(조회시 이용)
+            "name: 이름,
+            "gender": 성별, 
+            "image": 이미지(base 64 byte code)
+        },  
+        ...  
+    ]  
+}  
+
 
 
 ## 유저 프로필 설명 변경
@@ -336,10 +361,11 @@ text: "success delete"
 
 
 
-## 애견 프로필 삭제
+## 요구 등록
 ### POST /requirement
 - body  
 400_bad request   
+
 {
 
     "dogId": 애견 ID,
@@ -349,12 +375,50 @@ text: "success delete"
       "x": 경도,
       "y": 위도
     },
-    "description": "설명"
+    "description": "설명"  
 }
+
 
 ### 응답
 200_ok   
 {
-  id: 등록 id
+   id: 등록 id
 }
 
+
+## 내 요구 조회 
+### GET /requirement?id=${등록 id}
+
+### 응답
+200_ok   
+{  
+
+  "details": {
+
+    "id": 등록 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 유저네임,
+    "dogId": 애견 id,
+    "status": 등록 상태
+  },
+  "applications": 
+  [  (신청 리스트)  
+    {  
+
+      "id": 신청 id,
+      "userName": 유저네임, 
+      "image": 유저 이미지,
+      "name": 유저 이름,
+      "gender": 성별,
+      "rate": 유저등급 (미구현)
+
+  },...
+  ]  
+}  
