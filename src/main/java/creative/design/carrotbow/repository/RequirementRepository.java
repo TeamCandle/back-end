@@ -81,7 +81,7 @@ public class RequirementRepository {
 
         String dogSize = condForm.getDogSize();
         if (dogSize != null) {
-            queryString += " and d.size between minSize and :maxSize";
+            queryString += " and d.weight between :minWeight and :maxWeight";
         }
 
 
@@ -96,21 +96,21 @@ public class RequirementRepository {
                 .setParameter("radius", radius);
 
         if (dogSize != null) {
-            float minSize = 0;
-            float maxSize = 100;
+            float minWeight = 0;
+            float maxWeight = 100;
 
             DogSize size = DogSize.valueOf(dogSize);
             if (size == DogSize.SMALL) {
-                maxSize = 9;
+                maxWeight = 9;
             } else if (size == DogSize.MEDIUM) {
-                minSize = 8;
-                maxSize = 17;
+                minWeight = 8;
+                maxWeight = 17;
             } else if (size == DogSize.LARGE) {
-                minSize = 16;
+                minWeight = 16;
             }
 
-            findQuery.setParameter("minSize", minSize)
-                    .setParameter("maxSize", maxSize);
+            findQuery.setParameter("minWeight", minWeight)
+                    .setParameter("maxWeight", maxWeight);
 
         }
 
