@@ -360,16 +360,22 @@ text: "success delete"
 }   
 
 
+## 케어타입
+- "WALKING"-산책
+- "BOARDING"-돌봄
+- "GROOMING"-외견 케어
+- "PLAYTIME"-놀아주기
+- "ETC"-기타
+
+
 
 ## 요구 등록
 ### POST /requirement
 - body  
-400_bad request   
-
 {
 
     "dogId": 애견 ID,
-    "careType": 케어 타입, ("WALKING"-산책, "BOARDING"-돌봄, "GROOMING"-외견 케어, "PLAYTIME"-놀아주기, "ETC"-기타)
+    "careType": 케어 타입, 
     "careTime": 케어 시간 , (YYYY-MM-DDTHH:mm:ssZ)
     "careLocation": {
       "x": 경도,
@@ -386,8 +392,33 @@ text: "success delete"
 }
 
 
+
+## 내 요구 리스트 조회 
+### GET /requirement/list
+
+### 응답
+200_ok   
+{  
+  
+   "requirements":  
+   [  
+
+      {
+        
+        "id": 등록 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 등록 상태
+      },  
+      ...  
+  ]  
+}
+
+
+
 ## 내 요구 조회 
-### GET /requirement?id=${등록 id}
+### GET /my-requirement?id=${등록 id}
 
 ### 응답
 200_ok   
@@ -422,3 +453,135 @@ text: "success delete"
   },...
   ]  
 }  
+
+
+## 요구 리스트 조회 
+### GET /requirement/list
+- body
+  {  
+    
+     "location":{
+        "x": 위도,
+        "y": 경도
+    },
+      "radius": 반경, (기본:5, 최대:10)
+      "dogSize": 애견 크기, ("SMALL"-소형, "MEDIUM"-중형, "LARGE"-대형)
+      "careType": 케어 타입
+  }
+
+### 응답
+200_ok   
+{  
+  
+   "requirements":  
+   [  
+
+      {
+        
+        "id": 등록 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 등록 상태
+      },  
+      ...  
+  ]  
+}
+
+
+## 요구 조회 
+### GET /requirement?id=${등록 id}
+
+### 응답
+200_ok
+ {
+
+    "id": 등록 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 유저네임,
+    "dogId": 애견 id,
+    "status": 등록 상태
+  }
+
+
+## 요구 취소 
+### PUT /requirement/cancel?id=${등록 id}
+
+
+### 응답
+200_ok
+text: "success cancel"  
+
+
+
+## 신청 리스트 조회 
+### GET /application/list
+
+
+### 응답
+200_ok
+{  
+  
+   "applications":  
+   [  
+
+      {
+        
+        "id": 신청 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 신청 상태
+      },  
+      ...  
+  ]  
+}
+
+
+## 내 신청 조회 
+### GET /application?id=${신청 id}
+
+### 응답
+200_ok
+ {
+
+    "id": 신청 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 요구 등록 유저 네임,
+    "dogId": 애견 id,
+    "status": 신청 상태
+  }
+
+
+## 신청 거절 
+### GET /application/reject?id=${신청 id}
+
+
+### 응답
+200_ok
+text: "success reject"  
+
+
+
+## 신청 취소
+### GET /application/reject?id=${신청 id}
+
+
+### 응답
+200_ok
+text: "success cancel"  
+
