@@ -373,7 +373,7 @@ text: "success delete"
 ### POST /requirement
 - body  
 {
-
+      
     "dogId": 애견 ID,
     "careType": 케어 타입, 
     "careTime": 케어 시간 , (YYYY-MM-DDTHH:mm:ssZ)
@@ -458,8 +458,8 @@ text: "success delete"
 ## 요구 리스트 조회 
 ### GET /requirement/list
 - body
-  {  
-    
+  {
+      
      "location":{
         "x": 위도,
         "y": 경도
@@ -545,7 +545,7 @@ text: "success cancel"
 }
 
 
-## 내 신청 조회 
+## 신청 조회 
 ### GET /application?id=${신청 id}
 
 ### 응답
