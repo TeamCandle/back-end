@@ -54,7 +54,8 @@ text: "logout success"
 
 ## accessToken 재발급 
 ### POST /user/accessToken
-- body  
+- body
+
 {
 
     "refreshToken": ${refreshToken value}
@@ -142,8 +143,10 @@ refreshToken이 만료됐을 경우
 
 ## 유저 프로필 설명 변경
 ### PATCH /profile/user 
-- body  
+- body
+  
 {
+  
   "description": ${description value}
 }
 
@@ -371,9 +374,10 @@ text: "success delete"
 
 ## 요구 등록
 ### POST /requirement
-- body  
-{
-      
+- body
+  
+{  
+  
     "dogId": 애견 ID,
     "careType": 케어 타입, 
     "careTime": 케어 시간 , (YYYY-MM-DDTHH:mm:ssZ)
@@ -458,8 +462,9 @@ text: "success delete"
 ## 요구 리스트 조회 
 ### GET /requirement/list
 - body
+
   {
-      
+    
      "location":{
         "x": 위도,
         "y": 경도
