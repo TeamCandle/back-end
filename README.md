@@ -463,8 +463,8 @@ text: "success delete"
 ### GET /requirement/list
 - body
 
-  {
-    
+{  
+     
      "location":{
         "x": 위도,
         "y": 경도
