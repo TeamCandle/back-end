@@ -11,6 +11,17 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+
+    @ExceptionHandler(InvalidAccessException.class)
+    public ResponseEntity<?> handleCustomException(InvalidAccessException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Invalid Access");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handleCustomException(NotFoundException ex) {
 
@@ -25,6 +36,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("error", "Not Exist Type");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(WrongApplicationException.class)
+    public ResponseEntity<Map<String, Object>> handleCustomException(WrongApplicationException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Wrong Application");
         body.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);

@@ -1,7 +1,6 @@
 package creative.design.carrotbow.repository;
 
 import creative.design.carrotbow.domain.Application;
-import creative.design.carrotbow.domain.Requirement;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,6 +17,7 @@ public class ApplicationRepository {
         em.persist(application);
         return application.getId();
     }
+
 
     public Optional<Application> findById(Long id){
         return Optional.ofNullable(em.find(Application.class, id));
@@ -44,5 +44,6 @@ public class ApplicationRepository {
                 .setParameter("username", username)
                 .getResultList();
     }
+
 
 }

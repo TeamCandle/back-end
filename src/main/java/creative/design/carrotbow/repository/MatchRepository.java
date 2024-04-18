@@ -1,6 +1,6 @@
 package creative.design.carrotbow.repository;
 
-import creative.design.carrotbow.domain.Application;
+
 import creative.design.carrotbow.domain.MatchEntity;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -47,4 +47,5 @@ public class MatchRepository {
                 .setParameter("username", username)
                 .getResultList();
     }
+
 }

@@ -1,7 +1,9 @@
 package creative.design.carrotbow.domain;
 
 public enum MatchStatus {
-    COMPLETED,
-    IN_PROGRESS,
+    MATCHED,
+
+    NOT_MATCHED,
+
     CANCELLED
 }

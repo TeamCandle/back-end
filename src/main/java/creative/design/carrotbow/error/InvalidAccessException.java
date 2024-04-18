@@ -1,12 +1,11 @@
 package creative.design.carrotbow.error;
 
-public class WrongApplicationException extends RuntimeException{
-
-    public WrongApplicationException() {
+public class InvalidAccessException extends RuntimeException{
+    public InvalidAccessException() {
         super();
     }
 
-    public WrongApplicationException(String s) {
+    public InvalidAccessException(String s) {
         super(s);
     }
 

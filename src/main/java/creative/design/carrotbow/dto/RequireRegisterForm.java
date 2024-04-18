@@ -16,7 +16,9 @@ public class RequireRegisterForm {
     @NotEmpty
     private String careType;
     @NotNull
-    private LocalDateTime careTime;
+    private LocalDateTime startTime;
+    @NotNull
+    private LocalDateTime endTime;
     @NotNull
     private Point careLocation;
     @NotEmpty

@@ -2,6 +2,7 @@ package creative.design.carrotbow.repository;
 
 import creative.design.carrotbow.domain.CareType;
 import creative.design.carrotbow.domain.DogSize;
+import creative.design.carrotbow.domain.MatchStatus;
 import creative.design.carrotbow.domain.Requirement;
 import creative.design.carrotbow.dto.RequirementCondForm;
 import jakarta.persistence.EntityManager;
@@ -12,6 +13,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +31,13 @@ public class RequirementRepository {
     }
 
     public Optional<Requirement> findById(Long id){
-        return Optional.ofNullable(em.find(Requirement.class, id));
+        return em.createQuery("select r from Requirement r " +
+                        " join fetch r.dog" +
+                        " join fetch r.user" +
+                        " where r.id=:id", Requirement.class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream().findFirst();
     }
 
     public Optional<Requirement> findWithApplicationsById(Long id){
@@ -75,7 +83,9 @@ public class RequirementRepository {
 
         String queryString = "select r from Requirement r" +
                 " join fetch r.dog d" +
-                " where st_contains(st_buffer(:center, :radius), r.careLocation)";
+                " where r.startTime<:now" +
+                " and r.status =:currentStatus"+
+                " and st_contains(st_buffer(:center, :radius), r.careLocation)";
 
 
 
@@ -92,6 +102,8 @@ public class RequirementRepository {
 
 
         Query findQuery = em.createQuery(queryString, Requirement.class)
+                .setParameter("now", LocalDateTime.now())
+                .setParameter("currentStatus", MatchStatus.NOT_MATCHED)
                 .setParameter("center", center)
                 .setParameter("radius", radius);
 
@@ -127,5 +139,6 @@ public class RequirementRepository {
 
         return requirements;
     }
+
 
 }

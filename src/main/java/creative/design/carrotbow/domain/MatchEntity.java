@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -27,13 +26,13 @@ public class MatchEntity {
 
 
     @Enumerated(EnumType.STRING)
-    private MatchStatus status;
+    private MatchEntityStatus status;
 
     private LocalDateTime createTime;
 
 
     @Builder
-    public MatchEntity(Requirement requirement, Application application, MatchStatus status, LocalDateTime createTime) {
+    public MatchEntity(Requirement requirement, Application application, MatchEntityStatus status, LocalDateTime createTime) {
         this.requirement = requirement;
         this.application = application;
         this.status = status;

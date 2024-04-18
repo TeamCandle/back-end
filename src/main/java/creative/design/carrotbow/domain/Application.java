@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +11,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class Application {
+
+    public static String WAITING="WAITING";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -25,7 +27,7 @@ public class Application {
     private Requirement requirement;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationStatus status;
+    private MatchStatus status;
 
     private String description;
 
@@ -36,13 +38,16 @@ public class Application {
         requirement.getApplications().add(this);
     }
 
-    public void changeStatus(ApplicationStatus status){
+    public void changeStatus(MatchStatus status){
         this.status = status;
     }
 
+    public String getActualStatus(){
+        return this.status==MatchStatus.NOT_MATCHED&&requirement.getActualStatus().equals(Requirement.RECRUITING)?WAITING:this.status.toString();
+    }
 
     @Builder
-    public Application(User user, ApplicationStatus status, String description, LocalDateTime createTime) {
+    public Application(User user, MatchStatus status, String description, LocalDateTime createTime) {
         this.user = user;
         this.status = status;
         this.description = description;

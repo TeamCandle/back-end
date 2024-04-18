@@ -17,6 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Requirement {
 
+    public static String RECRUITING = "RECRUITING";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -32,30 +34,37 @@ public class Requirement {
     @Enumerated(EnumType.STRING)
     private CareType careType;
 
-    private LocalDateTime careTime;
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
 
     private Point careLocation;
 
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private RequirementStatus status;
+    private MatchStatus status;
 
     private LocalDateTime createTime;
 
     @OneToMany(mappedBy = "requirement")
     List<Application> applications = new ArrayList<>();
 
-    public void changeStatus(RequirementStatus status){
+    public void changeStatus(MatchStatus status){
         this.status = status;
     }
 
+    public String getActualStatus(){
+        return this.status==MatchStatus.NOT_MATCHED&&LocalDateTime.now().isBefore(this.startTime)?RECRUITING:this.status.toString();
+    }
+
     @Builder
-    public Requirement(User user, Dog dog, CareType careType, LocalDateTime careTime, Point careLocation, String description, RequirementStatus status, LocalDateTime createTime) {
+    public Requirement(User user, Dog dog, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, MatchStatus status, LocalDateTime createTime) {
         this.user = user;
         this.dog = dog;
         this.careType = careType;
-        this.careTime = careTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.careLocation = careLocation;
         this.description = description;
         this.status = status;
