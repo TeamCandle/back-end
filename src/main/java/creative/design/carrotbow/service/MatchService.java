@@ -31,7 +31,6 @@ public class MatchService {
     private final MatchRepository matchRepository;
 
     private final GeoService geoService;
-
     private final S3Service s3Service;
 
 

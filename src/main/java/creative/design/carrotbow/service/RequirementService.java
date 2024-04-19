@@ -23,7 +23,6 @@ public class RequirementService
 {
 
     private final RequirementRepository requirementRepository;
-
     private final DogService dogService;
     private final S3Service s3Service;
     private final GeoService geoService;
@@ -47,7 +46,6 @@ public class RequirementService
     }
 
     public List<ListMatchDto> getRequirementsByUser(AuthenticationUser authenticationUser){
-
         List<Requirement> requirementList = requirementRepository.findListByUsername(authenticationUser.getUsername());
 
         List<ListMatchDto> requirements = new ArrayList<>();
@@ -65,8 +63,6 @@ public class RequirementService
         }
 
         return requirements;
-
-
     }
 
     public List<ListMatchDto> getRequirementsByLocation(RequirementCondForm condForm){
@@ -105,7 +101,7 @@ public class RequirementService
                 .endTime(requirement.getEndTime())
                 .careLocation(geoService.makePoint(requirement.getCareLocation()))
                 .description(requirement.getDescription())
-                .status(requirement.getStatus().toString())     //status 생각
+                .status(requirement.getActualStatus())     //status 생각
                 .build();
 
         HashMap<String, Object> requirementDetail = new HashMap<>();

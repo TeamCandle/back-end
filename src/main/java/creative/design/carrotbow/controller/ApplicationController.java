@@ -23,7 +23,7 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @GetMapping("/application/list")
+    @GetMapping("/list")
     public ResponseEntity<?> getApplicationList(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
         List<ListMatchDto> applications = applicationService.getApplications(principalDetails.getUser());
@@ -34,7 +34,7 @@ public class ApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/application")
+    @GetMapping("")
     public ResponseEntity<?> getApplication(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         MatchDto application = applicationService.getApplication(id, principalDetails.getName());
@@ -43,7 +43,7 @@ public class ApplicationController {
     }
 
 
-    @PostMapping("/application")
+    @PostMapping("")
     public ResponseEntity<?> applyRequirement(@RequestParam Long requirementId, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         Long applicationId = applicationService.apply(requirementId, principalDetails.getName());
@@ -56,7 +56,7 @@ public class ApplicationController {
     }
 
 
-    @PutMapping("/application/cancel")
+    @PutMapping("/cancel")
     public ResponseEntity<?> cancelApplication(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
         applicationService.cancelApplication(id, principalDetails.getName());
         return ResponseEntity.ok().body("success cancel");

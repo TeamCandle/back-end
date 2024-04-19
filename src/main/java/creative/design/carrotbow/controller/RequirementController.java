@@ -31,7 +31,7 @@ public class RequirementController {
     private final RequirementService requirementService;
 
 
-    @PostMapping("/requirement")
+    @PostMapping("")
     public ResponseEntity<?> registerRequirement(@Validated @RequestBody RequireRegisterForm requireRegisterForm, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
@@ -59,7 +59,21 @@ public class RequirementController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/requirement/my-list")
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyRequirement(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        HashMap<String, Object> requirement = requirementService.getRequirementWithApplications(id, principalDetails.getName());
+
+        return ResponseEntity.status(HttpStatus.OK).body(requirement);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getRequirement(@RequestParam Long id){
+        MatchDto requirement = requirementService.getRequirement(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(requirement);
+    }
+
+    @GetMapping("/list/me")
     public ResponseEntity<?> getRequirementListByUser(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
         List<ListMatchDto> requirements = requirementService.getRequirementsByUser(principalDetails.getUser());
@@ -70,7 +84,7 @@ public class RequirementController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PostMapping(value = "/requirement/list")
+    @PostMapping("/list")
     public ResponseEntity<?> getRequirementListByLocation(@RequestBody RequirementCondForm condForm, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
@@ -97,21 +111,7 @@ public class RequirementController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/my-requirement")
-    public ResponseEntity<?> getMyRequirement(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        HashMap<String, Object> requirement = requirementService.getRequirementWithApplications(id, principalDetails.getName());
-
-        return ResponseEntity.status(HttpStatus.OK).body(requirement);
-    }
-
-    @GetMapping("/requirement")
-    public ResponseEntity<?> getRequirement(@RequestParam Long id){
-        MatchDto requirement = requirementService.getRequirement(id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(requirement);
-    }
-
-    @PutMapping("/requirement/cancel")
+    @PutMapping("/cancel")
     public ResponseEntity<?> cancelRequirement(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         requirementService.cancelRequirement(id, principalDetails.getName());

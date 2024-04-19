@@ -15,24 +15,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/match")
 public class MatchController {
 
     private final MatchService matchService;
 
 
-    @GetMapping("/match/list")
+    @GetMapping("/list")
     public ResponseEntity<?> getMatchList(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
         List<ListMatchDto> matches = matchService.getMatches(principalDetails.getUser());
@@ -43,7 +41,7 @@ public class MatchController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/match")
+    @GetMapping("")
     public ResponseEntity<?> getMatch(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         MatchDto application = matchService.getMatch(id, principalDetails.getUser());
@@ -52,7 +50,7 @@ public class MatchController {
     }
 
 
-    @PostMapping("/match")
+    @PostMapping("")
     public ResponseEntity<?> accept(@RequestParam Long requirementId, @RequestParam Long applicationId, @AuthenticationPrincipal PrincipalDetails principalDetails){
         Long matchId = matchService.makeMatch(requirementId, applicationId, principalDetails.getName());
 

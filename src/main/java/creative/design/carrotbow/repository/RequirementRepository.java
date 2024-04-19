@@ -83,7 +83,7 @@ public class RequirementRepository {
 
         String queryString = "select r from Requirement r" +
                 " join fetch r.dog d" +
-                " where r.startTime<:now" +
+                " where r.startTime>:now" +
                 " and r.status =:currentStatus"+
                 " and st_contains(st_buffer(:center, :radius), r.careLocation)";
 
