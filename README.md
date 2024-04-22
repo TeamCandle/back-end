@@ -385,6 +385,7 @@ text: "success delete"
       "x": 경도,
       "y": 위도
     },
+    "reward": 보상,
     "description": "설명"  
 }
 
@@ -398,7 +399,7 @@ text: "success delete"
 
 
 ## 내 요구 리스트 조회 
-### GET /requirement/list
+### GET /requirement/list/me
 
 ### 응답
 200_ok   
@@ -422,7 +423,7 @@ text: "success delete"
 
 
 ## 내 요구 조회 
-### GET /my-requirement?id=${등록 id}
+### GET /requirement/me?id=${등록 id}
 
 ### 응답
 200_ok   
@@ -441,7 +442,8 @@ text: "success delete"
     "description": 설명,
     "userName": 유저네임,
     "dogId": 애견 id,
-    "status": 등록 상태
+    "status": 등록 상태,
+    "reward": 보상 
   },
   "applications": 
   [  (신청 리스트)  
@@ -512,6 +514,7 @@ text: "success delete"
     "description": 설명,
     "userName": 유저네임,
     "dogId": 애견 id,
+    "reward": 보상,
     "status": 등록 상태
   }
 
@@ -568,22 +571,21 @@ text: "success cancel"
     "description": 설명,
     "userName": 요구 등록 유저 네임,
     "dogId": 애견 id,
+    "reward", 보상,
     "status": 신청 상태
   }
 
 
-## 신청 거절 
-### GET /application/reject?id=${신청 id}
-
+## 신청
+### POST /application?requrementId=${신청 id}
 
 ### 응답
-200_ok
-text: "success reject"  
-
+200_ok  
+{id: 신청 id}
 
 
 ## 신청 취소
-### GET /application/reject?id=${신청 id}
+### GET /application/cancel?id=${신청 id}
 
 
 ### 응답
