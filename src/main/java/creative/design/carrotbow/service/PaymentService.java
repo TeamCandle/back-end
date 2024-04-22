@@ -112,7 +112,7 @@ public class PaymentService {
     public PayApproveResponseDto payApprove(String orderId, String pgToken) {
 
         Payment payment = paymentRepository.findWithMatchById(Long.parseLong(orderId)).orElseThrow(() -> new NotFoundException("can't find payment. id:" + orderId));
-        MatchEntity match = matchRepository.findById(payment.getMatch().getId()).get();
+        MatchEntity match = matchRepository.findById(payment.getMatch().getId()).orElseThrow(() -> new NotFoundException("can't find linked match."));
 
         if(payment.getStatus()!=PaymentStatus.NOT_APPROVED){
             throw new InvalidAccessException("this access is not authorized");

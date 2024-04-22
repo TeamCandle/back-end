@@ -103,7 +103,7 @@ public class MatchService {
         return matchRepository.save(MatchEntity.builder()
                 .requirement(requirement)
                 .application(matchedApplication)
-                .status(MatchEntityStatus.WAITING_PAYMENT)
+                .status(requirement.getReward()==null?MatchEntityStatus.NOT_COMPLETED:MatchEntityStatus.WAITING_PAYMENT)
                 .createTime(LocalDateTime.now())
                 .build());
     }
