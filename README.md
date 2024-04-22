@@ -54,8 +54,10 @@ text: "logout success"
 
 ## accessToken 재발급 
 ### POST /user/accessToken
-- body  
+- body
+
 {
+
     "refreshToken": ${refreshToken value}
 }
 
@@ -89,8 +91,32 @@ refreshToken이 만료됐을 경우
 ▶ expried token 토큰의 경우 클라이언트 단에서는 로그아웃 진행후 이용자에게 다시 로그인을 요청한다.
 
 
+## 내 프로필 정보
+### GET /profile/user/me  
+
+### 응답
+200_ok   
+{  
+  
+    "name": 이름,
+    "gender": 성별,
+    "age": 나이,
+    "description": 설명,
+    "image": 이미지(base 64 byte code),  
+    애견 리스트
+    "dogList": [    
+        {  
+            "id": 애견 id(조회시 이용)
+            "name: 이름,
+            "gender": 성별, 
+            "image": 이미지(base 64 byte code)
+        },  
+        ...  
+    ]  
+}  
+
 ## 유저 프로필 정보
-### GET /profile/user   
+### GET /profile/user?useranme=${username}
 
 ### 응답
 200_ok   
@@ -114,10 +140,13 @@ refreshToken이 만료됐을 경우
 }  
 
 
+
 ## 유저 프로필 설명 변경
 ### PATCH /profile/user 
-- body  
+- body
+  
 {
+  
   "description": ${description value}
 }
 
@@ -332,3 +361,232 @@ text: "success delete"
     "message": "can't find dog",
     "status": 400
 }   
+
+
+## 케어타입
+- "WALKING"-산책
+- "BOARDING"-돌봄
+- "GROOMING"-외견 케어
+- "PLAYTIME"-놀아주기
+- "ETC"-기타
+
+
+
+## 요구 등록
+### POST /requirement
+- body
+  
+{  
+  
+    "dogId": 애견 ID,
+    "careType": 케어 타입, 
+    "careTime": 케어 시간 , (YYYY-MM-DDTHH:mm:ssZ)
+    "careLocation": {
+      "x": 경도,
+      "y": 위도
+    },
+    "description": "설명"  
+}
+
+
+### 응답
+200_ok   
+{
+   id: 등록 id
+}
+
+
+
+## 내 요구 리스트 조회 
+### GET /requirement/list
+
+### 응답
+200_ok   
+{  
+  
+   "requirements":  
+   [  
+
+      {
+        
+        "id": 등록 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 등록 상태
+      },  
+      ...  
+  ]  
+}
+
+
+
+## 내 요구 조회 
+### GET /my-requirement?id=${등록 id}
+
+### 응답
+200_ok   
+{  
+
+  "details": {
+
+    "id": 등록 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 유저네임,
+    "dogId": 애견 id,
+    "status": 등록 상태
+  },
+  "applications": 
+  [  (신청 리스트)  
+    {  
+
+      "id": 신청 id,
+      "userName": 유저네임, 
+      "image": 유저 이미지,
+      "name": 유저 이름,
+      "gender": 성별,
+      "rate": 유저등급 (미구현)
+
+  },...
+  ]  
+}  
+
+
+## 요구 리스트 조회 
+### GET /requirement/list
+- body
+
+{  
+     
+     "location":{
+        "x": 위도,
+        "y": 경도
+    },
+      "radius": 반경, (기본:5, 최대:10)
+      "dogSize": 애견 크기, ("SMALL"-소형, "MEDIUM"-중형, "LARGE"-대형)
+      "careType": 케어 타입
+  }
+
+### 응답
+200_ok   
+{  
+  
+   "requirements":  
+   [  
+
+      {
+        
+        "id": 등록 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 등록 상태
+      },  
+      ...  
+  ]  
+}
+
+
+## 요구 조회 
+### GET /requirement?id=${등록 id}
+
+### 응답
+200_ok
+ {
+
+    "id": 등록 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 유저네임,
+    "dogId": 애견 id,
+    "status": 등록 상태
+  }
+
+
+## 요구 취소 
+### PUT /requirement/cancel?id=${등록 id}
+
+
+### 응답
+200_ok
+text: "success cancel"  
+
+
+
+## 신청 리스트 조회 
+### GET /application/list
+
+
+### 응답
+200_ok
+{  
+  
+   "applications":  
+   [  
+
+      {
+        
+        "id": 신청 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 신청 상태
+      },  
+      ...  
+  ]  
+}
+
+
+## 신청 조회 
+### GET /application?id=${신청 id}
+
+### 응답
+200_ok
+ {
+
+    "id": 신청 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 요구 등록 유저 네임,
+    "dogId": 애견 id,
+    "status": 신청 상태
+  }
+
+
+## 신청 거절 
+### GET /application/reject?id=${신청 id}
+
+
+### 응답
+200_ok
+text: "success reject"  
+
+
+
+## 신청 취소
+### GET /application/reject?id=${신청 id}
+
+
+### 응답
+200_ok
+text: "success cancel"  
+
