@@ -1,15 +1,14 @@
-package creative.design.carrotbow.dto;
+package creative.design.carrotbow.dto.requestForm;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @Data
-public class DogRequestForm {
+public class DogRegisterForm {
 
     private Long id;
     @NotEmpty
@@ -29,7 +28,7 @@ public class DogRequestForm {
     private MultipartFile image;
 
 
-    public DogRequestForm(String name, String gender, boolean neutered, int age, float size, float weight, String breed, String description, MultipartFile image) {
+    public DogRegisterForm(String name, String gender, boolean neutered, int age, float size, float weight, String breed, String description, MultipartFile image) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;

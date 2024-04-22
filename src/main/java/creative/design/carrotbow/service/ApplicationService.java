@@ -72,6 +72,7 @@ public class ApplicationService {
                 .endTime(application.getRequirement().getEndTime())
                 .careLocation(geoService.makePoint(application.getRequirement().getCareLocation()))
                 .description(application.getRequirement().getDescription())
+                .reward(application.getRequirement().getReward())
                 .status(application.getActualStatus())     //status 생각 not matched & requirement current time -> waiting
                 .build();
     }

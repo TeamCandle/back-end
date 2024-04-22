@@ -2,6 +2,7 @@ package creative.design.carrotbow.service;
 
 import creative.design.carrotbow.domain.*;
 import creative.design.carrotbow.dto.*;
+import creative.design.carrotbow.dto.MatchDto;
 import creative.design.carrotbow.error.InvalidAccessException;
 import creative.design.carrotbow.error.NotFoundException;
 import creative.design.carrotbow.error.WrongApplicationException;
@@ -10,15 +11,11 @@ import creative.design.carrotbow.repository.MatchRepository;
 import creative.design.carrotbow.repository.RequirementRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -56,19 +53,20 @@ public class MatchService {
 
 
     public MatchDto getMatch(Long id, AuthenticationUser authenticationUser){
-        MatchEntity match = matchRepository.findWithRequirementById(id).orElseThrow(()->new NotFoundException("can't find match. id:" + id));
+        MatchEntity match = matchRepository.findWithFullById(id).orElseThrow(()->new NotFoundException("can't find match. id:" + id));
 
         String requestPerson = authenticationUser.getUsername();
         String requirePerson=match.getRequirement().getUser().getUsername();
+        String applyPerson=match.getApplication().getUser().getUsername();
 
-        if(!requestPerson.equals(match.getRequirement().getUser().getName())&&!requestPerson.equals(match.getApplication().getUser().getName())){
+        if(!requestPerson.equals(requirePerson)&&!requestPerson.equals(applyPerson)){
             throw new InvalidAccessException("this access is not authorized");
         }
 
 
         return MatchDto.builder()
                 .id(match.getId())
-                .userName(requestPerson.equals(requirePerson)?requirePerson:match.getApplication().getUser().getName())
+                .userName(requestPerson.equals(requirePerson)?requirePerson:applyPerson)
                 .dogId(match.getRequirement().getDog().getId())
                 .dogImage(s3Service.loadImage(match.getRequirement().getDog().getImage()))
                 .careType(match.getRequirement().getCareType())
@@ -76,6 +74,7 @@ public class MatchService {
                 .endTime(match.getRequirement().getEndTime())
                 .careLocation(geoService.makePoint(match.getRequirement().getCareLocation()))
                 .description(match.getRequirement().getDescription())
+                .reward(match.getRequirement().getReward())
                 .status(match.getStatus().toString())
                 .build();
     }
@@ -104,9 +103,44 @@ public class MatchService {
         return matchRepository.save(MatchEntity.builder()
                 .requirement(requirement)
                 .application(matchedApplication)
-                .status(MatchEntityStatus.IN_PROGRESS)
+                .status(MatchEntityStatus.WAITING_PAYMENT)
                 .createTime(LocalDateTime.now())
                 .build());
+    }
+
+    @Transactional
+    public void completeMatch(Long id, AuthenticationUser authenticationUser){
+
+        MatchEntity match = matchRepository.findWithRequirementById(id).orElseThrow(() -> new NotFoundException("can't find match. id:" + id));
+
+        String username = match.getRequirement().getUser().getUsername();
+
+        if(!username.equals(authenticationUser.getUsername())){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        if(match.getStatus()!=MatchEntityStatus.NOT_COMPLETED){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        match.changeStatus(MatchEntityStatus.COMPLETED);
+    }
+
+    @Transactional
+    public void cancelMatch(Long id, AuthenticationUser authenticationUser){
+
+        MatchEntity match = matchRepository.findWithRequirementById(id).orElseThrow(() -> new NotFoundException("can't find match. id:" + id));
+
+        String username = match.getRequirement().getUser().getUsername();
+
+        if(!username.equals(authenticationUser.getUsername())){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+        if(match.getStatus()==MatchEntityStatus.COMPLETED){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        match.changeStatus(MatchEntityStatus.CANCELLED);
     }
 
 }

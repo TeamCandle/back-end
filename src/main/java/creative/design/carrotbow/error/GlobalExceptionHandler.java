@@ -32,6 +32,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
+    @ExceptionHandler(PayProcessException.class)
+    public ResponseEntity<?> handleCustomException(PayProcessException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Error While Payment");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
         Map<String, Object> body = new HashMap<>();

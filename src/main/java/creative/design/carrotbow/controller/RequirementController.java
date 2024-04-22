@@ -3,8 +3,8 @@ package creative.design.carrotbow.controller;
 
 import creative.design.carrotbow.dto.ListMatchDto;
 import creative.design.carrotbow.dto.MatchDto;
-import creative.design.carrotbow.dto.RequireRegisterForm;
-import creative.design.carrotbow.dto.RequirementCondForm;
+import creative.design.carrotbow.dto.requestForm.RequireRegisterForm;
+import creative.design.carrotbow.dto.requestForm.RequirementCondForm;
 import creative.design.carrotbow.error.ErrorResponse;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.service.RequirementService;

@@ -1,10 +1,9 @@
 package creative.design.carrotbow.service;
 
-import com.amazonaws.AmazonClientException;
 import creative.design.carrotbow.domain.Dog;
 import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.dto.DogProfileDto;
-import creative.design.carrotbow.dto.DogRequestForm;
+import creative.design.carrotbow.dto.requestForm.DogRegisterForm;
 import creative.design.carrotbow.dto.ListDogDto;
 import creative.design.carrotbow.dto.UserProfileDto;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
@@ -76,7 +75,7 @@ public class ProfileService {
 
 
     @Transactional
-    public Long registerDogProfile(AuthenticationUser authenticationUser, DogRequestForm dogRegister){
+    public Long registerDogProfile(AuthenticationUser authenticationUser, DogRegisterForm dogRegister){
 
         User owner = userService.findRead(authenticationUser.getUsername());
 
@@ -121,7 +120,7 @@ public class ProfileService {
     }
 
     @Transactional
-    public void changeDogProfile(DogRequestForm dogEdition){
+    public void changeDogProfile(DogRegisterForm dogEdition){
         Dog dog = dogService.find(dogEdition.getId());
         s3Service.deleteImage(dog.getImage());
         String objectKey = s3Service.saveDogImage(dog.getOwner().getUsername(), dogEdition.getName(), dogEdition.getImage());

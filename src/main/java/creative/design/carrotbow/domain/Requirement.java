@@ -40,6 +40,8 @@ public class Requirement {
 
     private Point careLocation;
 
+    private Integer reward;
+
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -59,13 +61,14 @@ public class Requirement {
     }
 
     @Builder
-    public Requirement(User user, Dog dog, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, MatchStatus status, LocalDateTime createTime) {
+    public Requirement(User user, Dog dog, Integer reward, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, MatchStatus status, LocalDateTime createTime) {
         this.user = user;
         this.dog = dog;
         this.careType = careType;
         this.startTime = startTime;
         this.endTime = endTime;
         this.careLocation = careLocation;
+        this.reward = reward;
         this.description = description;
         this.status = status;
         this.createTime = createTime;

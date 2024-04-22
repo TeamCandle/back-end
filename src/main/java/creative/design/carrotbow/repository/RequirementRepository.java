@@ -4,7 +4,7 @@ import creative.design.carrotbow.domain.CareType;
 import creative.design.carrotbow.domain.DogSize;
 import creative.design.carrotbow.domain.MatchStatus;
 import creative.design.carrotbow.domain.Requirement;
-import creative.design.carrotbow.dto.RequirementCondForm;
+import creative.design.carrotbow.dto.requestForm.RequirementCondForm;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;

@@ -26,9 +26,32 @@ public class MatchRepository {
     public Optional<MatchEntity> findWithRequirementById(Long id){
         return em.createQuery("select m from MatchEntity m" +
                         " join fetch m.requirement r" +
+                        " join fetch r.user" +
+                        " where m.id=:id", MatchEntity.class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream().findFirst();
+    }
+
+    public Optional<MatchEntity> findWithPaymentById(Long id){
+        return em.createQuery("select m from MatchEntity m" +
+                        " join fetch m.application a" +
+                        " join fetch a.user au" +
+                        " join fetch m.payment p" +
+                        " join fetch p.user pu" +
+                        " where m.id=:id", MatchEntity.class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream().findFirst();
+    }
+
+    public Optional<MatchEntity> findWithFullById(Long id){
+        return em.createQuery("select m from MatchEntity m" +
+                        " join fetch m.requirement r" +
                         " join fetch r.dog" +
                         " join fetch m.application a" +
-                        " join fetch a.user" +
+                        " join fetch a.user au" +
+                        " join fetch r.user ru" +
                         " where m.id=:id", MatchEntity.class)
                 .setParameter("id", id)
                 .getResultList()

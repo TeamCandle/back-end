@@ -2,6 +2,9 @@ package creative.design.carrotbow.service;
 
 import creative.design.carrotbow.domain.*;
 import creative.design.carrotbow.dto.*;
+import creative.design.carrotbow.dto.MatchDto;
+import creative.design.carrotbow.dto.requestForm.RequireRegisterForm;
+import creative.design.carrotbow.dto.requestForm.RequirementCondForm;
 import creative.design.carrotbow.error.InvalidAccessException;
 import creative.design.carrotbow.error.NotFoundException;
 import creative.design.carrotbow.error.WrongApplicationException;
@@ -42,6 +45,7 @@ public class RequirementService
                         .description(requireRegisterForm.getDescription())
                         .status(MatchStatus.NOT_MATCHED)       //NOT MATCHED
                         .createTime(LocalDateTime.now())
+                        .reward(requireRegisterForm.getReward())
                         .build());
     }
 
@@ -101,6 +105,7 @@ public class RequirementService
                 .endTime(requirement.getEndTime())
                 .careLocation(geoService.makePoint(requirement.getCareLocation()))
                 .description(requirement.getDescription())
+                .reward(requirement.getReward())
                 .status(requirement.getActualStatus())     //status 생각
                 .build();
 
@@ -143,6 +148,7 @@ public class RequirementService
                 .endTime(requirement.getEndTime())
                 .careLocation(geoService.makePoint(requirement.getCareLocation()))
                 .description(requirement.getDescription())
+                .reward(requirement.getReward())
                 .status(requirement.getActualStatus()) //recruiting 생각
                 .build();
     }

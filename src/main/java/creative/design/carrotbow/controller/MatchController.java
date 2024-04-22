@@ -3,13 +3,8 @@ package creative.design.carrotbow.controller;
 
 import creative.design.carrotbow.dto.ListMatchDto;
 import creative.design.carrotbow.dto.MatchDto;
-import creative.design.carrotbow.dto.RequireRegisterForm;
-import creative.design.carrotbow.dto.RequirementCondForm;
-import creative.design.carrotbow.error.ErrorResponse;
-import creative.design.carrotbow.error.WrongApplicationException;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.service.MatchService;
-import creative.design.carrotbow.service.RequirementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,5 +55,18 @@ public class MatchController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PutMapping("/complete")
+    public ResponseEntity<?> complete(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        matchService.completeMatch(id, principalDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body("success complete");
+    }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<?> cancel(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        matchService.cancelMatch(id, principalDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body("success cancel");
+    }
 
 }

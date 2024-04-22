@@ -1,5 +1,6 @@
-package creative.design.carrotbow.dto;
+package creative.design.carrotbow.dto.requestForm;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,6 +22,8 @@ public class RequireRegisterForm {
     private LocalDateTime endTime;
     @NotNull
     private Point careLocation;
+    @Min(0) @NotNull
+    private Integer reward;
     @NotEmpty
     private String description;
 }

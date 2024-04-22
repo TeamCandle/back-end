@@ -1,6 +1,6 @@
 package creative.design.carrotbow.domain;
 
-import creative.design.carrotbow.dto.DogRequestForm;
+import creative.design.carrotbow.dto.requestForm.DogRegisterForm;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +35,7 @@ public class Dog {
         owner.getDogs().add(this);
     }
 
-    public void changeAttr(DogRequestForm dogEdition, String image){
+    public void changeAttr(DogRegisterForm dogEdition, String image){
         this.name = dogEdition.getName();
         this.age = dogEdition.getAge();
         this.gender = dogEdition.getGender();

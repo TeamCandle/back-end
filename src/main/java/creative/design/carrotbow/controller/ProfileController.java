@@ -1,7 +1,7 @@
 package creative.design.carrotbow.controller;
 
 import creative.design.carrotbow.dto.DogProfileDto;
-import creative.design.carrotbow.dto.DogRequestForm;
+import creative.design.carrotbow.dto.requestForm.DogRegisterForm;
 import creative.design.carrotbow.dto.UserProfileDto;
 import creative.design.carrotbow.error.ErrorResponse;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
@@ -75,7 +75,7 @@ public class ProfileController {
     }
 
     @PostMapping("/dog")
-    public ResponseEntity<?> registerDogProfile(@Validated @ModelAttribute DogRequestForm dogRequestForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> registerDogProfile(@Validated @ModelAttribute DogRegisterForm dogRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -94,7 +94,7 @@ public class ProfileController {
             return ResponseEntity.badRequest().body(list);
         }
 
-        Long dogId = profileService.registerDogProfile(principalDetails.getUser(), dogRequestForm);
+        Long dogId = profileService.registerDogProfile(principalDetails.getUser(), dogRegisterForm);
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", dogId);
@@ -102,7 +102,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/dog")
-    public ResponseEntity<?> changeDogProfile(@Validated @ModelAttribute DogRequestForm dogRequestForm, BindingResult bindingResult){
+    public ResponseEntity<?> changeDogProfile(@Validated @ModelAttribute DogRegisterForm dogRegisterForm, BindingResult bindingResult){
 
         if(bindingResult.getTarget()!=null) {
             ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "id", "required");
@@ -125,7 +125,7 @@ public class ProfileController {
             return ResponseEntity.badRequest().body(list);
         }
 
-        profileService.changeDogProfile(dogRequestForm);
+        profileService.changeDogProfile(dogRegisterForm);
         return ResponseEntity.status(HttpStatus.OK).body("success change");
     }
 

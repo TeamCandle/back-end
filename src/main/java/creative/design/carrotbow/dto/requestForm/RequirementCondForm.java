@@ -1,6 +1,5 @@
-package creative.design.carrotbow.dto;
+package creative.design.carrotbow.dto.requestForm;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
