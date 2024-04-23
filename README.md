@@ -654,7 +654,14 @@ text: "success cancel"
   "payment": 결제할 사람인지 여부
 }
 
-▶ "payment"가 true라면 요구 등록자이므로 결제 버튼 표시, false라면 요구 지원자이므로 상태 표시 
+▶ "payment" -> true (요구 등록자라는 뜻)  
+- status: WAITING_PAYMENT -> 결제 버튼 표시
+- status: NOT_COMPLETED -> 완료 버튼 표시
+- status: 그 외 -> 상태 표시 
+  
+
+▶ "payment" -> false (요구 지원자라는)  
+- status: 항상 -> 상태 표시 
 
 
 ## 매칭 완료 
