@@ -633,7 +633,9 @@ text: "success cancel"
 
 ### 응답
 200_ok
- {
+{  
+  
+  "details": {
 
     "id": 매칭 id,
     "dogImage": 애견 이미지,
@@ -648,7 +650,11 @@ text: "success cancel"
     "dogId": 애견 id,
     "reward", 보상,
     "status": 매칭 상태
-  }
+  },  
+  "payment": 결제할 사람인지 여부
+}
+
+▶ "payment"가 true라면 요구 등록자이므로 결제 버튼 표시, false라면 요구 지원자이므로 상태 표시 
 
 
 ## 매칭 완료 
