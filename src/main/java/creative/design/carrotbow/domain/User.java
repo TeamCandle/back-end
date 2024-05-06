@@ -38,6 +38,10 @@ public class User {
     @OneToMany(mappedBy = "owner",  cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final List<Dog> dogs = new ArrayList<>();
 
+    public User(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public User(String username, String password, String email, String role, String name, String gender, int birthYear, String phNum) {
         this.username = username;

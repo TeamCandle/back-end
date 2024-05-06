@@ -36,6 +36,10 @@ public class MatchEntity {
     private LocalDateTime createTime;
 
 
+    public MatchEntity(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public MatchEntity(Requirement requirement, Application application, MatchEntityStatus status, LocalDateTime createTime) {
         this.requirement = requirement;

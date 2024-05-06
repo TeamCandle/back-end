@@ -39,9 +39,9 @@ public class MatchController {
     @GetMapping("")
     public ResponseEntity<?> getMatch(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        MatchDto application = matchService.getMatch(id, principalDetails.getUser());
+        HashMap<String, Object> result = matchService.getMatch(id, principalDetails.getUser());
 
-        return ResponseEntity.status(HttpStatus.OK).body(application);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 

@@ -83,6 +83,8 @@ public class ApplicationService {
 
         Requirement requirement = requirementRepository.findWithApplicationsById(requirementId).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + requirementId));
 
+        System.out.println(requirement.getActualStatus());
+
         if(!requirement.getActualStatus().equals(Requirement.RECRUITING)){  //NOT MATCHED and <currentTime
             throw new WrongApplicationException("this requirement is expired. id:" + requirementId);
         }

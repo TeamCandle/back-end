@@ -77,6 +77,10 @@ public class ProfileController {
     @PostMapping("/dog")
     public ResponseEntity<?> registerDogProfile(@Validated @ModelAttribute DogRegisterForm dogRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
+
+        System.out.println("what the hell?");
+
+
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 

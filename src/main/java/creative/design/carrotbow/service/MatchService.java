@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -51,8 +52,11 @@ public class MatchService {
         return matches;
     }
 
+    public MatchEntity getMatch(Long id){
+        return matchRepository.findWithFullById(id).orElseThrow(()->new NotFoundException("can't find match. id:" + id));
+    }
 
-    public MatchDto getMatch(Long id, AuthenticationUser authenticationUser){
+    public HashMap<String, Object> getMatch(Long id, AuthenticationUser authenticationUser){
         MatchEntity match = matchRepository.findWithFullById(id).orElseThrow(()->new NotFoundException("can't find match. id:" + id));
 
         String requestPerson = authenticationUser.getUsername();
@@ -64,9 +68,9 @@ public class MatchService {
         }
 
 
-        return MatchDto.builder()
+        MatchDto details = MatchDto.builder()
                 .id(match.getId())
-                .userName(requestPerson.equals(requirePerson)?requirePerson:applyPerson)
+                .userName(requestPerson.equals(requirePerson) ? requirePerson : applyPerson)
                 .dogId(match.getRequirement().getDog().getId())
                 .dogImage(s3Service.loadImage(match.getRequirement().getDog().getImage()))
                 .careType(match.getRequirement().getCareType())
@@ -77,6 +81,13 @@ public class MatchService {
                 .reward(match.getRequirement().getReward())
                 .status(match.getStatus().toString())
                 .build();
+
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("details", details);
+        result.put("payment", requestPerson.equals(requirePerson));
+
+        return result;
     }
 
 
@@ -103,7 +114,7 @@ public class MatchService {
         return matchRepository.save(MatchEntity.builder()
                 .requirement(requirement)
                 .application(matchedApplication)
-                .status(requirement.getReward()==null?MatchEntityStatus.NOT_COMPLETED:MatchEntityStatus.WAITING_PAYMENT)
+                .status(MatchEntityStatus.WAITING_PAYMENT)
                 .createTime(LocalDateTime.now())
                 .build());
     }
@@ -136,7 +147,7 @@ public class MatchService {
         if(!username.equals(authenticationUser.getUsername())){
             throw new InvalidAccessException("this access is not authorized");
         }
-        if(match.getStatus()==MatchEntityStatus.COMPLETED){
+        if(match.getStatus()==MatchEntityStatus.WAITING_PAYMENT){
             throw new InvalidAccessException("this access is not authorized");
         }
 

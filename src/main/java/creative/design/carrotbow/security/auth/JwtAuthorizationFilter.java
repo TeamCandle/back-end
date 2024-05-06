@@ -9,6 +9,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,16 +20,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private UserService userService;
-    private JwtUtils jwtUtils;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
 
-
-    public JwtAuthorizationFilter(UserService userService, JwtUtils jwtUtils) {
-        this.userService = userService;
-        this.jwtUtils = jwtUtils;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -37,7 +36,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if(jwtHeader != null && jwtHeader.startsWith("Bearer")){
             String jwtToken = jwtHeader.replace("Bearer ", "");
-            String username = jwtUtils.getUsernameFromToken(jwtToken, jwtUtils.ACCESS);
+            String username = jwtUtils.getUsernameFromToken(jwtToken, JwtUtils.ACCESS);
 
             if(username == null){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -66,7 +65,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         }
-        else{
+        else {
             filterChain.doFilter(request, response);
         }
     }

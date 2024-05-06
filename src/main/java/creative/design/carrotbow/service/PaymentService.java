@@ -162,7 +162,8 @@ public class PaymentService {
         테스트 용도 주석처리
          */
 
-        if(match.getStatus()!=MatchEntityStatus.COMPLETED){
+
+        if(match.getStatus()!=MatchEntityStatus.NOT_COMPLETED){
             throw new InvalidAccessException("this access is not authorized");
         }
 

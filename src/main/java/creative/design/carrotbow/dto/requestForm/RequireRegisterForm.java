@@ -22,7 +22,7 @@ public class RequireRegisterForm {
     private LocalDateTime endTime;
     @NotNull
     private Point careLocation;
-    @Min(0)
+    @Min(0) @NotNull
     private Integer reward;
     @NotEmpty
     private String description;
