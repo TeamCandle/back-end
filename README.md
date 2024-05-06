@@ -385,6 +385,7 @@ text: "success delete"
       "x": 경도,
       "y": 위도
     },
+    "reward": 보상,
     "description": "설명"  
 }
 
@@ -398,7 +399,7 @@ text: "success delete"
 
 
 ## 내 요구 리스트 조회 
-### GET /requirement/list
+### GET /requirement/list/me
 
 ### 응답
 200_ok   
@@ -422,7 +423,7 @@ text: "success delete"
 
 
 ## 내 요구 조회 
-### GET /my-requirement?id=${등록 id}
+### GET /requirement/me?id=${등록 id}
 
 ### 응답
 200_ok   
@@ -441,7 +442,8 @@ text: "success delete"
     "description": 설명,
     "userName": 유저네임,
     "dogId": 애견 id,
-    "status": 등록 상태
+    "status": 등록 상태,
+    "reward": 보상 
   },
   "applications": 
   [  (신청 리스트)  
@@ -512,6 +514,7 @@ text: "success delete"
     "description": 설명,
     "userName": 유저네임,
     "dogId": 애견 id,
+    "reward": 보상,
     "status": 등록 상태
   }
 
@@ -568,25 +571,133 @@ text: "success cancel"
     "description": 설명,
     "userName": 요구 등록 유저 네임,
     "dogId": 애견 id,
+    "reward", 보상,
     "status": 신청 상태
   }
 
 
-## 신청 거절 
-### GET /application/reject?id=${신청 id}
-
+## 신청
+### POST /application?requrementId=${등록 id}
 
 ### 응답
-200_ok
-text: "success reject"  
-
+200_ok  
+{id: 신청 id}
 
 
 ## 신청 취소
-### GET /application/reject?id=${신청 id}
+### GET /application/cancel?id=${신청 id}
 
 
 ### 응답
 200_ok
 text: "success cancel"  
+
+
+
+## 신청 수락
+### POST /match?requirementId=${등록 id}&applicationId=${신청 id}
+
+### 응답
+200_ok  
+{id: 매칭 id}
+
+
+
+## 매칭 리스트 조회 
+### GET /match/list
+
+
+### 응답
+200_ok
+{  
+  
+   "matches":  
+   [  
+
+      {
+        
+        "id": 매칭 id,
+        "image": 애견 이미지,
+        "breed": 견종,
+        "careType": 케어 타입, 
+        "status": 매칭 상태
+      },  
+      ...  
+  ]  
+}
+
+
+
+## 매칭 조회 
+### GET /match?id=${매칭 id}
+
+### 응답
+200_ok
+{  
+  
+  "details": {
+
+    "id": 매칭 id,
+    "dogImage": 애견 이미지,
+    "careType": 케어 타입,
+    "careLoaction": {
+
+      "x": 경도,
+      "y": 위도
+    },
+    "description": 설명,
+    "userName": 매칭 상대 유저네임,
+    "dogId": 애견 id,
+    "reward", 보상,
+    "status": 매칭 상태
+  },  
+  "payment": 결제할 사람인지 여부
+}
+
+▶ "payment" -> true (요구 등록자라는 뜻)  
+- status: WAITING_PAYMENT -> 결제 버튼 표시
+- status: NOT_COMPLETED -> 완료 버튼 표시
+- status: 그 외 -> 상태 표시 
+  
+
+▶ "payment" -> false (요구 지원자라는)  
+- status: 항상 -> 상태 표시 
+
+
+## 매칭 완료 
+### GET /match/complete?id=${매칭 id}
+
+### 응답
+200_ok
+text: "success complete"  
+
+
+## 매칭 취소 (= 매칭이 WAITING_PAYMENT 상태일 때 취소 동작)
+### GET /match/cancel?id=${매칭 id}
+
+### 응답
+200_ok
+text: "success cancel"  
+
+
+
+## 결제 요청 
+### GET /payment/ready?matchId=${매칭 id}
+
+### 응답
+302_redirection
+redriect: kakao 인증 페이지 
+
+- 인증 성공시 -> text: "success payment total: 결제금액"  
+- 인증 취소시 -> text: "cancel payment"
+- 인증 실패시 -> text: "fail payment"
+
+
+## 결제 취소 (= 매칭이 NOT_COMPLETED 상태일 때 취소 동작 
+### GET /payment/refund?matchId=${매칭 id}
+
+### 응답
+200_oK
+test: "refund payment total: 환불 금액"
+
 
