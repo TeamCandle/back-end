@@ -701,3 +701,35 @@ redriect: kakao 인증 페이지
 test: "refund payment total: 환불 금액"
 
 
+
+## 채팅
+- connection - ws://13.209.220.187/ws (헤더: stompConnectHeaders - Authorization: Bearer ${accessToken value})
+- subscribe - /exchange/chat.exchange/*.room.{matchId} (sub 데이터: {"message": ${text}, "sender": ${username}, "createdAt": ${DateTime}}
+- send - /send/chat.talk.{matchId} (pub 데이터: ${text})
+
+
+
+## 채팅 기록 조회
+### GET /chat/history?roomId=${매칭 id}
+
+### 응답
+200_ok
+{   
+  "messages": [  (message List)  
+      
+    {  
+      "id": 매칭 id,
+      "dogImage": 애견 이미지,
+      "careType": 케어 타입
+    },
+      ...
+  ]
+
+
+}
+
+  
+
+
+
+
