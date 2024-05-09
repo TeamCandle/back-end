@@ -61,7 +61,7 @@ public class RequirementController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getMyRequirement(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        HashMap<String, Object> requirement = requirementService.getRequirementWithApplications(id, principalDetails.getName());
+        HashMap<String, Object> requirement = requirementService.getRequirementWithApplications(id, principalDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(requirement);
     }
@@ -114,7 +114,7 @@ public class RequirementController {
     @PutMapping("/cancel")
     public ResponseEntity<?> cancelRequirement(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        requirementService.cancelRequirement(id, principalDetails.getName());
+        requirementService.cancelRequirement(id, principalDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body("success cancel");
     }

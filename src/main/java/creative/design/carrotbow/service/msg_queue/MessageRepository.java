@@ -19,6 +19,7 @@ public class MessageRepository {
 
     public List<Message> findMsgListByRoom(Long roomId){
         return em.createQuery("select m from Message m" +
+                " join fetch m.sender u" +
                 " where m.room.id =:roomId", Message.class)
                 .setParameter("roomId", roomId)
                 .getResultList();

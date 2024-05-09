@@ -43,14 +43,14 @@ public class ProfileController {
     @ResponseBody
     public UserProfileDto getUserProfile(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        return profileService.getUserProfile(principalDetails.getUser().getUsername());
+        return profileService.getUserProfile(principalDetails.getUser().getId());
     }
 
     @GetMapping("/user")
     @ResponseBody
-    public UserProfileDto getUserProfile(@RequestParam String username){
+    public UserProfileDto getUserProfile(@RequestParam Long id){
 
-        return profileService.getUserProfile(username);
+        return profileService.getUserProfile(id);
     }
 
     @PatchMapping("/user")
@@ -76,10 +76,6 @@ public class ProfileController {
 
     @PostMapping("/dog")
     public ResponseEntity<?> registerDogProfile(@Validated @ModelAttribute DogRegisterForm dogRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
-
-
-        System.out.println("what the hell?");
-
 
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();

@@ -26,9 +26,9 @@ public class ProfileService {
     private final DogService dogService;
 
 
-    public UserProfileDto getUserProfile(String username){
+    public UserProfileDto getUserProfile(Long id){
 
-        User user = userService.findReadWithDogs(username);
+        User user = userService.findWithDogs(id);
 
         int age = LocalDate.now().getYear() - user.getBirthYear() + 1;
         List<Dog> dogs = user.getDogs();
@@ -75,15 +75,9 @@ public class ProfileService {
 
 
     @Transactional
-    public Long registerDogProfile(AuthenticationUser authenticationUser, DogRegisterForm dogRegister){
+    public Long registerDogProfile(AuthenticationUser user, DogRegisterForm dogRegister){
 
-        User owner = userService.findRead(authenticationUser.getUsername());
-
-        String objectKey = s3Service.saveDogImage(owner.getUsername(), dogRegister.getName(), dogRegister.getImage());
-
-        System.out.println(dogRegister.getImage()==null?"true":"false");
-        System.out.println(dogRegister.getImage());
-        System.out.println(objectKey);
+        String objectKey = s3Service.saveDogImage(user.getUsername(), dogRegister.getName(), dogRegister.getImage());
 
         Dog dog = Dog.builder()
                 .name(dogRegister.getName())
@@ -97,16 +91,16 @@ public class ProfileService {
                 .image(objectKey)
                 .build();
 
-        return dogService.register(owner, dog);
+        return dogService.register(new User(user.getId()), dog);
     }
 
 
 
     public DogProfileDto getDogProfile(Long id){
-        Dog dog = dogService.findWithUser(id);
+        Dog dog = dogService.find(id);
 
         return DogProfileDto.builder()
-                .owner(dog.getOwner().getName())
+                .owner(dog.getOwner().getId())
                 .name(dog.getName())
                 .age(dog.getAge())
                 .gender(dog.getGender())
@@ -121,7 +115,7 @@ public class ProfileService {
 
     @Transactional
     public void changeDogProfile(DogRegisterForm dogEdition){
-        Dog dog = dogService.find(dogEdition.getId());
+        Dog dog = dogService.findWithUser(dogEdition.getId());
         s3Service.deleteImage(dog.getImage());
         String objectKey = s3Service.saveDogImage(dog.getOwner().getUsername(), dogEdition.getName(), dogEdition.getImage());
         dog.changeAttr(dogEdition, objectKey);

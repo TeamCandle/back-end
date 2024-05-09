@@ -1,9 +1,7 @@
 package creative.design.carrotbow.security.jwt;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import creative.design.carrotbow.domain.User;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,10 +14,13 @@ public class RefreshToken {
     @GeneratedValue
     private Long id;
     private String token;
-    private String username;
 
-    public RefreshToken(String token, String username) {
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+    public RefreshToken(String token, User user) {
         this.token = token;
-        this.username = username;
+        this.user = user;
     }
 }

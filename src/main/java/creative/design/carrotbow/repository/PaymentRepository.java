@@ -21,13 +21,9 @@ public class PaymentRepository {
         return payment.getId();
     }
 
-    public Optional<Payment> findById(Long id){
-        return Optional.ofNullable(em.find(Payment.class, id));
-    }
-
     public Optional<Payment> findWithMatchById(Long id){
         return em.createQuery("select p from Payment p " +
-                        " join p.match" +
+                        " left join fetch p.match" +
                         " where p.id=:id", Payment.class)
                 .setParameter("id", id)
                 .getResultList()

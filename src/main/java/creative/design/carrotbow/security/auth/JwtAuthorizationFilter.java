@@ -9,7 +9,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,7 +50,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 response.getWriter().write(mapper.writeValueAsString(body));
             }
             else {
-                User userEntity = userService.findRead(username);
+                User userEntity = userService.findByUsername(username);
                 PrincipalDetails principalDetails = new PrincipalDetails(
                         AuthenticationUser.builder()
                                 .id(userEntity.getId())

@@ -47,7 +47,7 @@ public class MatchController {
 
     @PostMapping("")
     public ResponseEntity<?> accept(@RequestParam Long requirementId, @RequestParam Long applicationId, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        Long matchId = matchService.makeMatch(requirementId, applicationId, principalDetails.getName());
+        Long matchId = matchService.makeMatch(requirementId, applicationId, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", matchId);

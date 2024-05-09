@@ -48,17 +48,17 @@ public class PaymentService {
         return  headers;
     }
 
-    public PayReadyResponseDto payReady(Long matchId/*, AuthenticationUser authenticationUser*/){
+    public PayReadyResponseDto payReady(Long matchId/*, AuthenticationUser user*/){
 
         MatchEntity match = matchRepository.findWithRequirementById(matchId).orElseThrow(()->new NotFoundException("can't find match. id:" + matchId));
 
         Requirement requirement = match.getRequirement();
 
-        /*  테스트 용도로 주석처리
-        if(!requirement.getUser().getUsername().equals(authenticationUser.getUsername())){
+         /* 테스트 용도로 주석처리
+        if(!user.getId().equals(requirement.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
-        }
-         */
+        }*/
+
 
         if(match.getStatus()!=MatchEntityStatus.WAITING_PAYMENT){
             throw new InvalidAccessException("this access is not authorized");
@@ -112,7 +112,7 @@ public class PaymentService {
     public PayApproveResponseDto payApprove(String orderId, String pgToken) {
 
         Payment payment = paymentRepository.findWithMatchById(Long.parseLong(orderId)).orElseThrow(() -> new NotFoundException("can't find payment. id:" + orderId));
-        MatchEntity match = matchRepository.findById(payment.getMatch().getId()).orElseThrow(() -> new NotFoundException("can't find linked match."));
+        MatchEntity match = payment.getMatch();
 
         if(payment.getStatus()!=PaymentStatus.NOT_APPROVED){
             throw new InvalidAccessException("this access is not authorized");
@@ -147,21 +147,18 @@ public class PaymentService {
         return approveResponse;
     }
 
-    public PayCancelResponseDto payRefund(Long matchId/*, AuthenticationUser authenticationUser*/) {
+    public PayCancelResponseDto payRefund(Long matchId/*, AuthenticationUser user*/) {
 
 
         MatchEntity match = matchRepository.findWithPaymentById(matchId).orElseThrow(()->new NotFoundException("can't find match. id:" + matchId));
         Payment payment = match.getPayment();
 
-        /*
-        String requestPerson = authenticationUser.getUsername();
 
-        if(!payment.getUser().getUsername().equals(requestPerson) && !match.getApplication().getUser().getUsername().equals(requestPerson)){
+        /* 테스트 용도 주석처리
+        if(!user.getId().equals(payment.getUser().getId()) && !user.getId().equals(match.getApplication().getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
-        테스트 용도 주석처리
-         */
-
+        */
 
         if(match.getStatus()!=MatchEntityStatus.NOT_COMPLETED){
             throw new InvalidAccessException("this access is not authorized");

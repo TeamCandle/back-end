@@ -25,22 +25,20 @@ public class MessageService {
     private final MatchService matchService;
 
     @Transactional
-    public Long recordMessage(String message, Long userId, Long roomId){
+    public Long recordMessage(String message, AuthenticationUser user, Long roomId){
         return messageRepository.save(Message.builder()
                 .message(message)
-                .sender(new User(userId))
+                .sender(new User(user.getId()))
                 .room(new MatchEntity(roomId))
                 .createdAt(LocalDateTime.now())
                 .build());
     }
 
-    public List<MessageDto> getRecords(Long roomId, AuthenticationUser authenticationUser){
+    public List<MessageDto> getRecords(Long roomId, AuthenticationUser user){
 
         MatchEntity room = matchService.getMatch(roomId);
 
-        String username = authenticationUser.getUsername();
-
-        if(!username.equals(room.getRequirement().getUser().getUsername())&&!username.equals(room.getApplication().getUser().getUsername())){
+        if(!user.getId().equals(room.getRequirement().getUser().getId())&&!user.getId().equals(room.getApplication().getUser().getId())){
             throw new InvalidAccessException("Invalid access");
         }
 

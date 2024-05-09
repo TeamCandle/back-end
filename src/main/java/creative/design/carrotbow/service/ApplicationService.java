@@ -3,6 +3,7 @@ package creative.design.carrotbow.service;
 import creative.design.carrotbow.domain.Application;
 import creative.design.carrotbow.domain.MatchStatus;
 import creative.design.carrotbow.domain.Requirement;
+import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.dto.ListMatchDto;
 import creative.design.carrotbow.dto.MatchDto;
 import creative.design.carrotbow.error.InvalidAccessException;
@@ -30,12 +31,10 @@ public class ApplicationService {
 
     private final S3Service s3Service;
     private final GeoService geoService;
-    private final UserService userService;
 
 
-
-    public List<ListMatchDto> getApplications(AuthenticationUser authenticationUser){
-        List<Application> applicationList = applicationRepository.findListWithRequirementByUsername(authenticationUser.getUsername());
+    public List<ListMatchDto> getApplications(AuthenticationUser user){
+        List<Application> applicationList = applicationRepository.findListWithRequirementByUserId(user.getId());
 
         List<ListMatchDto> applications = new ArrayList<>();
 
@@ -54,17 +53,17 @@ public class ApplicationService {
     }
 
 
-    public MatchDto getApplication(Long id, String username){
+    public MatchDto getApplication(Long id, AuthenticationUser user){
         Application application = applicationRepository.findWithRequirementById(id).orElseThrow(() -> new NotFoundException("can't find application. id:" + id));
 
 
-        if(!username.equals(application.getUser().getUsername())){
+        if(!user.getId().equals(application.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
 
         return MatchDto.builder()
                 .id(application.getId())
-                .userName(application.getRequirement().getUser().getUsername())
+                .userId(application.getRequirement().getUser().getId())
                 .dogId(application.getRequirement().getDog().getId())
                 .dogImage(s3Service.loadImage(application.getRequirement().getDog().getImage()))
                 .careType(application.getRequirement().getCareType())
@@ -79,24 +78,22 @@ public class ApplicationService {
 
 
     @Transactional
-    public Long apply(Long requirementId, String username){
+    public Long apply(Long requirementId, AuthenticationUser user){
 
         Requirement requirement = requirementRepository.findWithApplicationsById(requirementId).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + requirementId));
-
-        System.out.println(requirement.getActualStatus());
 
         if(!requirement.getActualStatus().equals(Requirement.RECRUITING)){  //NOT MATCHED and <currentTime
             throw new WrongApplicationException("this requirement is expired. id:" + requirementId);
         }
 
         for(Application application: requirement.getApplications()){
-            if(application.getUser().getUsername().equals(username)){
-                throw new WrongApplicationException("this user already applied. username:" + username);
+            if(application.getUser().getId().equals(user.getId())){
+                throw new WrongApplicationException("this user already applied. username:" + user.getUsername());
             }
         }
 
         Application application = Application.builder()
-                .user(userService.findRead(username))
+                .user(new User(user.getId()))
                 .status(MatchStatus.NOT_MATCHED)  //NOT MATCHED
                 .createTime(LocalDateTime.now())
                 .build();
@@ -109,10 +106,10 @@ public class ApplicationService {
 
 
     @Transactional
-    public void cancelApplication(Long id, String username){
+    public void cancelApplication(Long id, AuthenticationUser user){
         Application application = applicationRepository.findWithRequirementById(id).orElseThrow(() -> new NotFoundException("can't find application. id:" + id));
 
-        if(!username.equals(application.getUser().getUsername())){
+        if(!user.getId().equals(application.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
 

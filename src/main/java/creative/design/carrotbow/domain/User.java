@@ -32,9 +32,6 @@ public class User {
     private String description;
     private String image;
 
-    @CreationTimestamp
-    private LocalDateTime CreateDate;
-
     @OneToMany(mappedBy = "owner",  cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final List<Dog> dogs = new ArrayList<>();
 

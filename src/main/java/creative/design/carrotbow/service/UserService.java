@@ -3,6 +3,7 @@ package creative.design.carrotbow.service;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.repository.UserRepository;
+import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.security.jwt.RefreshToken;
 import creative.design.carrotbow.security.jwt.TokenRepository;
@@ -22,29 +23,29 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public User findRead(String username){
+    public User findByUsername(String username){
         return userRepository.findByUsername(username).orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public User findReadWithDogs(String username){
-        return userRepository.findByUsernameWithDogs(username).orElse(null);
+    public User findWithDogs(Long id){
+        return userRepository.findWithDogs(id).orElse(null);
     }
 
     public User find(Long id){
-        return userRepository.findById(id).orElse(null);
+        return userRepository.find(id).orElse(null);
     }
 
     public void register(User user){
         userRepository.save(user);
     }
 
-    public void logOut(String username){
-        tokenRepository.deleteAllByUsername(username);
+    public void logout(AuthenticationUser user){
+        tokenRepository.deleteAll(user.getId());
     }
 
-    public void saveRefreshToken(String refreshToken, String username){
-        tokenRepository.save(new RefreshToken(refreshToken, username));
+    public void saveRefreshToken(String refreshToken, AuthenticationUser user){
+        tokenRepository.save(new RefreshToken(refreshToken, new User(user.getId())));
     }
 
     public String refreshAccessToken(String refreshToken){

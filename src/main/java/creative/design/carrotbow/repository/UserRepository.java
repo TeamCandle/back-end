@@ -19,7 +19,7 @@ public class UserRepository {
         return user.getId();
     }
 
-    public Optional<User> findById(Long id){
+    public Optional<User> find(Long id){
         return Optional.ofNullable(em.find(User.class, id));
     }
 
@@ -32,10 +32,10 @@ public class UserRepository {
 
     }
 
-    public Optional<User> findByUsernameWithDogs(String username){
+    public Optional<User> findWithDogs(Long id){
 
-        return em.createQuery("select u from User u left join fetch u.dogs where u.username =:username", User.class)
-                .setParameter("username", username)
+        return em.createQuery("select u from User u left join fetch u.dogs where u.id =:id", User.class)
+                .setParameter("id", id)
                 .getResultList().stream()
                 .findFirst();
 

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GeoService {
 
-
     private final GeometryFactory geometryFactory;
 
     public Point makeGeoData(org.springframework.data.geo.Point carePoint){

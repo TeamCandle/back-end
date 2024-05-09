@@ -26,7 +26,6 @@ public class MatchRepository {
     public Optional<MatchEntity> findWithRequirementById(Long id){
         return em.createQuery("select m from MatchEntity m" +
                         " join fetch m.requirement r" +
-                        " join fetch r.user" +
                         " where m.id=:id", MatchEntity.class)
                 .setParameter("id", id)
                 .getResultList()
@@ -36,9 +35,7 @@ public class MatchRepository {
     public Optional<MatchEntity> findWithPaymentById(Long id){
         return em.createQuery("select m from MatchEntity m" +
                         " join fetch m.application a" +
-                        " join fetch a.user au" +
                         " join fetch m.payment p" +
-                        " join fetch p.user pu" +
                         " where m.id=:id", MatchEntity.class)
                 .setParameter("id", id)
                 .getResultList()
@@ -50,24 +47,20 @@ public class MatchRepository {
                         " join fetch m.requirement r" +
                         " join fetch r.dog" +
                         " join fetch m.application a" +
-                        " join fetch a.user au" +
-                        " join fetch r.user ru" +
                         " where m.id=:id", MatchEntity.class)
                 .setParameter("id", id)
                 .getResultList()
                 .stream().findFirst();
     }
 
-    public List<MatchEntity> findListWithRequirementByUsername(String username){
+    public List<MatchEntity> findListWithRequirementByUserId(Long userId){
         return em.createQuery("select distinct m from MatchEntity m" +
-                        " join fetch m.application a" +
-                        " join fetch a.user au" +
                         " join fetch m.requirement r" +
+                        " join fetch m.application a" +
                         " join fetch r.dog" +
-                        " join fetch r.user ru" +
-                        " where ru.username=:username" +
-                        " or au.username=:username", MatchEntity.class)
-                .setParameter("username", username)
+                        " where r.user.id=:userId" +
+                        " or a.user.id=:userId", MatchEntity.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 

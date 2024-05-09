@@ -1,5 +1,6 @@
 package creative.design.carrotbow.error;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +12,16 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(JWTVerificationException.class)
+    public ResponseEntity<?> handleCustomException(JWTVerificationException ex) {
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", 401);
+        body.put("error", "Unauthorized");
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
 
     @ExceptionHandler(InvalidAccessException.class)
     public ResponseEntity<?> handleCustomException(InvalidAccessException ex) {

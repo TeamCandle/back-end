@@ -50,7 +50,7 @@ public class RequirementService
     }
 
     public List<ListMatchDto> getRequirementsByUser(AuthenticationUser authenticationUser){
-        List<Requirement> requirementList = requirementRepository.findListByUsername(authenticationUser.getUsername());
+        List<Requirement> requirementList = requirementRepository.findListByUserId(authenticationUser.getId());
 
         List<ListMatchDto> requirements = new ArrayList<>();
 
@@ -88,16 +88,16 @@ public class RequirementService
         return requirements;
     }
 
-    public HashMap<String, Object> getRequirementWithApplications(Long id, String username){
+    public HashMap<String, Object> getRequirementWithApplications(Long id, AuthenticationUser user){
         Requirement requirement = requirementRepository.findWithApplicationsById(id).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + id));
 
-        if(!username.equals(requirement.getUser().getUsername())){
+        if(!user.getId().equals(requirement.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
 
         MatchDto details = MatchDto.builder()
                 .id(requirement.getId())
-                .userName(requirement.getUser().getUsername())
+                .userId(requirement.getUser().getId())
                 .dogId(requirement.getDog().getId())
                 .dogImage(s3Service.loadImage(requirement.getDog().getImage()))
                 .careType(requirement.getCareType())
@@ -140,7 +140,7 @@ public class RequirementService
 
         return MatchDto.builder()
                 .id(requirement.getId())
-                .userName(requirement.getUser().getUsername())
+                .userId(requirement.getUser().getId())
                 .dogId(requirement.getDog().getId())
                 .dogImage(s3Service.loadImage(requirement.getDog().getImage()))
                 .careType(requirement.getCareType())
@@ -155,11 +155,11 @@ public class RequirementService
 
 
     @Transactional
-    public void cancelRequirement(Long id, String username){
+    public void cancelRequirement(Long id, AuthenticationUser user){
         Requirement requirement = requirementRepository.findById(id).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + id));
 
 
-        if(!username.equals(requirement.getUser().getUsername())){
+        if(!user.getId().equals(requirement.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
 

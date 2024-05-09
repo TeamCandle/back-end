@@ -33,8 +33,8 @@ public class MatchService {
 
 
 
-    public List<ListMatchDto> getMatches(AuthenticationUser authenticationUser){
-        List<MatchEntity> matchList = matchRepository.findListWithRequirementByUsername(authenticationUser.getUsername());
+    public List<ListMatchDto> getMatches(AuthenticationUser user){
+        List<MatchEntity> matchList = matchRepository.findListWithRequirementByUserId(user.getId());
 
         List<ListMatchDto> matches = new ArrayList<>();
 
@@ -59,9 +59,9 @@ public class MatchService {
     public HashMap<String, Object> getMatch(Long id, AuthenticationUser authenticationUser){
         MatchEntity match = matchRepository.findWithFullById(id).orElseThrow(()->new NotFoundException("can't find match. id:" + id));
 
-        String requestPerson = authenticationUser.getUsername();
-        String requirePerson=match.getRequirement().getUser().getUsername();
-        String applyPerson=match.getApplication().getUser().getUsername();
+        Long requestPerson = authenticationUser.getId();
+        Long requirePerson=match.getRequirement().getUser().getId();
+        Long applyPerson=match.getApplication().getUser().getId();
 
         if(!requestPerson.equals(requirePerson)&&!requestPerson.equals(applyPerson)){
             throw new InvalidAccessException("this access is not authorized");
@@ -70,7 +70,7 @@ public class MatchService {
 
         MatchDto details = MatchDto.builder()
                 .id(match.getId())
-                .userName(requestPerson.equals(requirePerson) ? requirePerson : applyPerson)
+                .userId(requestPerson.equals(requirePerson) ? requirePerson : applyPerson)
                 .dogId(match.getRequirement().getDog().getId())
                 .dogImage(s3Service.loadImage(match.getRequirement().getDog().getImage()))
                 .careType(match.getRequirement().getCareType())
@@ -85,18 +85,30 @@ public class MatchService {
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("details", details);
-        result.put("payment", requestPerson.equals(requirePerson));
+        result.put("requester", requestPerson.equals(requirePerson));
 
         return result;
     }
 
 
     @Transactional
-    public Long makeMatch(Long requirementId, Long applicationId, String username){
+    public Long makeMatch(Long requirementId, Long applicationId, AuthenticationUser user){
         Requirement requirement = requirementRepository.findWithApplicationsById(requirementId).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + requirementId));
-        Application matchedApplication = applicationRepository.findById(applicationId).orElseThrow(() -> new NotFoundException("can't find application. id:" + applicationId));
+        Application matchedApplication = applicationRepository.find(applicationId).orElseThrow(() -> new NotFoundException("can't find application. id:" + applicationId));
 
-        if(!username.equals(requirement.getUser().getUsername())){
+        if(!user.getId().equals(requirement.getUser().getId())){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        boolean check = false;
+
+        for(Application application: requirement.getApplications()){
+            if(application.getId().equals(applicationId)){
+                check = true;
+                break;
+            }
+        }
+        if(!check){
             throw new InvalidAccessException("this access is not authorized");
         }
 
@@ -120,13 +132,11 @@ public class MatchService {
     }
 
     @Transactional
-    public void completeMatch(Long id, AuthenticationUser authenticationUser){
+    public void completeMatch(Long id, AuthenticationUser user){
 
         MatchEntity match = matchRepository.findWithRequirementById(id).orElseThrow(() -> new NotFoundException("can't find match. id:" + id));
 
-        String username = match.getRequirement().getUser().getUsername();
-
-        if(!username.equals(authenticationUser.getUsername())){
+        if(!user.getId().equals(match.getRequirement().getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
 
@@ -138,16 +148,14 @@ public class MatchService {
     }
 
     @Transactional
-    public void cancelMatch(Long id, AuthenticationUser authenticationUser){
+    public void cancelMatch(Long id, AuthenticationUser user){
 
-        MatchEntity match = matchRepository.findWithRequirementById(id).orElseThrow(() -> new NotFoundException("can't find match. id:" + id));
+        MatchEntity match = matchRepository.findWithFullById(id).orElseThrow(() -> new NotFoundException("can't find match. id:" + id));
 
-        String username = match.getRequirement().getUser().getUsername();
-
-        if(!username.equals(authenticationUser.getUsername())){
+        if(!user.getId().equals(match.getRequirement().getUser().getId()) && !user.getId().equals(match.getApplication().getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
-        if(match.getStatus()==MatchEntityStatus.WAITING_PAYMENT){
+        if(match.getStatus()!=MatchEntityStatus.WAITING_PAYMENT){
             throw new InvalidAccessException("this access is not authorized");
         }
 

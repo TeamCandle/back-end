@@ -5,10 +5,10 @@ import creative.design.carrotbow.domain.DogSize;
 import creative.design.carrotbow.domain.MatchStatus;
 import creative.design.carrotbow.domain.Requirement;
 import creative.design.carrotbow.dto.requestForm.RequirementCondForm;
+import creative.design.carrotbow.service.GeoService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Repository;
@@ -25,6 +25,8 @@ public class RequirementRepository {
     private final EntityManager em;
     private final GeometryFactory geometryFactory;
 
+    private final GeoService geoService;
+
     public Long save(Requirement requirement){
         em.persist(requirement);
         return requirement.getId();
@@ -33,7 +35,6 @@ public class RequirementRepository {
     public Optional<Requirement> findById(Long id){
         return em.createQuery("select r from Requirement r " +
                         " join fetch r.dog" +
-                        " join fetch r.user" +
                         " where r.id=:id", Requirement.class)
                 .setParameter("id", id)
                 .getResultList()
@@ -44,19 +45,17 @@ public class RequirementRepository {
         return em.createQuery("select r from Requirement r " +
                         " join fetch r.dog" +
                         " left join fetch r.applications a" +
-                        " left join fetch a.user" +
                         " where r.id=:id", Requirement.class)
                         .setParameter("id", id)
                         .getResultList()
                         .stream().findFirst();
     }
 
-    public List<Requirement> findListByUsername(String username){
+    public List<Requirement> findListByUserId(Long userId){
         List<Requirement> requirements = em.createQuery("select r from Requirement r" +
                         " join fetch r.dog" +
-                        " join fetch r.user u" +
-                        " where u.username=:username", Requirement.class)
-                .setParameter("username", username)
+                        " where r.user.id=:userId", Requirement.class)
+                .setParameter("userId", userId)
                 .getResultList();
 
         if(requirements==null){
@@ -66,17 +65,10 @@ public class RequirementRepository {
         return requirements;
     }
 
-    private org.locationtech.jts.geom.Point makeGeoData(org.springframework.data.geo.Point carePoint){
-        final Coordinate coordinate = new Coordinate(carePoint.getX(), carePoint.getY());
-        org.locationtech.jts.geom.Point point = geometryFactory.createPoint(coordinate);
-        point.setSRID(4326); // SRID 설정
-
-        return point;
-    }
 
     public List<Requirement> findListByLocation(RequirementCondForm condForm) {
 
-        Point center = makeGeoData(condForm.getLocation());
+        Point center = geoService.makeGeoData(condForm.getLocation());
         System.out.println(center);
         System.out.println(condForm.getRadius());
         int radius = condForm.getRadius()==0?5000:condForm.getRadius()*1000;

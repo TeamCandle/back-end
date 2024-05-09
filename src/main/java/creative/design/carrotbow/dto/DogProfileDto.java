@@ -8,7 +8,7 @@ import lombok.Data;
 public class DogProfileDto {
 
     private String name;
-    private String owner;
+    private Long owner;
     private String gender;
     private boolean neutered;
     private int age;
@@ -20,7 +20,7 @@ public class DogProfileDto {
     private byte[] image;
 
     @Builder
-    public DogProfileDto(String name, String owner, String gender, boolean neutered, int age, float size, float weight, String breed, String description, byte[] image) {
+    public DogProfileDto(String name, Long owner, String gender, boolean neutered, int age, float size, float weight, String breed, String description, byte[] image) {
         this.name = name;
         this.owner = owner;
         this.gender = gender;

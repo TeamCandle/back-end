@@ -19,7 +19,7 @@ public class ApplicationRepository {
     }
 
 
-    public Optional<Application> findById(Long id){
+    public Optional<Application> find(Long id){
         return Optional.ofNullable(em.find(Application.class, id));
     }
 
@@ -27,7 +27,6 @@ public class ApplicationRepository {
     public Optional<Application> findWithRequirementById(Long id){
         return em.createQuery("select a from Application a" +
                         " join fetch a.requirement r" +
-                        " join fetch r.user" +
                         " join fetch r.dog" +
                         " where a.id=:id", Application.class)
                 .setParameter("id", id)
@@ -35,13 +34,12 @@ public class ApplicationRepository {
                 .stream().findFirst();
     }
 
-    public List<Application> findListWithRequirementByUsername(String username){
+    public List<Application> findListWithRequirementByUserId(Long userId){
         return em.createQuery("select a from Application a" +
-                        " join fetch a.user u" +
                         " join fetch a.requirement r" +
                         " join fetch r.dog" +
-                        " where u.username=:username", Application.class)
-                .setParameter("username", username)
+                        " where a.user.id=:userId", Application.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 

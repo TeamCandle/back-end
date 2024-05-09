@@ -4,6 +4,8 @@ import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -27,8 +31,13 @@ public class ChatController {
     // 이전 기록
     @ResponseBody
     @GetMapping("/chat/history")
-    public List<MessageDto> getHistory(@RequestParam Long roomId, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        return messageService.getRecords(roomId, principalDetails.getUser());
+    public ResponseEntity<?> getHistory(@RequestParam Long roomId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        List<MessageDto> messages = messageService.getRecords(roomId, principalDetails.getUser());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("messages", messages);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
@@ -47,7 +56,7 @@ public class ChatController {
         Authentication authentication = (Authentication) accessor.getSessionAttributes().get("Authentication");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        messageService.recordMessage(message, principalDetails.getUser().getId(), roomId);
+        messageService.recordMessage(message, principalDetails.getUser(), roomId);
 
         MessageDto messageDto = new MessageDto(message, principalDetails.getName(), LocalDateTime.now());
 

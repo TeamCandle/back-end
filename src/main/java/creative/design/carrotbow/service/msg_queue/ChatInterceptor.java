@@ -57,7 +57,7 @@ public class ChatInterceptor implements ChannelInterceptor {
                     throw new InvalidAccessException("Invalid or Expired token");
                 } else {
 
-                    User userEntity = userService.findRead(username);
+                    User userEntity = userService.findByUsername(username);
                     PrincipalDetails principalDetails = new PrincipalDetails(
                             AuthenticationUser.builder()
                                     .id(userEntity.getId())
@@ -87,15 +87,21 @@ public class ChatInterceptor implements ChannelInterceptor {
             Long roomId = Long.parseLong(destination.replace("/exchange/chat.exchange/*.room.", ""));
             MatchEntity match = matchService.getMatch(roomId);
 
+            System.out.println("roomId: " + roomId);
+
             if(match.getStatus()==MatchEntityStatus.COMPLETED || match.getStatus() == MatchEntityStatus.CANCELLED){
+                System.out.println("invalid2");
                 throw new InvalidAccessException("Invalid access");
             }
 
             Authentication authentication = (Authentication) accessor.getSessionAttributes().get("Authentication");
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-            String username = principalDetails.getName();
+            AuthenticationUser user = principalDetails.getUser();
 
-            if(!username.equals(match.getRequirement().getUser().getUsername())&&!username.equals(match.getApplication().getUser().getUsername())) {
+            System.out.println("username: " + user.getUsername());
+
+            if(!user.getId().equals(match.getRequirement().getUser().getId())&&!user.getId().equals(match.getApplication().getUser().getId())) {
+                System.out.println("invalid3");
                 throw new InvalidAccessException("Invalid access");
             }
 
@@ -113,6 +119,7 @@ public class ChatInterceptor implements ChannelInterceptor {
             Long roomId = (Long) accessor.getSessionAttributes().get("roomId");
 
             if(!targetId.equals(roomId)){
+                System.out.println("invalid4");
                 throw new InvalidAccessException("Invalid access");
             }
         }

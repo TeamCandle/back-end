@@ -33,7 +33,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         String accessToken = jwtUtils.generateAccessToken(user.getUsername());
         String refreshToken = jwtUtils.generateRefreshToken(user.getUsername());
 
-        userService.saveRefreshToken(refreshToken, user.getUsername());
+        userService.saveRefreshToken(refreshToken, user);
 
         response.addHeader("Authorization1", "Bearer "+accessToken);
         response.addHeader("Authorization2", "Bearer "+refreshToken);
