@@ -26,9 +26,9 @@ public class MatchController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<?> getMatchList(@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> getMatchList(@RequestParam int offset, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        List<ListMatchDto> matches = matchService.getMatches(principalDetails.getUser());
+        List<ListMatchDto> matches = matchService.getMatches(offset, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();
         result.put("matches", matches);

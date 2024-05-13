@@ -11,6 +11,7 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -23,9 +24,9 @@ import java.util.Optional;
 public class RequirementRepository {
 
     private final EntityManager em;
-    private final GeometryFactory geometryFactory;
-
     private final GeoService geoService;
+    @Value("${spring.jpa.page-size}")
+    private int pageSize;
 
     public Long save(Requirement requirement){
         em.persist(requirement);
@@ -51,11 +52,14 @@ public class RequirementRepository {
                         .stream().findFirst();
     }
 
-    public List<Requirement> findListByUserId(Long userId){
+    public List<Requirement> findListByUserId(Long userId, int offset){
         List<Requirement> requirements = em.createQuery("select r from Requirement r" +
                         " join fetch r.dog" +
-                        " where r.user.id=:userId", Requirement.class)
+                        " where r.user.id=:userId" +
+                        " order by r.startTime asc", Requirement.class)
                 .setParameter("userId", userId)
+                .setFirstResult(pageSize * (offset-1))
+                .setMaxResults(pageSize)
                 .getResultList();
 
         if(requirements==null){
@@ -66,7 +70,7 @@ public class RequirementRepository {
     }
 
 
-    public List<Requirement> findListByLocation(RequirementCondForm condForm) {
+    public List<Requirement> findListByLocation(RequirementCondForm condForm, int offset) {
 
         Point center = geoService.makeGeoData(condForm.getLocation());
         System.out.println(center);
@@ -76,7 +80,7 @@ public class RequirementRepository {
         String queryString = "select r from Requirement r" +
                 " join fetch r.dog d" +
                 " where r.startTime>:now" +
-                " and r.status =:currentStatus"+
+                " and r.status =:currentStatus" +
                 " and st_contains(st_buffer(:center, :radius), r.careLocation)";
 
 
@@ -92,12 +96,15 @@ public class RequirementRepository {
             queryString += " and r.careType=:care";
         }
 
+        queryString +=  " order by r.startTime asc";
 
         Query findQuery = em.createQuery(queryString, Requirement.class)
                 .setParameter("now", LocalDateTime.now())
                 .setParameter("currentStatus", MatchStatus.NOT_MATCHED)
                 .setParameter("center", center)
-                .setParameter("radius", radius);
+                .setParameter("radius", radius)
+                .setFirstResult(pageSize * (offset-1))
+                .setMaxResults(pageSize);
 
         if (dogSize != null) {
             float minWeight = 0;

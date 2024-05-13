@@ -33,8 +33,8 @@ public class ApplicationService {
     private final GeoService geoService;
 
 
-    public List<ListMatchDto> getApplications(AuthenticationUser user){
-        List<Application> applicationList = applicationRepository.findListWithRequirementByUserId(user.getId());
+    public List<ListMatchDto> getApplications(int offset, AuthenticationUser user){
+        List<Application> applicationList = applicationRepository.findListWithRequirementByUserId(user.getId(), offset);
 
         List<ListMatchDto> applications = new ArrayList<>();
 

@@ -24,9 +24,9 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @GetMapping("/list")
-    public ResponseEntity<?> getApplicationList(@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> getApplicationList(@RequestParam int offset, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        List<ListMatchDto> applications = applicationService.getApplications(principalDetails.getUser());
+        List<ListMatchDto> applications = applicationService.getApplications(offset, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();
         result.put("applications", applications);

@@ -74,9 +74,9 @@ public class RequirementController {
     }
 
     @GetMapping("/list/me")
-    public ResponseEntity<?> getRequirementListByUser(@AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> getRequirementListByUser(@RequestParam int offset, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        List<ListMatchDto> requirements = requirementService.getRequirementsByUser(principalDetails.getUser());
+        List<ListMatchDto> requirements = requirementService.getRequirementsByUser(offset, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();
         result.put("requirements", requirements);
@@ -85,7 +85,7 @@ public class RequirementController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<?> getRequirementListByLocation(@RequestBody RequirementCondForm condForm, BindingResult bindingResult){
+    public ResponseEntity<?> getRequirementListByLocation(@RequestParam int offset, @RequestBody RequirementCondForm condForm, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -103,7 +103,7 @@ public class RequirementController {
             return ResponseEntity.badRequest().body(list);
         }
 
-        List<ListMatchDto> requirements = requirementService.getRequirementsByLocation(condForm);
+        List<ListMatchDto> requirements = requirementService.getRequirementsByLocation(condForm, offset);
 
         Map<String, Object> result = new HashMap<>();
         result.put("requirements", requirements);

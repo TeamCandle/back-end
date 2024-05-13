@@ -49,8 +49,8 @@ public class RequirementService
                         .build());
     }
 
-    public List<ListMatchDto> getRequirementsByUser(AuthenticationUser authenticationUser){
-        List<Requirement> requirementList = requirementRepository.findListByUserId(authenticationUser.getId());
+    public List<ListMatchDto> getRequirementsByUser(int offset, AuthenticationUser authenticationUser){
+        List<Requirement> requirementList = requirementRepository.findListByUserId(authenticationUser.getId(), offset);
 
         List<ListMatchDto> requirements = new ArrayList<>();
 
@@ -69,8 +69,8 @@ public class RequirementService
         return requirements;
     }
 
-    public List<ListMatchDto> getRequirementsByLocation(RequirementCondForm condForm){
-        List<Requirement> requirementList = requirementRepository.findListByLocation(condForm);
+    public List<ListMatchDto> getRequirementsByLocation(RequirementCondForm condForm, int offset){
+        List<Requirement> requirementList = requirementRepository.findListByLocation(condForm, offset);
 
         List<ListMatchDto> requirements = new ArrayList<>();
 

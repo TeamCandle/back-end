@@ -33,8 +33,8 @@ public class MatchService {
 
 
 
-    public List<ListMatchDto> getMatches(AuthenticationUser user){
-        List<MatchEntity> matchList = matchRepository.findListWithRequirementByUserId(user.getId());
+    public List<ListMatchDto> getMatches(int offset, AuthenticationUser user){
+        List<MatchEntity> matchList = matchRepository.findListWithRequirementByUserId(user.getId(), offset);
 
         List<ListMatchDto> matches = new ArrayList<>();
 
