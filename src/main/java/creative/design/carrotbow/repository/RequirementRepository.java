@@ -46,6 +46,7 @@ public class RequirementRepository {
         return em.createQuery("select r from Requirement r " +
                         " join fetch r.dog" +
                         " left join fetch r.applications a" +
+                        " left join fetch a.user" +
                         " where r.id=:id", Requirement.class)
                         .setParameter("id", id)
                         .getResultList()
@@ -53,7 +54,7 @@ public class RequirementRepository {
     }
 
     public List<Requirement> findListByUserId(Long userId, int offset){
-        List<Requirement> requirements = em.createQuery("select r from Requirement r" +
+        return em.createQuery("select r from Requirement r" +
                         " join fetch r.dog" +
                         " where r.user.id=:userId" +
                         " order by r.startTime asc", Requirement.class)
@@ -61,12 +62,6 @@ public class RequirementRepository {
                 .setFirstResult(pageSize * (offset-1))
                 .setMaxResults(pageSize)
                 .getResultList();
-
-        if(requirements==null){
-            requirements = Collections.emptyList();
-        }
-
-        return requirements;
     }
 
 

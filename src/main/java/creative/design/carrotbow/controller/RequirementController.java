@@ -30,7 +30,6 @@ public class RequirementController {
 
     private final RequirementService requirementService;
 
-
     @PostMapping("")
     public ResponseEntity<?> registerRequirement(@Validated @RequestBody RequireRegisterForm requireRegisterForm, BindingResult bindingResult){
 

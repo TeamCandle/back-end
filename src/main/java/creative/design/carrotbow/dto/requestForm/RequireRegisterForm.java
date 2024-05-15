@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class RequireRegisterForm {
-
-    private Long id;
     @NotNull
     private Long dogId;
     @NotEmpty
@@ -22,8 +20,8 @@ public class RequireRegisterForm {
     private LocalDateTime endTime;
     @NotNull
     private Point careLocation;
-    @Min(0) @NotNull
-    private Integer reward;
+    @Min(0)
+    private int reward;
     @NotEmpty
     private String description;
 }

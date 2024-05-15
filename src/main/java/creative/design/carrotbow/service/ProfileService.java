@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -111,6 +112,17 @@ public class ProfileService {
                 .description(dog.getDescription())
                 .image(s3Service.loadImage(dog.getImage()))
                 .build();
+    }
+
+    public List<ListDogDto> getDogProfileListByUserId(Long userId){
+        List<Dog> dogList = dogService.findListByUserId(userId);
+
+        return dogList.stream().map(dog -> ListDogDto.builder()
+                .id(dog.getId())
+                .name(dog.getName())
+                .gender(dog.getGender())
+                .image(s3Service.loadImage(dog.getImage()))
+                .build()).collect(Collectors.toList());
     }
 
     @Transactional

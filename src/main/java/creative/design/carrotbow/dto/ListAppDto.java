@@ -11,15 +11,15 @@ public class ListAppDto {
     private byte[] image;
     private String name;
     private String gender;
-    private String rate;
+    private float rating;
 
     @Builder
-    public ListAppDto(Long id, String username, byte[] image, String name, String gender, String rate) {
+    public ListAppDto(Long id, String username, byte[] image, String name, String gender, float rating) {
         this.id = id;
         this.username = username;
         this.image = image;
         this.name = name;
         this.gender = gender;
-        this.rate = rate;
+        this.rating = rating;
     }
 }

@@ -40,7 +40,7 @@ public class Requirement {
 
     private Point careLocation;
 
-    private Integer reward;
+    private int reward;
 
     private String description;
 
@@ -61,7 +61,7 @@ public class Requirement {
     }
 
     @Builder
-    public Requirement(User user, Dog dog, Integer reward, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, MatchStatus status, LocalDateTime createTime) {
+    public Requirement(User user, Dog dog, int reward, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, MatchStatus status, LocalDateTime createTime) {
         this.user = user;
         this.dog = dog;
         this.careType = careType;

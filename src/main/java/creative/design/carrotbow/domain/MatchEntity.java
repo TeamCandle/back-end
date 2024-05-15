@@ -28,8 +28,6 @@ public class MatchEntity {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-
-
     @Enumerated(EnumType.STRING)
     private MatchEntityStatus status;
 

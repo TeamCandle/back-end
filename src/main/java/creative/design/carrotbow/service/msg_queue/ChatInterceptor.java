@@ -70,12 +70,9 @@ public class ChatInterceptor implements ChannelInterceptor {
 
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                     accessor.getSessionAttributes().put("Authentication", authentication);
-
-                    System.out.println("accessor: " + accessor);
                 }
             }
             else{
-                System.out.println("invalid1");
                 throw new InvalidAccessException("Invalid access");
             }
         }
@@ -90,7 +87,6 @@ public class ChatInterceptor implements ChannelInterceptor {
             System.out.println("roomId: " + roomId);
 
             if(match.getStatus()==MatchEntityStatus.COMPLETED || match.getStatus() == MatchEntityStatus.CANCELLED){
-                System.out.println("invalid2");
                 throw new InvalidAccessException("Invalid access");
             }
 
@@ -101,7 +97,6 @@ public class ChatInterceptor implements ChannelInterceptor {
             System.out.println("username: " + user.getUsername());
 
             if(!user.getId().equals(match.getRequirement().getUser().getId())&&!user.getId().equals(match.getApplication().getUser().getId())) {
-                System.out.println("invalid3");
                 throw new InvalidAccessException("Invalid access");
             }
 
@@ -119,7 +114,6 @@ public class ChatInterceptor implements ChannelInterceptor {
             Long roomId = (Long) accessor.getSessionAttributes().get("roomId");
 
             if(!targetId.equals(roomId)){
-                System.out.println("invalid4");
                 throw new InvalidAccessException("Invalid access");
             }
         }

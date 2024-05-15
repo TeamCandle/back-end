@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,5 +33,11 @@ public class DogRepository {
         return em.createQuery("select d from Dog d join fetch d.owner where d.id=:id", Dog.class)
                 .setParameter("id", id)
                 .getResultList().stream().findFirst();
+    }
+
+    public List<Dog> findListByUserId(Long userId){
+        return em.createQuery("select d from Dog d where d.owner.id=:userId", Dog.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 }

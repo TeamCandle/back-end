@@ -19,13 +19,13 @@ public class MatchDto {
     private Point careLocation;
     private String description;
     private Long userId;
-    private Integer reward;
+    private int reward;
     private Long dogId;
     private String status;
 
 
     @Builder
-    public MatchDto(Long id, byte[] dogImage, Integer reward, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, Long userId, Long dogId, String status) {
+    public MatchDto(Long id, byte[] dogImage, int reward, CareType careType, LocalDateTime startTime, LocalDateTime endTime, Point careLocation, String description, Long userId, Long dogId, String status) {
         this.id = id;
         this.dogImage = dogImage;
         this.careType = careType;

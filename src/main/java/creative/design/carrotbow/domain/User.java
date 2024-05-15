@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +28,9 @@ public class User {
     private String phNum;
     private String description;
     private String image;
+    private float totalRating;
+    private int reviewCount;
+
 
     @OneToMany(mappedBy = "owner",  cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final List<Dog> dogs = new ArrayList<>();
@@ -40,7 +40,7 @@ public class User {
     }
 
     @Builder
-    public User(String username, String password, String email, String role, String name, String gender, int birthYear, String phNum) {
+    public User(String username, String password, String email, String role, String name, String gender, int birthYear, String phNum, float totalRating, int reviewCount) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -49,6 +49,8 @@ public class User {
         this.gender = gender;
         this.birthYear = birthYear;
         this.phNum = phNum;
+        this.totalRating = totalRating;
+        this.reviewCount = reviewCount;
     }
 
     public void changeDescription(String description){
@@ -57,5 +59,19 @@ public class User {
 
     public void changeImage(String image){
         this.image = image;
+    }
+
+    public void addReview(float rating){
+        reviewCount++;
+        totalRating += rating;
+    }
+
+    public void subReview(float rating){
+        reviewCount--;
+        totalRating -= rating;
+    }
+
+    public float getRating(){
+        return totalRating/reviewCount;
     }
 }

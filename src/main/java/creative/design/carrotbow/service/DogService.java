@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,6 +29,10 @@ public class DogService {
 
     public Dog findWithUser(Long id){
         return dogRepository.findByIdWithUser(id).orElseThrow(()->new NotFoundException("can't find dog. id:"+id));
+    }
+
+    public List<Dog> findListByUserId(Long userId){
+        return dogRepository.findListByUserId(userId);
     }
 
     public Dog find(Long id){

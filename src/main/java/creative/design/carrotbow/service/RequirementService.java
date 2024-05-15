@@ -121,7 +121,7 @@ public class RequirementService
                     applications.add(ListAppDto.builder()
                             .id(application.getId())
                             .username(application.getUser().getUsername())
-                            .rate("not implemented")
+                            .rating(application.getUser().getReviewCount()!=0?application.getUser().getTotalRating()/application.getUser().getReviewCount():-1)
                             .name(application.getUser().getName())
                             .gender(application.getUser().getGender())
                             .image(s3Service.loadImage(application.getUser().getImage()))

@@ -1,6 +1,7 @@
 package creative.design.carrotbow.controller;
 
 import creative.design.carrotbow.dto.DogProfileDto;
+import creative.design.carrotbow.dto.ListDogDto;
 import creative.design.carrotbow.dto.requestForm.DogRegisterForm;
 import creative.design.carrotbow.dto.UserProfileDto;
 import creative.design.carrotbow.error.ErrorResponse;
@@ -72,6 +73,15 @@ public class ProfileController {
     @ResponseBody
     public DogProfileDto getDogProfile(@RequestParam Long id){
         return profileService.getDogProfile(id);
+    }
+
+    @GetMapping("/dog/list")
+    public ResponseEntity<?> getDogList(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        List<ListDogDto> dogs = profileService.getDogProfileListByUserId(principalDetails.getUser().getId());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("dogs", dogs);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping("/dog")

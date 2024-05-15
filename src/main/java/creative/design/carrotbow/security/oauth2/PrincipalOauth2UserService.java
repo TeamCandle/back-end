@@ -68,7 +68,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
             user = User.builder().username(username).password(password).email(email)
                     .role(role).phNum(phNum).name(name).gender(gender).birthYear(birthYear)
-                    .build();
+                    .totalRating(0).reviewCount(0).build();
 
             userService.register(user);
         }

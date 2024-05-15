@@ -51,6 +51,7 @@ public class MatchRepository {
                         " join fetch m.requirement r" +
                         " join fetch r.dog" +
                         " join fetch m.application a" +
+                        " join fetch a.user" +
                         " where m.id=:id", MatchEntity.class)
                 .setParameter("id", id)
                 .getResultList()

@@ -81,7 +81,7 @@ public class PaymentService {
         map.put("partner_user_id", requirement.getUser().getUsername());
         map.put("item_name",requirement.getCareType().getActualName() + "대행");
         map.put("quantity","1");
-        map.put("total_amount", requirement.getReward().toString());
+        map.put("total_amount", Integer.toString(requirement.getReward()));
         map.put("tax_free_amount", "0");
 
         map.put("approval_url", partnerServer+"/approve?partner_order_id="+orderId); // 성공 시 redirect url
