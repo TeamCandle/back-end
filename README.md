@@ -116,7 +116,7 @@ refreshToken이 만료됐을 경우
 }  
 
 ## 유저 프로필 정보
-### GET /profile/user?useranme=${username}
+### GET /profile/user?id=${유저 Id}
 
 ### 응답
 200_ok   
@@ -201,6 +201,23 @@ text: "success change"
     "status": 400
 }   
 
+
+## 애견 프로필 리스트 조회
+### GET /profile/dog/list
+
+### 응답
+{  
+  
+    "dogs: [    
+        {  
+            "id": 애견 id(조회시 이용)
+            "name: 이름,
+            "gender": 성별, 
+            "image": 이미지(base 64 byte code)
+        },  
+        ...  
+    ]  
+}
 
 
 ## 애견 프로필 등록
@@ -399,7 +416,7 @@ text: "success delete"
 
 
 ## 내 요구 리스트 조회 
-### GET /requirement/list/me
+### GET /requirement/list/me?offset=${page no}
 
 ### 응답
 200_ok   
@@ -440,7 +457,7 @@ text: "success delete"
       "y": 위도
     },
     "description": 설명,
-    "userName": 유저네임,
+    "userId": 유저 id,
     "dogId": 애견 id,
     "status": 등록 상태,
     "reward": 보상 
@@ -450,7 +467,7 @@ text: "success delete"
     {  
 
       "id": 신청 id,
-      "userName": 유저네임, 
+      "userId": 유저 id, 
       "image": 유저 이미지,
       "name": 유저 이름,
       "gender": 성별,
@@ -462,7 +479,7 @@ text: "success delete"
 
 
 ## 요구 리스트 조회 
-### GET /requirement/list
+### GET /requirement/list?offset=${page no}
 - body
 
 {  
@@ -530,7 +547,7 @@ text: "success cancel"
 
 
 ## 신청 리스트 조회 
-### GET /application/list
+### GET /application/list?offset=${page no}
 
 
 ### 응답
@@ -569,7 +586,7 @@ text: "success cancel"
       "y": 위도
     },
     "description": 설명,
-    "userName": 요구 등록 유저 네임,
+    "userId": 요구 등록 유저 id,
     "dogId": 애견 id,
     "reward", 보상,
     "status": 신청 상태
@@ -604,7 +621,7 @@ text: "success cancel"
 
 
 ## 매칭 리스트 조회 
-### GET /match/list
+### GET /match/list?offset=${page no}
 
 
 ### 응답
@@ -646,7 +663,7 @@ text: "success cancel"
       "y": 위도
     },
     "description": 설명,
-    "userName": 매칭 상대 유저네임,
+    "userId": 매칭 상대 유저 id,
     "dogId": 애견 id,
     "reward", 보상,
     "status": 매칭 상태
