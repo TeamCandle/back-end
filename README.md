@@ -735,17 +735,85 @@ test: "refund payment total: 환불 금액"
   "messages": [  (message List)  
       
     {  
-      "id": 매칭 id,
-      "dogImage": 애견 이미지,
-      "careType": 케어 타입
+      "id": 매칭 id,  
+      "dogImage": 애견 이미지,  
+      "careType": 케어 타입  
     },
       ...
   ]
 
-
 }
 
   
+## 리뷰 등록
+### POST /review  
+
+- body
+
+{  
+     
+     "id": 매칭 id, (required)   
+     "rating": 평점, (0~5)  
+     "text": 리뷰 (required)  
+  }
+
+### 응답
+200_ok  
+{id: 매칭 id}
+
+
+## 리뷰 변경
+### PUT /review  
+
+- body
+
+{  
+     
+     "id": 리뷰 id, (required)  
+     "rating": 평점, (0~5)  
+     "text": 리뷰 (required)  
+  }
+
+### 응답
+200_ok  
+{id: 매칭 id}
+
+
+## 리뷰 조회
+### GET /review?matchId=${match Id}  
+
+### 응답
+200_ok  
+{  
+     
+     "id": 리뷰 id, (required)   
+     "rating": 평점, (0~5)  
+     "text": 리뷰 (required)  
+}
+
+
+## 리뷰 리스트 조회
+### GET /review/list?offset=${page no}
+
+### 응답
+200_ok
+{   
+  "reviews": [  (review List)  
+      
+    {  
+      "id": 리뷰 id,    
+      "matchId": 매칭 id,    
+      "rating": 평점, (0~5)   
+      "text": 리뷰,  
+      "createdAt": 작성 시간,  
+      "breed": 견종,  
+      "careType": 케어 타입    
+    },
+      ...
+  ]
+
+}
+
 
 
 
