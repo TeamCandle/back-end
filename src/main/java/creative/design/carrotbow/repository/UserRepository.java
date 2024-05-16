@@ -32,12 +32,4 @@ public class UserRepository {
 
     }
 
-    public Optional<User> findWithDogs(Long id){
-
-        return em.createQuery("select distinct u from User u left join fetch u.dogs where u.id =:id", User.class)
-                .setParameter("id", id)
-                .getResultList().stream()
-                .findFirst();
-
-    }
 }

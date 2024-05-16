@@ -29,10 +29,10 @@ public class ProfileService {
 
     public UserProfileDto getUserProfile(Long id){
 
-        User user = userService.findWithDogs(id);
+        User user = userService.find(id);
+        List<Dog> dogs = dogService.findDogsByUserId(id);
 
         int age = LocalDate.now().getYear() - user.getBirthYear() + 1;
-        List<Dog> dogs = user.getDogs();
 
         ArrayList<ListDogDto> dogList = new ArrayList<>();
 
@@ -115,7 +115,7 @@ public class ProfileService {
     }
 
     public List<ListDogDto> getDogProfileListByUserId(Long userId){
-        List<Dog> dogList = dogService.findListByUserId(userId);
+        List<Dog> dogList = dogService.findDogsByUserId(userId);
 
         return dogList.stream().map(dog -> ListDogDto.builder()
                 .id(dog.getId())
@@ -135,8 +135,6 @@ public class ProfileService {
 
     @Transactional
     public void deleteDogProfile(Long id){
-        Dog dog = dogService.find(id);
-        s3Service.deleteImage(dog.getImage());
         dogService.delete(id);
     }
 }

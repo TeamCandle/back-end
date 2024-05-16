@@ -24,14 +24,15 @@ public class DogService {
     }
 
     public void delete(Long id){
-        dogRepository.deleteById(id);
+        Dog dog = dogRepository.findById(id).orElseThrow(() -> new NotFoundException("can't find dog. id:" + id));
+        dog.delete();
     }
 
     public Dog findWithUser(Long id){
         return dogRepository.findByIdWithUser(id).orElseThrow(()->new NotFoundException("can't find dog. id:"+id));
     }
 
-    public List<Dog> findListByUserId(Long userId){
+    public List<Dog> findDogsByUserId(Long userId){
         return dogRepository.findListByUserId(userId);
     }
 

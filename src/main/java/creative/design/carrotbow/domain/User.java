@@ -32,9 +32,6 @@ public class User {
     private int reviewCount;
 
 
-    @OneToMany(mappedBy = "owner",  cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private final List<Dog> dogs = new ArrayList<>();
-
     public User(Long id) {
         this.id = id;
     }

@@ -19,24 +19,28 @@ public class DogRepository {
         return dog.getId();
     }
 
-    public void deleteById(Long id){
-        em.createQuery("delete from Dog d where d.id=:id")
-                .setParameter("id", id)
-                .executeUpdate();
-    }
 
     public Optional<Dog> findById(Long id){
-       return Optional.ofNullable(em.find(Dog.class, id));
+        return em.createQuery("select d from Dog d" +
+                        " where d.id=:id" +
+                        " and d.deleted=false", Dog.class)
+                .setParameter("id", id)
+                .getResultList().stream().findFirst();
     }
 
     public Optional<Dog> findByIdWithUser(Long id){
-        return em.createQuery("select d from Dog d join fetch d.owner where d.id=:id", Dog.class)
+        return em.createQuery("select d from Dog d" +
+                        " join fetch d.owner" +
+                        " where d.id=:id" +
+                        " and d.deleted=false", Dog.class)
                 .setParameter("id", id)
                 .getResultList().stream().findFirst();
     }
 
     public List<Dog> findListByUserId(Long userId){
-        return em.createQuery("select d from Dog d where d.owner.id=:userId", Dog.class)
+        return em.createQuery("select d from Dog d" +
+                        " where d.owner.id=:userId" +
+                        " and d.deleted=false ", Dog.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }

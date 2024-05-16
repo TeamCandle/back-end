@@ -27,11 +27,6 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
-    @Transactional(readOnly = true)
-    public User findWithDogs(Long id){
-        return userRepository.findWithDogs(id).orElse(null);
-    }
-
     public User find(Long id){
         return userRepository.find(id).orElse(null);
     }

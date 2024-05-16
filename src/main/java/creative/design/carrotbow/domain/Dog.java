@@ -23,8 +23,10 @@ public class Dog {
     private float weight;
     private String breed;
     private String description;
-
     private String image;
+
+    @Column(nullable = false)
+    private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -32,7 +34,10 @@ public class Dog {
 
     public void setOwner(User owner){
         this.owner = owner;
-        owner.getDogs().add(this);
+    }
+
+    public void delete(){
+        this.deleted=true;
     }
 
     public void changeAttr(DogRegisterForm dogEdition, String image){
