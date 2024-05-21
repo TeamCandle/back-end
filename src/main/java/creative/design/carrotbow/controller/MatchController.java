@@ -1,10 +1,13 @@
 package creative.design.carrotbow.controller;
 
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import creative.design.carrotbow.dto.ListMatchDto;
 import creative.design.carrotbow.dto.MatchDto;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.service.MatchService;
+import creative.design.carrotbow.service.external.FcmService;
+import creative.design.carrotbow.service.external.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import java.util.Map;
 public class MatchController {
 
     private final MatchService matchService;
+
 
 
     @GetMapping("/list")
@@ -46,7 +50,7 @@ public class MatchController {
 
 
     @PostMapping("")
-    public ResponseEntity<?> accept(@RequestParam Long requirementId, @RequestParam Long applicationId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> accept(@RequestParam Long requirementId, @RequestParam Long applicationId, @AuthenticationPrincipal PrincipalDetails principalDetails) throws FirebaseMessagingException {
         Long matchId = matchService.makeMatch(requirementId, applicationId, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();

@@ -28,6 +28,8 @@ public class User {
     private String phNum;
     private String description;
     private String image;
+
+
     private float totalRating;
     private int reviewCount;
 

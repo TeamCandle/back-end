@@ -1,5 +1,6 @@
 package creative.design.carrotbow.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import creative.design.carrotbow.domain.*;
 import creative.design.carrotbow.dto.*;
 import creative.design.carrotbow.dto.MatchDto;
@@ -10,6 +11,9 @@ import creative.design.carrotbow.repository.ApplicationRepository;
 import creative.design.carrotbow.repository.MatchRepository;
 import creative.design.carrotbow.repository.RequirementRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
+import creative.design.carrotbow.service.external.FcmService;
+import creative.design.carrotbow.service.external.RedisService;
+import creative.design.carrotbow.service.external.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +32,10 @@ public class MatchService {
     private final ApplicationRepository applicationRepository;
     private final MatchRepository matchRepository;
 
+
+
+    private final FcmService fcmService;
+    private final RedisService redisService;
     private final GeoService geoService;
     private final S3Service s3Service;
 
@@ -92,7 +100,7 @@ public class MatchService {
 
 
     @Transactional
-    public Long makeMatch(Long requirementId, Long applicationId, AuthenticationUser user){
+    public Long makeMatch(Long requirementId, Long applicationId, AuthenticationUser user) throws FirebaseMessagingException {
         Requirement requirement = requirementRepository.findWithApplicationsById(requirementId).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + requirementId));
         Application matchedApplication = applicationRepository.find(applicationId).orElseThrow(() -> new NotFoundException("can't find application. id:" + applicationId));
 
@@ -122,6 +130,9 @@ public class MatchService {
         requirement.changeStatus(MatchStatus.MATCHED);
         matchedApplication.changeStatus(MatchStatus.MATCHED);
 
+
+        String token = redisService.getValues("user_" + matchedApplication.getUser().getId());
+        fcmService.sendMessageByToken("matched", requirement.getDog().getName(),token);
 
         return matchRepository.save(MatchEntity.builder()
                 .requirement(requirement)

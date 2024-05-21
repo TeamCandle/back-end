@@ -7,16 +7,16 @@ import lombok.Data;
 public class ListAppDto {
 
     private Long id;
-    private String username;
+    private Long userId;
     private byte[] image;
     private String name;
     private String gender;
     private float rating;
 
     @Builder
-    public ListAppDto(Long id, String username, byte[] image, String name, String gender, float rating) {
+    public ListAppDto(Long id, Long userId, byte[] image, String name, String gender, float rating) {
         this.id = id;
-        this.username = username;
+        this.userId = userId;
         this.image = image;
         this.name = name;
         this.gender = gender;

@@ -54,7 +54,7 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PutMapping("/change")
+    @PutMapping("")
     public ResponseEntity<?> changeReview(@Validated @RequestBody ReviewRegisterForm reviewRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class ReviewDto {
 
+    private Long id;
     private Long matchId;
     private String text;
     private float rating;
@@ -17,8 +18,9 @@ public class ReviewDto {
     private CareType careType;
 
     @Builder
-    public ReviewDto(Long id, String text, float rating, LocalDateTime createdAt, String breed, CareType careType) {
-        this.matchId = id;
+    public ReviewDto(Long id, Long matchId, String text, float rating, LocalDateTime createdAt, String breed, CareType careType) {
+        this.id=id;
+        this.matchId = matchId;
         this.text = text;
         this.rating = rating;
         this.createdAt = createdAt;

@@ -7,6 +7,7 @@ import creative.design.carrotbow.dto.requestForm.DogRegisterForm;
 import creative.design.carrotbow.dto.ListDogDto;
 import creative.design.carrotbow.dto.UserProfileDto;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
+import creative.design.carrotbow.service.external.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

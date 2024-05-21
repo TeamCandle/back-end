@@ -1,5 +1,6 @@
 package creative.design.carrotbow.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import creative.design.carrotbow.domain.Application;
 import creative.design.carrotbow.domain.MatchStatus;
 import creative.design.carrotbow.domain.Requirement;
@@ -12,6 +13,9 @@ import creative.design.carrotbow.error.WrongApplicationException;
 import creative.design.carrotbow.repository.ApplicationRepository;
 import creative.design.carrotbow.repository.RequirementRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
+import creative.design.carrotbow.service.external.FcmService;
+import creative.design.carrotbow.service.external.RedisService;
+import creative.design.carrotbow.service.external.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +32,8 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final RequirementRepository requirementRepository;
 
-
+    private final FcmService fcmService;
+    private final RedisService redisService;
     private final S3Service s3Service;
     private final GeoService geoService;
 
@@ -78,7 +83,7 @@ public class ApplicationService {
 
 
     @Transactional
-    public Long apply(Long requirementId, AuthenticationUser user){
+    public Long apply(Long requirementId, AuthenticationUser user) throws FirebaseMessagingException {
 
         Requirement requirement = requirementRepository.findWithApplicationsById(requirementId).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + requirementId));
 
@@ -99,6 +104,9 @@ public class ApplicationService {
                 .build();
 
         application.apply(requirement);
+
+        String token = redisService.getValues("user_" + requirement.getUser().getId());
+        fcmService.sendMessageByToken("someone applied", requirement.getDog().getName() ,token);
 
         return applicationRepository.save(application);
     }

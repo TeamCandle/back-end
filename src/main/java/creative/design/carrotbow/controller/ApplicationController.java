@@ -1,10 +1,12 @@
 package creative.design.carrotbow.controller;
 
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import creative.design.carrotbow.dto.ListMatchDto;
 import creative.design.carrotbow.dto.MatchDto;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.service.ApplicationService;
+import creative.design.carrotbow.service.external.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class ApplicationController {
 
     private final ApplicationService applicationService;
+
 
     @GetMapping("/list")
     public ResponseEntity<?> getApplicationList(@RequestParam int offset, @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -44,7 +47,7 @@ public class ApplicationController {
 
 
     @PostMapping("")
-    public ResponseEntity<?> applyRequirement(@RequestParam Long requirementId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> applyRequirement(@RequestParam Long requirementId, @AuthenticationPrincipal PrincipalDetails principalDetails) throws FirebaseMessagingException {
 
         Long applicationId = applicationService.apply(requirementId, principalDetails.getUser());
 

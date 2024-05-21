@@ -1,4 +1,4 @@
-package creative.design.carrotbow.service;
+package creative.design.carrotbow.service.external;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;

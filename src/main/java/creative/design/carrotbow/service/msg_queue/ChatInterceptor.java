@@ -10,6 +10,7 @@ import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.service.MatchService;
 import creative.design.carrotbow.service.UserService;
+import creative.design.carrotbow.service.external.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -33,6 +34,7 @@ public class ChatInterceptor implements ChannelInterceptor {
     private final MatchService matchService;
     private final UserService userService;
     private final JwtUtils jwtUtils;
+    private final RedisService redisService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -84,6 +86,9 @@ public class ChatInterceptor implements ChannelInterceptor {
             Long roomId = Long.parseLong(destination.replace("/exchange/chat.exchange/*.room.", ""));
             MatchEntity match = matchService.getMatch(roomId);
 
+            Long requirePerson = match.getRequirement().getUser().getId();
+            Long applyPerson = match.getApplication().getUser().getId();
+
             System.out.println("roomId: " + roomId);
 
             if(match.getStatus()==MatchEntityStatus.COMPLETED || match.getStatus() == MatchEntityStatus.CANCELLED){
@@ -96,11 +101,22 @@ public class ChatInterceptor implements ChannelInterceptor {
 
             System.out.println("username: " + user.getUsername());
 
-            if(!user.getId().equals(match.getRequirement().getUser().getId())&&!user.getId().equals(match.getApplication().getUser().getId())) {
+            String targetToken;
+
+            if(user.getId().equals(requirePerson)){
+                targetToken = redisService.getValues("user_"+applyPerson);
+            }else if(user.getId().equals(applyPerson)){
+                targetToken = redisService.getValues("user_"+requirePerson);
+            }
+            else{
                 throw new InvalidAccessException("Invalid access");
             }
 
             accessor.getSessionAttributes().put("roomId", roomId);
+            accessor.getSessionAttributes().put("target", targetToken);
+
+            //redis에 추가
+            redisService.addSets("room_"+roomId, user.getId().toString());
         }
 
 
@@ -116,6 +132,18 @@ public class ChatInterceptor implements ChannelInterceptor {
             if(!targetId.equals(roomId)){
                 throw new InvalidAccessException("Invalid access");
             }
+        }
+
+        if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
+
+            Authentication authentication = (Authentication) accessor.getSessionAttributes().get("Authentication");
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+            AuthenticationUser user = principalDetails.getUser();
+
+            Long roomId = (Long) accessor.getSessionAttributes().get("roomId");
+
+            //redis에서 삭제
+            redisService.deleteSets("room_"+roomId, user.getId().toString());
         }
 
         return message;

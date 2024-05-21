@@ -10,6 +10,7 @@ import creative.design.carrotbow.error.NotFoundException;
 import creative.design.carrotbow.error.WrongApplicationException;
 import creative.design.carrotbow.repository.RequirementRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
+import creative.design.carrotbow.service.external.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,7 +121,7 @@ public class RequirementService
                 if (application.getStatus()==MatchStatus.NOT_MATCHED) { //NOT MATCHED
                     applications.add(ListAppDto.builder()
                             .id(application.getId())
-                            .username(application.getUser().getUsername())
+                            .userId(application.getUser().getId())
                             .rating(application.getUser().getReviewCount()!=0?application.getUser().getTotalRating()/application.getUser().getReviewCount():-1)
                             .name(application.getUser().getName())
                             .gender(application.getUser().getGender())

@@ -94,7 +94,8 @@ public class ReviewService {
 
         for (Review review : reviewList) {
             reviews.add(ReviewDto.builder()
-                            .id(review.getMatch().getId())
+                            .id(review.getId())
+                            .matchId(review.getMatch().getId())
                             .text(review.getText())
                             .rating(review.getRating())
                             .createdAt(review.getCreatedAt())
