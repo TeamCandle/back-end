@@ -668,16 +668,16 @@ text: "success cancel"
     "reward", 보상,
     "status": 매칭 상태
   },  
-  "payment": 결제할 사람인지 여부
+  "requester": 결제할 사람인지 여부
 }
 
-▶ "payment" -> true (요구 등록자라는 뜻)  
+▶ "requester" -> true (요구 등록자라는 뜻)  
 - status: WAITING_PAYMENT -> 결제 버튼 표시
 - status: NOT_COMPLETED -> 완료 버튼 표시
 - status: 그 외 -> 상태 표시 
   
 
-▶ "payment" -> false (요구 지원자라는)  
+▶ "requester" -> false (요구 지원자라는 뜻)  
 - status: 항상 -> 상태 표시 
 
 
@@ -762,21 +762,12 @@ test: "refund payment total: 환불 금액"
 {id: 매칭 id}
 
 
-## 리뷰 변경
-### PUT /review  
-
-- body
-
-{  
-     
-     "id": 리뷰 id, (required)  
-     "rating": 평점, (0~5)  
-     "text": 리뷰 (required)  
-  }
+## 리뷰 삭제
+### PUT /review?id=${리뷰 id}
 
 ### 응답
 200_ok  
-{id: 매칭 id}
+text: "success delete"
 
 
 ## 리뷰 조회
@@ -790,6 +781,12 @@ test: "refund payment total: 환불 금액"
      "rating": 평점, (0~5)  
      "text": 리뷰 (required)  
 }
+
+!리뷰가 없을 경우  
+{  
+  "id": null
+}
+
 
 
 ## 리뷰 리스트 조회
