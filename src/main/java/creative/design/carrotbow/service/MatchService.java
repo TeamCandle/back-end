@@ -32,8 +32,6 @@ public class MatchService {
     private final ApplicationRepository applicationRepository;
     private final MatchRepository matchRepository;
 
-
-
     private final FcmService fcmService;
     private final RedisService redisService;
     private final GeoService geoService;
@@ -74,7 +72,6 @@ public class MatchService {
         if(!requestPerson.equals(requirePerson)&&!requestPerson.equals(applyPerson)){
             throw new InvalidAccessException("this access is not authorized");
         }
-
 
         MatchDto details = MatchDto.builder()
                 .id(match.getId())

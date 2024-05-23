@@ -55,4 +55,9 @@ public class ReviewRepository {
                 .setMaxResults(pageSize)
                 .getResultList();
     }
+
+
+    public void delete(Review review){
+        em.remove(review);
+    }
 }

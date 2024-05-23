@@ -54,8 +54,8 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> changeReview(@Validated @RequestBody ReviewRegisterForm reviewRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteReview(@RequestParam Long id, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
@@ -73,9 +73,9 @@ public class ReviewController {
             return ResponseEntity.badRequest().body(list);
         }
 
-        reviewService.changeReview(reviewRegisterForm, principalDetails.getUser());
+        reviewService.deleteReview(id, principalDetails.getUser());
 
-        return ResponseEntity.status(HttpStatus.OK).body("change success");
+        return ResponseEntity.status(HttpStatus.OK).body("success delete");
     }
 
 

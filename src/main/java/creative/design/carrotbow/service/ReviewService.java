@@ -54,9 +54,10 @@ public class ReviewService {
                 .build());
     }
 
+
     @Transactional
-    public void changeReview(ReviewRegisterForm reviewRegisterForm, AuthenticationUser user){
-        Review review = reviewRepository.findById(reviewRegisterForm.getId()).orElseThrow(()->new NotFoundException("can't find review. id:" + reviewRegisterForm.getId()));
+    public void deleteReview(Long id, AuthenticationUser user){
+        Review review = reviewRepository.findById(id).orElseThrow(()->new NotFoundException("can't find review. id:" + id));
 
         if(!user.getId().equals(review.getMatch().getRequirement().getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
@@ -65,9 +66,7 @@ public class ReviewService {
         User reviewedUser = review.getReviewedUser();
         reviewedUser.subReview(review.getRating());
 
-        review.change(reviewRegisterForm.getText(), reviewRegisterForm.getRating());
-
-        reviewedUser.addReview(review.getRating());
+        reviewRepository.delete(review);
     }
 
 
