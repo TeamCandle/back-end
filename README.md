@@ -668,16 +668,16 @@ text: "success cancel"
     "reward", 보상,
     "status": 매칭 상태
   },  
-  "payment": 결제할 사람인지 여부
+  "requester": 결제할 사람인지 여부
 }
 
-▶ "payment" -> true (요구 등록자라는 뜻)  
+▶ "requester" -> true (요구 등록자라는 뜻)  
 - status: WAITING_PAYMENT -> 결제 버튼 표시
 - status: NOT_COMPLETED -> 완료 버튼 표시
 - status: 그 외 -> 상태 표시 
   
 
-▶ "payment" -> false (요구 지원자라는)  
+▶ "requester" -> false (요구 지원자라는 뜻)  
 - status: 항상 -> 상태 표시 
 
 
