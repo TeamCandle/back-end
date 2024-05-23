@@ -87,12 +87,12 @@ public class FcmService {
     @Transactional(readOnly = true)
     public String getToken(Long userId){
 
-        String token = redisService.getValues("user_" + userId);
+        String token = redisService.getValues("user_"+userId);
 
         if(token==null){
             FcmToken fcmToken = fcmRepository.findByUser(userId).orElseThrow(() -> new NotFoundException("can't find FcmToken. userId:" + userId));
             token = fcmToken.getToken();
-            redisService.setValues("user_" + userId, token);
+            redisService.setValues("user_"+userId, token);
         }
 
         return token;

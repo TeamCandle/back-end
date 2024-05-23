@@ -10,6 +10,7 @@ import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.service.MatchService;
 import creative.design.carrotbow.service.UserService;
+import creative.design.carrotbow.service.external.FcmService;
 import creative.design.carrotbow.service.external.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class ChatInterceptor implements ChannelInterceptor {
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final RedisService redisService;
+    private final FcmService fcmService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -104,9 +106,9 @@ public class ChatInterceptor implements ChannelInterceptor {
             String targetToken;
 
             if(user.getId().equals(requirePerson)){
-                targetToken = redisService.getValues("user_"+applyPerson);
+                targetToken = fcmService.getToken(applyPerson);
             }else if(user.getId().equals(applyPerson)){
-                targetToken = redisService.getValues("user_"+requirePerson);
+                targetToken = fcmService.getToken(requirePerson);
             }
             else{
                 throw new InvalidAccessException("Invalid access");
