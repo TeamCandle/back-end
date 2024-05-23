@@ -762,21 +762,12 @@ test: "refund payment total: 환불 금액"
 {id: 매칭 id}
 
 
-## 리뷰 변경
-### PUT /review  
-
-- body
-
-{  
-     
-     "id": 리뷰 id, (required)  
-     "rating": 평점, (0~5)  
-     "text": 리뷰 (required)  
-  }
+## 리뷰 삭제
+### PUT /review?id=${리뷰 id}
 
 ### 응답
 200_ok  
-{id: 매칭 id}
+text: "success delete"
 
 
 ## 리뷰 조회
