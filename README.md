@@ -791,6 +791,12 @@ test: "refund payment total: 환불 금액"
      "text": 리뷰 (required)  
 }
 
+!리뷰가 없을 경우  
+{  
+  "id": null
+}
+
+
 
 ## 리뷰 리스트 조회
 ### GET /review/list?offset=${page no}
