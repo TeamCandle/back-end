@@ -82,11 +82,11 @@ request body에 refreshToken 값이 없을 경우
 refreshToken이 만료됐을 경우   
 401_unauthorized   
 {
-  
-    "error": "Unauthorized",
-    "message": "expried token",
-    "status": 401
-}   
+    
+      "error": "Unauthorized",
+      "message": "expried token",
+      "status": 401
+  }   
 
 
 ▶ expried token 토큰의 경우 클라이언트 단에서는 로그아웃 진행후 이용자에게 다시 로그인을 요청한다.
@@ -804,7 +804,7 @@ text: "success delete"
 
 
 ## 리뷰 리스트 조회
-### GET /review/list?offset=${page no}
+### GET /review/list?userId=${유저 id}&offset=${page no}
 
 ### 응답
 200_ok
