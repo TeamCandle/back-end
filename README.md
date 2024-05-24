@@ -832,7 +832,7 @@ text: "success delete"
 {   
   "description": ${fcm 토큰 value}  (key 값은 추후 token으로 변경 예정, 현재는 description)
 }
-
-
-
+   
+!FCM 토큰이 등록되지 않았을 경우 특정 api에서 문제 발생 
+!매 로그인 마다 값을 받아 등록할 것 
 
