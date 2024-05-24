@@ -1,11 +1,11 @@
 package creative.design.carrotbow.security.oauth2;
 
-import creative.design.carrotbow.domain.User;
+import creative.design.carrotbow.profile.domain.User;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.security.oauth2.provider.KakaoUserInfo;
 import creative.design.carrotbow.security.oauth2.provider.Oauth2UserInfo;
-import creative.design.carrotbow.service.UserService;
+import creative.design.carrotbow.profile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -26,14 +26,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
-        //System.out.println("clientRegistration: " + userRequest.getClientRegistration());
-
-        //System.out.println("accessToken: " + userRequest.getAccessToken().getTokenValue());
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        //System.out.println("loadUser().getAttributes: " + oAuth2User.getAttributes());
-
         Oauth2UserInfo oauth2UserInfo = null;
 
         if(userRequest.getClientRegistration().getRegistrationId().equals("google")){

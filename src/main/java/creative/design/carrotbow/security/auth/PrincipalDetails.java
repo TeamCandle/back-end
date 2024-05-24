@@ -1,7 +1,6 @@
 package creative.design.carrotbow.security.auth;
 
 
-import creative.design.carrotbow.domain.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;

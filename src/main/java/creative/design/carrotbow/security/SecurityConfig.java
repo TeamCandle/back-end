@@ -7,8 +7,7 @@ import creative.design.carrotbow.security.oauth2.AuthenticationFailureHandler;
 import creative.design.carrotbow.security.oauth2.AuthenticationSuccessHandler;
 import creative.design.carrotbow.security.auth.JwtAuthorizationFilter;
 import creative.design.carrotbow.security.oauth2.PrincipalOauth2UserService;
-import creative.design.carrotbow.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import creative.design.carrotbow.profile.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +42,10 @@ public class SecurityConfig {
                 .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(fl->fl.disable())
                 .httpBasic(hb->hb.disable())
-                .authorizeHttpRequests(ahr-> ahr.requestMatchers("/profile/**", "/user/logout").hasAnyRole("USER")
+                .authorizeHttpRequests(ahr-> ahr
+                        .requestMatchers("/profile/**", "/user/logout").hasAnyRole("USER")
+                        .requestMatchers("/requirement/**", "application/**", "match/**").hasAnyRole("USER")
+                        .requestMatchers("/payment").hasAnyRole("USER")
                         .anyRequest().permitAll())
                 .oauth2Login(oauth2Login -> oauth2Login
                         .successHandler(new AuthenticationSuccessHandler(jwtUtils, userService))

@@ -2,9 +2,9 @@ package creative.design.carrotbow.security.auth;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import creative.design.carrotbow.domain.User;
+import creative.design.carrotbow.profile.domain.User;
 import creative.design.carrotbow.security.jwt.JwtUtils;
-import creative.design.carrotbow.service.UserService;
+import creative.design.carrotbow.profile.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

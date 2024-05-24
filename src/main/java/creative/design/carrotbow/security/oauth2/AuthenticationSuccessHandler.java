@@ -1,10 +1,9 @@
 package creative.design.carrotbow.security.oauth2;
 
-import creative.design.carrotbow.domain.User;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
-import creative.design.carrotbow.service.UserService;
+import creative.design.carrotbow.profile.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
