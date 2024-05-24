@@ -821,9 +821,18 @@ text: "success delete"
       "careType": 케어 타입    
     },
       ...
-  ]
-
+  ]  
 }
+
+## fcm 토큰 등록
+### POST /fcm/token
+
+- body
+
+{   
+  "description": ${fcm 토큰 value}  (key 값은 추후 token으로 변경 예정, 현재는 description)
+}
+
 
 
 
