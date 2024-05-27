@@ -849,7 +849,18 @@ test: success register
 ### GET /user/dummy?id=${유저 id} (범위 1~50)
 
 ### 응답
-text: ${accessToken 밸류}
+text: 해당 유저 accessToken
+
+
+!참고 
+유저 수: 1~50 
+유저 당 애견 수: 4 (총 200)
+유저 당 등록 수: 4 (총 200)
+유저 당 신청 수: 4 (총 200)
+유저 당 매칭 수: 1 (총 50)
+
+모든 등록 위치는 금오공대 중심으로 4~10km 범위 
+
 
 
 
