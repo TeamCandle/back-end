@@ -1,9 +1,14 @@
 package creative.design.carrotbow.profile.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import creative.design.carrotbow.DummyUtils;
+import creative.design.carrotbow.error.InvalidAccessException;
+import creative.design.carrotbow.profile.domain.User;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.profile.service.UserService;
+import creative.design.carrotbow.security.jwt.JwtUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -21,6 +26,23 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+
+    private final DummyUtils dummyUtils;
+
+
+    //dummy - 테스트용
+    @PostConstruct
+    public void makeDummy(){
+        dummyUtils.makeDummy();
+    }
+
+    @RequestMapping("/dummy")
+    @ResponseBody
+    public String getUser(@RequestParam Long id){
+        User user = userService.find(id);
+
+        return dummyUtils.makeDummyToken(user.getUsername());
+    }
 
 
     @GetMapping("/login/kakao")

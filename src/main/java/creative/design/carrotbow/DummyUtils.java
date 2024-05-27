@@ -18,20 +18,17 @@ import creative.design.carrotbow.profile.repository.UserRepository;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Point;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-@Controller
-@Transactional
-@RequestMapping("/dummy")
+@Component
+//@Transactional
+//@RequestMapping("/dummy")
 @RequiredArgsConstructor
-public class DummyController {
+public class DummyUtils {
 
     private final UserRepository userRepository;
     private final DogRepository dogRepository;
@@ -44,17 +41,14 @@ public class DummyController {
     private final JwtUtils jwtUtils;
 
 
-    @RequestMapping("/user")
-    @ResponseBody
-    public String getUser(@RequestParam Long id){
-        User user = userRepository.find(id).orElseThrow(()->new InvalidAccessException("invalid access"));
 
-        return "Bearer " + jwtUtils.generateAccessToken(user.getUsername());
+    public String makeDummyToken(String username){
+        return "Bearer " + jwtUtils.generateAccessToken(username);
     }
 
-
-    @RequestMapping("")
-    @ResponseBody
+    //@RequestMapping("")
+    //@ResponseBody
+    @Transactional
     public void makeDummy(){
 
         for(int i=1; i<=50; i++){
