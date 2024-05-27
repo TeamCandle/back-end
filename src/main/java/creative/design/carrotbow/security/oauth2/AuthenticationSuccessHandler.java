@@ -34,8 +34,8 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 
         userService.saveRefreshToken(refreshToken, user);
 
-        response.addHeader("Authorization1", "Bearer "+accessToken);
-        response.addHeader("Authorization2", "Bearer "+refreshToken);
+        response.addHeader("accessToken", "Bearer "+accessToken);
+        response.addHeader("refreshToken", "Bearer "+refreshToken);
 
         String script = "<script>" +
                 "var tokens = {" +
