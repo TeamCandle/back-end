@@ -49,7 +49,7 @@ public class DummyController {
     public String getUser(@RequestParam Long id){
         User user = userRepository.find(id).orElseThrow(()->new InvalidAccessException("invalid access"));
 
-        return "Bearer: " + jwtUtils.generateAccessToken(user.getUsername());
+        return "Bearer " + jwtUtils.generateAccessToken(user.getUsername());
     }
 
 
