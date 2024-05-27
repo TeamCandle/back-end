@@ -35,6 +35,7 @@ public class ApplicationService {
     private final FcmService fcmService;
     private final S3Service s3Service;
     private final GeoService geoService;
+    private final MessageUtils messageUtils;
 
 
     public List<ListMatchDto> getApplications(int offset, AuthenticationUser user){
@@ -48,6 +49,7 @@ public class ApplicationService {
                             .id(application.getId())
                             .image(s3Service.loadImage(application.getRequirement().getDog().getImage()))
                             .breed(application.getRequirement().getDog().getBreed())
+                            .time(messageUtils.generateListMatchMessage(application.getRequirement().getStartTime()))
                             .careType(application.getRequirement().getCareType().getActualName())
                             .status(application.getActualStatus())
                             .build());
@@ -105,8 +107,7 @@ public class ApplicationService {
 
         application.apply(requirement);
 
-        String message = requirement.getStartTime().getMonthValue() + "월 " +
-                requirement.getStartTime().getDayOfMonth() + "일자 건에 대한 신청이 도착했습니다.";
+        String message = messageUtils.generateApplyMessage(requirement.getStartTime());
 
         String token = fcmService.getToken(user.getId());
         fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message ,token);

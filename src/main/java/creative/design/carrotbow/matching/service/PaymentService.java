@@ -51,18 +51,18 @@ public class PaymentService {
         return  headers;
     }
 
-    public PayReadyResponseDto payReady(Long matchId/*, AuthenticationUser user*/){
+    public PayReadyResponseDto payReady(Long matchId, AuthenticationUser user){
 
         MatchEntity match = matchRepository.findWithRequirementById(matchId).orElseThrow(()->new NotFoundException("can't find match. id:" + matchId));
 
         Requirement requirement = match.getRequirement();
 
-        /*
+
         //테스트 용도로 주석처리
         if(!user.getId().equals(requirement.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
-         */
+
 
 
         if(match.getStatus()!= MatchEntityStatus.WAITING_PAYMENT){

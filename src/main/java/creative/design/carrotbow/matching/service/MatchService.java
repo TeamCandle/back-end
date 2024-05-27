@@ -40,6 +40,7 @@ public class MatchService {
     private final FcmService fcmService;
     private final GeoService geoService;
     private final S3Service s3Service;
+    private final MessageUtils messageUtils;
 
 
 
@@ -55,6 +56,7 @@ public class MatchService {
                             .image(s3Service.loadImage(match.getRequirement().getDog().getImage()))
                             .breed(match.getRequirement().getDog().getBreed())
                             .careType(match.getRequirement().getCareType().getActualName())
+                            .time(messageUtils.generateListMatchMessage(match.getRequirement().getStartTime()))
                             .status(match.getStatus().getActualName())
                             .build());
         }
@@ -132,8 +134,7 @@ public class MatchService {
         matchedApplication.changeStatus(MatchStatus.MATCHED);
 
 
-        String message = requirement.getStartTime().getMonthValue() + "월 " +
-                requirement.getStartTime().getDayOfMonth() + "일자 건에 대한 신청이 수락되었습니다.";
+        String message = messageUtils.generateAcceptMessage(requirement.getStartTime());
 
         String token = fcmService.getToken(matchedApplication.getUser().getId());
         fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message, token);

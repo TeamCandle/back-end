@@ -37,6 +37,7 @@ public class RequirementService
     private final DogService dogService;
     private final S3Service s3Service;
     private final GeoService geoService;
+    private final MessageUtils messageUtils;
 
     @Transactional
     public Long registerRequirement(RequireRegisterForm requireRegisterForm){
@@ -70,6 +71,7 @@ public class RequirementService
                             .image(s3Service.loadImage(requirement.getDog().getImage()))
                             .breed(requirement.getDog().getBreed())
                             .careType(requirement.getCareType().getActualName())
+                            .time(messageUtils.generateListMatchMessage(requirement.getStartTime()))
                             .status(requirement.getActualStatus())
                             .build());
         }
@@ -89,6 +91,7 @@ public class RequirementService
                             .image(s3Service.loadImage(requirement.getDog().getImage()))
                             .breed(requirement.getDog().getBreed())
                             .careType(requirement.getCareType().getActualName())
+                            .time(messageUtils.generateListMatchMessage(requirement.getStartTime()))
                             .status(requirement.getActualStatus())
                             .build());
         }
