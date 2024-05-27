@@ -75,7 +75,7 @@ public class DummyController {
     public void makeUser(int num){
         userRepository.save(User.builder()
                         .name("user_"+num)
-                        .username("user_num")
+                        .username("user_"+num)
                         .password("secret"+num)
                         .email("user@"+num)
                         .gender(num%2==0?"male":"female")
