@@ -1,5 +1,6 @@
 package creative.design.carrotbow;
 
+import creative.design.carrotbow.error.InvalidAccessException;
 import creative.design.carrotbow.external.geo.GeoService;
 import creative.design.carrotbow.matching.domain.Application;
 import creative.design.carrotbow.matching.domain.MatchEntity;
@@ -14,21 +15,23 @@ import creative.design.carrotbow.profile.domain.Dog;
 import creative.design.carrotbow.profile.domain.User;
 import creative.design.carrotbow.profile.repository.DogRepository;
 import creative.design.carrotbow.profile.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
+import creative.design.carrotbow.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Point;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @Transactional
+@RequestMapping("/dummy")
 @RequiredArgsConstructor
-public class Dummy {
+public class DummyController {
 
     private final UserRepository userRepository;
     private final DogRepository dogRepository;
@@ -38,7 +41,19 @@ public class Dummy {
 
     private final GeoService geoService;
 
-    @RequestMapping("/dummy")
+    private final JwtUtils jwtUtils;
+
+
+    @RequestMapping("/user")
+    @ResponseBody
+    public String getUser(@RequestParam Long id){
+        User user = userRepository.find(id).orElseThrow(()->new InvalidAccessException("invalid access"));
+
+        return jwtUtils.generateAccessToken(user.getUsername());
+    }
+
+
+    @RequestMapping("")
     @ResponseBody
     public void makeDummy(){
 
@@ -52,7 +67,7 @@ public class Dummy {
         }
 
         for(int i=1; i<=100; i++){
-            makeMatche(i);
+            makeMatches(i);
         }
     }
 
@@ -117,7 +132,7 @@ public class Dummy {
         applicationRepository.save(application);
     }
 
-    public void makeMatche(int num){
+    public void makeMatches(int num){
 
         if(num%2==0) {
             matchRepository.save(MatchEntity.builder()
