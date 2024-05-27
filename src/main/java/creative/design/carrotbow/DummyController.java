@@ -57,7 +57,7 @@ public class DummyController {
     @ResponseBody
     public void makeDummy(){
 
-        for(int i=1; i<=100; i++){
+        for(int i=1; i<=50; i++){
             makeUser(i);
         }
         for(int i=1; i<=200; i++){
@@ -98,33 +98,34 @@ public class DummyController {
                 .neutered(num % 2 == 0)
                 .description("dogDes_"+num)
                 .build();
-        dog.setOwner(new User(num%100+1L));
+        dog.setOwner(new User(num%50+1L));
         dogRepository.save(dog);
     }
 
     public void makeRequirement(int num){
         LocalDateTime start = LocalDateTime.now().plusDays(num%20+5);
 
+
         requirementRepository.save(Requirement.builder()
                         .dog(new Dog(num+0L))
-                        .user(new User(num%100+1L))
+                        .user(new User(num%50+1L))
                         .careLocation(geoService.makeGeoData(new Point(128.3+(num%10)*0.01, 36.1+(num%10)*0.01)))
                         .startTime(start)
                         .endTime(start.plusDays(num%5))
                         .careType(num%2==0? CareType.WALKING:CareType.BOARDING)
                         .description("req_"+num)
                         .reward(num+1000)
-                        .status(MatchStatus.NOT_MATCHED)
+                        .status(num%3==0? MatchStatus.MATCHED:MatchStatus.NOT_MATCHED)
                 .build());
     }
 
     public void makeApplication(int num){
 
         Application application = Application.builder()
-                .user(new User(num % 100 + 1L))
+                .user(new User(num % 50 + 1L))
                 .createTime(LocalDateTime.now())
                 .description("app_" + num)
-                .status(MatchStatus.NOT_MATCHED)
+                .status(num%3==0? MatchStatus.MATCHED:MatchStatus.NOT_MATCHED)
                 .build();
 
         application.apply(new Requirement(num+0L));
@@ -134,7 +135,7 @@ public class DummyController {
 
     public void makeMatches(int num){
 
-        if(num%2==0) {
+        if(num%3==0) {
             matchRepository.save(MatchEntity.builder()
                             .application(new Application(num + 0L))
                             .requirement(new Requirement(num + 0L))
