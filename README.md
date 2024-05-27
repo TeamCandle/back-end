@@ -434,6 +434,7 @@ text: "success delete"
         "id": 등록 id,
         "image": 애견 이미지,
         "breed": 견종,
+        "time": 일자,   
         "careType": 케어 타입, 
         "status": 등록 상태
       },  
@@ -510,6 +511,7 @@ text: "success delete"
         "image": 애견 이미지,
         "breed": 견종,
         "careType": 케어 타입, 
+        "time": 일자,  
         "status": 등록 상태
       },  
       ...  
@@ -567,6 +569,7 @@ text: "success cancel"
         "image": 애견 이미지,
         "breed": 견종,
         "careType": 케어 타입, 
+        "time": 일자,  
         "status": 신청 상태
       },  
       ...  
@@ -641,6 +644,7 @@ text: "success cancel"
         "image": 애견 이미지,
         "breed": 견종,
         "careType": 케어 타입, 
+        "time": 일자,  
         "status": 매칭 상태
       },  
       ...  
@@ -832,7 +836,22 @@ text: "success delete"
 {   
   "description": ${fcm 토큰 value}  (key 값은 추후 token으로 변경 예정, 현재는 description)
 }
+
+### 응답
+test: success register
    
 !FCM 토큰이 등록되지 않았을 경우 특정 api에서 문제 발생   
 !매 로그인 마다 값을 받아 등록할 것 
+
+
+
+## dummy 유저 token 반환
+### GET /user/dummy?id=${유저 id} (범위 1~50)
+
+### 응답
+text: ${accessToken 밸류}
+
+
+
+
 
