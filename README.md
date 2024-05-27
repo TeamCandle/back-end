@@ -65,7 +65,8 @@ text: "logout success"
 200_ok   
 {
   
-    "accessToken": ${accessToken value}
+  "accessToken": `${accessToken value}`,  
+  "refreshToken": `${refreshToken value}`  
 }
 
 ### Exception 
@@ -81,11 +82,11 @@ request body에 refreshToken 값이 없을 경우
 refreshToken이 만료됐을 경우   
 401_unauthorized   
 {
-  
-    "error": "Unauthorized",
-    "message": "expried token",
-    "status": 401
-}   
+    
+      "error": "Unauthorized",
+      "message": "expried token",
+      "status": 401
+  }   
 
 
 ▶ expried token 토큰의 경우 클라이언트 단에서는 로그아웃 진행후 이용자에게 다시 로그인을 요청한다.
@@ -121,7 +122,8 @@ refreshToken이 만료됐을 경우
 ### 응답
 200_ok   
 {  
-  
+
+    "id": 유저 id,  
     "name": 이름,
     "gender": 성별,
     "age": 나이,
@@ -179,8 +181,9 @@ text: "success change"
 200_ok   
 {
 
+    "id": id,  
     "name": 이름,
-    "owner": 주인이름,
+    "owner": 견주 id,
     "gender": 성별,
     "neutered": 중성화 여부,
     "age": 나이,
@@ -380,7 +383,7 @@ text: "success delete"
 }   
 
 
-## 케어타입
+## 케어타입 (인터페이스는 선택 박스로, api 파라미터는 영어로 정확히 입력할 것)
 - "WALKING"-산책
 - "BOARDING"-돌봄
 - "GROOMING"-외견 케어
@@ -397,7 +400,8 @@ text: "success delete"
   
     "dogId": 애견 ID,
     "careType": 케어 타입, 
-    "careTime": 케어 시간 , (YYYY-MM-DDTHH:mm:ssZ)
+    "startTime": 케어 시작 시간 , (YYYY-MM-DDTHH:mm:ssZ)
+    "endTime": 케어 종료 시간,  
     "careLocation": {
       "x": 경도,
       "y": 위도
@@ -471,7 +475,7 @@ text: "success delete"
       "image": 유저 이미지,
       "name": 유저 이름,
       "gender": 성별,
-      "rate": 유저등급 (미구현)
+      "rating": 평균 평점 (0~5)
 
   },...
   ]  
@@ -484,12 +488,12 @@ text: "success delete"
 
 {  
      
-     "location":{
+     "location":{  :required)  
         "x": 위도,
         "y": 경도
     },
       "radius": 반경, (기본:5, 최대:10)
-      "dogSize": 애견 크기, ("SMALL"-소형, "MEDIUM"-중형, "LARGE"-대형)
+      "dogSize": 애견 크기, ("SMALL"-소형, "MEDIUM"-중형, "LARGE"-대형) (영어로 정확히 보낼 것)
       "careType": 케어 타입
   }
 
@@ -529,7 +533,7 @@ text: "success delete"
       "y": 위도
     },
     "description": 설명,
-    "userName": 유저네임,
+    "userId": 유저 id,
     "dogId": 애견 id,
     "reward": 보상,
     "status": 등록 상태
@@ -674,11 +678,13 @@ text: "success cancel"
 ▶ "requester" -> true (요구 등록자라는 뜻)  
 - status: WAITING_PAYMENT -> 결제 버튼 표시
 - status: NOT_COMPLETED -> 완료 버튼 표시
+- status: COMPLETED -> 리뷰 버튼 표시  
 - status: 그 외 -> 상태 표시 
   
 
 ▶ "requester" -> false (요구 지원자라는 뜻)  
-- status: 항상 -> 상태 표시 
+- status: COMPLETED -> 리뷰 버튼 표시   
+- status: 그 외 -> 상태 표시
 
 
 ## 매칭 완료 
@@ -721,8 +727,8 @@ test: "refund payment total: 환불 금액"
 
 ## 채팅
 - connection - ws://13.209.220.187/ws (헤더: stompConnectHeaders - Authorization: Bearer ${accessToken value})
-- subscribe - /exchange/chat.exchange/*.room.{matchId} (sub 데이터: {"message": ${text}, "sender": ${username}, "createdAt": ${DateTime}}
-- send - /send/chat.talk.{matchId} (pub 데이터: ${text})
+- subscribe - /exchange/chat.exchange/*.room.${matchId} (sub 데이터: {"message": ${text}, "sender": ${username}, "createdAt": ${DateTime}}
+- send - /send/chat.talk.${matchId} (pub 데이터: ${text})
 
 
 
@@ -763,7 +769,7 @@ test: "refund payment total: 환불 금액"
 
 
 ## 리뷰 삭제
-### PUT /review?id=${리뷰 id}
+### Delete /review?id=${리뷰 id}
 
 ### 응답
 200_ok  
@@ -787,10 +793,18 @@ text: "success delete"
   "id": null
 }
 
+이전 매칭 조회 결과 requester 필드에 따른 후속 동작
+▶ "requester" -> true (요구 등록자라는 뜻)  
+- id: null -> 리뷰 작성 페이지
+- id: not null -> 리뷰 표시 & 삭제 버튼 활성화 
+
+▶ "requester" -> false (요구 지원자라는 뜻)  
+- 항상 리뷰 표시 
+
 
 
 ## 리뷰 리스트 조회
-### GET /review/list?offset=${page no}
+### GET /review/list?userId=${유저 id}&offset=${page no}
 
 ### 응답
 200_ok
@@ -807,11 +821,18 @@ text: "success delete"
       "careType": 케어 타입    
     },
       ...
-  ]
-
+  ]  
 }
 
+## fcm 토큰 등록
+### POST /fcm/token
 
+- body
 
-
+{   
+  "description": ${fcm 토큰 value}  (key 값은 추후 token으로 변경 예정, 현재는 description)
+}
+   
+!FCM 토큰이 등록되지 않았을 경우 특정 api에서 문제 발생   
+!매 로그인 마다 값을 받아 등록할 것 
 
