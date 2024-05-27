@@ -55,6 +55,12 @@ public class Application {
         this.description = description;
         this.createTime = createTime;
     }
+
+
+    //테스트용
+    public Application(Long id){
+        this.id=id;
+    }
 }
 
 

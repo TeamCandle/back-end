@@ -24,9 +24,9 @@ public class PaymentController {
 
     //Test용 Get 후에 적절히 변경
     @GetMapping("/ready")
-    public String payReady(@RequestParam Long matchId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public String payReady(@RequestParam Long matchId/*, @AuthenticationPrincipal PrincipalDetails principalDetails*/){
 
-        PayReadyResponseDto readyResponse = paymentService.payReady(matchId, principalDetails.getUser());
+        PayReadyResponseDto readyResponse = paymentService.payReady(matchId/*, principalDetails.getUser()*/);
 
         //return "redirect:" + readyResponse.getNext_redirect_pc_url();
         return "redirect:" + readyResponse.getNext_redirect_app_url();

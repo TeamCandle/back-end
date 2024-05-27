@@ -90,6 +90,7 @@ public class ApplicationService {
             throw new WrongApplicationException("this requirement is expired. id:" + requirementId);
         }
 
+
         for(Application application: requirement.getApplications()){
             if(application.getUser().getId().equals(user.getId())){
                 throw new WrongApplicationException("this user already applied. username:" + user.getUsername());
@@ -98,7 +99,7 @@ public class ApplicationService {
 
         Application application = Application.builder()
                 .user(new User(user.getId()))
-                .status(MatchStatus.NOT_MATCHED)  //NOT MATCHED
+                .status(MatchStatus.NOT_MATCHED)
                 .createTime(LocalDateTime.now())
                 .build();
 

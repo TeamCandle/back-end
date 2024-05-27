@@ -36,7 +36,7 @@ public class FcmController {
 
     @PostMapping("/token")
     public ResponseEntity<?> registerToken(@RequestBody(required = false) JSONObject jsonRequest, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        String fcmToken = jsonRequest != null ? (String)jsonRequest.get("description") : null;
+        String fcmToken = jsonRequest != null ? (String)jsonRequest.get("token") : null;
         Long userId = principalDetails.getUser().getId();
 
         Long tokenId = fcmService.saveToken(fcmToken, userId);

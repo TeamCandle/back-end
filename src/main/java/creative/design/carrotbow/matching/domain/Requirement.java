@@ -77,4 +77,10 @@ public class Requirement {
         this.status = status;
         this.createTime = createTime;
     }
+
+
+    //테스트용
+    public Requirement(Long id){
+        this.id=id;
+    }
 }

@@ -52,6 +52,7 @@ public class Dog {
         this.image = image;
     }
 
+
     @Builder
     public Dog(String name, String gender, boolean neutered, int age, float size, float weight, String breed, String description, String image) {
         this.name = name;
@@ -63,5 +64,12 @@ public class Dog {
         this.breed = breed;
         this.description = description;
         this.image = image;
+    }
+
+
+
+    //테스트용
+    public Dog(Long id){
+        this.id=id;
     }
 }
