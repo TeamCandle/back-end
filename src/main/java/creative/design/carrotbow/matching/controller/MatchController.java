@@ -37,6 +37,14 @@ public class MatchController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/upcoming")
+    @ResponseBody
+    public ResponseEntity<?> getUpcomingMatch(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        ListMatchDto result = matchService.getUpcomingMatch(principalDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     @GetMapping("")
     public ResponseEntity<?> getMatch(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 

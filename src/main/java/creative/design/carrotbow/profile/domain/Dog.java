@@ -1,6 +1,8 @@
 package creative.design.carrotbow.profile.domain;
 
+import creative.design.carrotbow.matching.domain.dto.type.CareType;
 import creative.design.carrotbow.profile.domain.dto.DogRegisterForm;
+import creative.design.carrotbow.profile.domain.dto.DogSize;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +21,9 @@ public class Dog {
     private String gender;
     private boolean neutered;
     private int age;
-    private float size;
-    private float weight;
+
+    @Enumerated(EnumType.STRING)
+    private DogSize size;
     private String breed;
     private String description;
     private String image;
@@ -46,21 +49,19 @@ public class Dog {
         this.gender = dogEdition.getGender();
         this.neutered = dogEdition.isNeutered();
         this.breed = dogEdition.getBreed();
-        this.size = dogEdition.getSize();
-        this.weight = dogEdition.getWeight();
+        this.size = DogSize.valueOf(dogEdition.getSize());
         this.description = dogEdition.getDescription();
         this.image = image;
     }
 
 
     @Builder
-    public Dog(String name, String gender, boolean neutered, int age, float size, float weight, String breed, String description, String image) {
+    public Dog(String name, String gender, boolean neutered, int age, DogSize size, String breed, String description, String image) {
         this.name = name;
         this.gender = gender;
         this.neutered = neutered;
         this.age = age;
         this.size = size;
-        this.weight = weight;
         this.breed = breed;
         this.description = description;
         this.image = image;

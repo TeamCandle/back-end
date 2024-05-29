@@ -2,10 +2,7 @@ package creative.design.carrotbow.profile.service;
 
 import creative.design.carrotbow.profile.domain.Dog;
 import creative.design.carrotbow.profile.domain.User;
-import creative.design.carrotbow.profile.domain.dto.DogProfileDto;
-import creative.design.carrotbow.profile.domain.dto.DogRegisterForm;
-import creative.design.carrotbow.profile.domain.dto.ListDogDto;
-import creative.design.carrotbow.profile.domain.dto.UserProfileDto;
+import creative.design.carrotbow.profile.domain.dto.*;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -87,8 +84,7 @@ public class ProfileService {
                 .age(dogRegister.getAge())
                 .gender(dogRegister.getGender())
                 .neutered(dogRegister.isNeutered())
-                .size(dogRegister.getSize())
-                .weight(dogRegister.getWeight())
+                .size(DogSize.valueOf(dogRegister.getSize()))
                 .breed(dogRegister.getBreed())
                 .description(dogRegister.getDescription())
                 .image(objectKey)
@@ -96,7 +92,6 @@ public class ProfileService {
 
         return dogService.register(new User(user.getId()), dog);
     }
-
 
 
     public DogProfileDto getDogProfile(Long id){
@@ -110,8 +105,7 @@ public class ProfileService {
                 .gender(dog.getGender())
                 .neutered(dog.isNeutered())
                 .breed(dog.getBreed())
-                .size(dog.getSize())
-                .weight(dog.getWeight())
+                .size(dog.getSize().getActualName())
                 .description(dog.getDescription())
                 .image(s3Service.loadImage(dog.getImage()))
                 .build();

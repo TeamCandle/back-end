@@ -77,8 +77,8 @@ public class FcmService {
                         .build())
                         .putData("test", "test")
                 .setToken(token)
-                .build());
-        */
+                .build());*/
+
 
         FirebaseMessaging.getInstance().send(Message.builder()
                 .putData("title", title)

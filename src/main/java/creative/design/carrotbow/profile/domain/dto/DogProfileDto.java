@@ -12,15 +12,14 @@ public class DogProfileDto {
     private String gender;
     private boolean neutered;
     private int age;
-    private float size;
-    private float weight;
+    private String size;
     private String breed;
     private String description;
 
     private byte[] image;
 
     @Builder
-    public DogProfileDto(Long id, String name, Long owner, String gender, boolean neutered, int age, float size, float weight, String breed, String description, byte[] image) {
+    public DogProfileDto(Long id, String name, Long owner, String gender, boolean neutered, int age, String size, float weight, String breed, String description, byte[] image) {
         this.id = id;
         this.name = name;
         this.owner = owner;
@@ -28,7 +27,6 @@ public class DogProfileDto {
         this.neutered = neutered;
         this.age = age;
         this.size = size;
-        this.weight = weight;
         this.breed = breed;
         this.description = description;
         this.image = image;

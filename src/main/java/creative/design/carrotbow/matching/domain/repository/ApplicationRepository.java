@@ -33,8 +33,7 @@ public class ApplicationRepository {
                         " join fetch r.dog" +
                         " where a.id=:id", Application.class)
                 .setParameter("id", id)
-                .getResultList()
-                .stream().findFirst();
+                .getResultStream().findFirst();
     }
 
     public List<Application> findListWithRequirementByUserId(Long userId, int offset){

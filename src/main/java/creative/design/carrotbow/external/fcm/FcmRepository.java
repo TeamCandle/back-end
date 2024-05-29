@@ -22,6 +22,6 @@ public class FcmRepository {
     public Optional<FcmToken> findByUser(Long userId){
         return em.createQuery("select t from FcmToken t where t.user.id=:userId", FcmToken.class)
                 .setParameter("userId", userId)
-                .getResultList().stream().findFirst();
+                .getResultStream().findFirst();
     }
 }

@@ -25,7 +25,7 @@ public class DogRepository {
                         " where d.id=:id" +
                         " and d.deleted=false", Dog.class)
                 .setParameter("id", id)
-                .getResultList().stream().findFirst();
+                .getResultStream().findFirst();
     }
 
     public Optional<Dog> findByIdWithUser(Long id){
@@ -34,7 +34,7 @@ public class DogRepository {
                         " where d.id=:id" +
                         " and d.deleted=false", Dog.class)
                 .setParameter("id", id)
-                .getResultList().stream().findFirst();
+                .getResultStream().findFirst();
     }
 
     public List<Dog> findListByUserId(Long userId){

@@ -25,7 +25,6 @@ public class PaymentRepository {
                         " left join fetch p.match" +
                         " where p.id=:id", Payment.class)
                 .setParameter("id", id)
-                .getResultList()
-                .stream().findFirst();
+                .getResultStream().findFirst();
     }
 }

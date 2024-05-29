@@ -13,6 +13,7 @@ import creative.design.carrotbow.matching.domain.repository.MatchRepository;
 import creative.design.carrotbow.matching.domain.repository.RequirementRepository;
 import creative.design.carrotbow.profile.domain.Dog;
 import creative.design.carrotbow.profile.domain.User;
+import creative.design.carrotbow.profile.domain.dto.DogSize;
 import creative.design.carrotbow.profile.repository.DogRepository;
 import creative.design.carrotbow.profile.repository.UserRepository;
 import creative.design.carrotbow.security.jwt.JwtUtils;
@@ -86,8 +87,7 @@ public class DummyUtils {
                 .name("dog_" + num)
                 .age(num)
                 .breed("type_" + num)
-                .size(num % 3 + 1)
-                .weight(num % 10)
+                .size(num % 2 == 0? DogSize.SMALL:DogSize.MEDIUM)
                 .gender(num % 2 == 0 ? "male" : "female")
                 .neutered(num % 2 == 0)
                 .description("dogDes_"+num)

@@ -59,10 +59,10 @@ public class PaymentService {
 
 
         //테스트 용도로 주석처리
+
         if(!user.getId().equals(requirement.getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
-
 
 
         if(match.getStatus()!= MatchEntityStatus.WAITING_PAYMENT){
@@ -160,6 +160,7 @@ public class PaymentService {
 
 
         //테스트 용도 주석처리
+
         if(!user.getId().equals(payment.getUser().getId()) && !user.getId().equals(match.getApplication().getUser().getId())){
             throw new InvalidAccessException("this access is not authorized");
         }

@@ -63,7 +63,7 @@ public class ProfileController {
     }
 
     @PatchMapping(value = "/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> changeUserImage(@RequestPart("image") MultipartFile image, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<String> changeUserImage(@RequestPart(value = "image") MultipartFile image, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         profileService.changeUserImage(principalDetails.getUser(), image);
         return ResponseEntity.status(HttpStatus.OK).body("success change");
     }

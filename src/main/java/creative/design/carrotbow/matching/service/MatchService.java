@@ -64,6 +64,19 @@ public class MatchService {
         return matches;
     }
 
+    public ListMatchDto getUpcomingMatch(AuthenticationUser user){
+        MatchEntity match = matchRepository.findUpcomingByUserId(user.getId()).orElseThrow(() -> new NotFoundException("can't find match. userId:" + user.getId()));
+
+        return ListMatchDto.builder()
+                .id(match.getId())
+                .image(s3Service.loadImage(match.getRequirement().getDog().getImage()))
+                .breed(match.getRequirement().getDog().getBreed())
+                .careType(match.getRequirement().getCareType().getActualName())
+                .time(messageUtils.generateListMatchMessage(match.getRequirement().getStartTime()))
+                .status(match.getStatus().getActualName())
+                .build();
+    }
+
     public MatchEntity getMatch(Long id){
         return matchRepository.findWithFullById(id).orElseThrow(()->new NotFoundException("can't find match. id:" + id));
     }

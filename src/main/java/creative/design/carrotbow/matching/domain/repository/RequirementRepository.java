@@ -1,6 +1,7 @@
 package creative.design.carrotbow.matching.domain.repository;
 
 import creative.design.carrotbow.matching.domain.dto.type.CareType;
+import creative.design.carrotbow.profile.domain.Dog;
 import creative.design.carrotbow.profile.domain.dto.DogSize;
 import creative.design.carrotbow.matching.domain.dto.type.MatchStatus;
 import creative.design.carrotbow.matching.domain.Requirement;
@@ -37,8 +38,7 @@ public class RequirementRepository {
                         " join fetch r.dog" +
                         " where r.id=:id", Requirement.class)
                 .setParameter("id", id)
-                .getResultList()
-                .stream().findFirst();
+                .getResultStream().findFirst();
     }
 
     public Optional<Requirement> findWithApplicationsById(Long id){
@@ -47,9 +47,8 @@ public class RequirementRepository {
                         " left join fetch r.applications a" +
                         " left join fetch a.user" +
                         " where r.id=:id", Requirement.class)
-                        .setParameter("id", id)
-                        .getResultList()
-                        .stream().findFirst();
+                .setParameter("id", id)
+                .getResultStream().findFirst();
     }
 
     public List<Requirement> findListByUserId(Long userId, int offset){
@@ -78,19 +77,17 @@ public class RequirementRepository {
                 " and st_contains(st_buffer(:center, :radius), r.careLocation)";
 
 
-
         String dogSize = condForm.getDogSize();
         if (dogSize != null) {
-            queryString += " and d.weight between :minWeight and :maxWeight";
+            queryString += " and d.size =:dogSize";
         }
-
 
         String careType = condForm.getCareType();
         if(careType!=null){
             queryString += " and r.careType=:care";
         }
 
-        queryString +=  " order by r.startTime asc";
+        queryString += " order by r.startTime asc";
 
         Query findQuery = em.createQuery(queryString, Requirement.class)
                 .setParameter("now", LocalDateTime.now())
@@ -101,22 +98,7 @@ public class RequirementRepository {
                 .setMaxResults(pageSize);
 
         if (dogSize != null) {
-            float minWeight = 0;
-            float maxWeight = 100;
-
-            DogSize size = DogSize.valueOf(dogSize);
-            if (size == DogSize.SMALL) {
-                maxWeight = 9;
-            } else if (size == DogSize.MEDIUM) {
-                minWeight = 8;
-                maxWeight = 17;
-            } else if (size == DogSize.LARGE) {
-                minWeight = 16;
-            }
-
-            findQuery.setParameter("minWeight", minWeight)
-                    .setParameter("maxWeight", maxWeight);
-
+            findQuery.setParameter("dogSize", DogSize.valueOf(dogSize));
         }
 
         if(careType!=null){

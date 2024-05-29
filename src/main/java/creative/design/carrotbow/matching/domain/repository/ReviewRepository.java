@@ -31,16 +31,14 @@ public class ReviewRepository {
                         " join fetch r.reviewedUser" +
                         " where r.id=:id", Review.class)
                 .setParameter("id",id)
-                .getResultList()
-                .stream().findFirst();
+                .getResultStream().findFirst();
     }
 
     public Optional<Review> findByMatchId(Long matchId){
         return em.createQuery("select r from Review r" +
                         " where r.match.id=:matchId", Review.class)
                 .setParameter("matchId",matchId)
-                .getResultList()
-                .stream().findFirst();
+                .getResultStream().findFirst();
     }
 
     public List<Review> findListByUserId(Long userId, int offset){
