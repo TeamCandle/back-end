@@ -867,13 +867,14 @@ text: 해당 유저 accessToken
 ### GET /match/upcoming
 
 ### 응답
-{  
-         
+{    
+    
   "id": 매칭 id,  
   "image": 애견 이미지,  
   "breed": 견종,  
   "careType": 케어 타입,   
   "time": 일자,    
   "status": 매칭 상태  
+  
 }
 
