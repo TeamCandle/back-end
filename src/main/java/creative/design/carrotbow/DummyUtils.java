@@ -1,6 +1,7 @@
 package creative.design.carrotbow;
 
-import creative.design.carrotbow.error.InvalidAccessException;
+import creative.design.carrotbow.external.fcm.FcmRepository;
+import creative.design.carrotbow.external.fcm.FcmToken;
 import creative.design.carrotbow.external.geo.GeoService;
 import creative.design.carrotbow.matching.domain.Application;
 import creative.design.carrotbow.matching.domain.MatchEntity;
@@ -21,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
@@ -36,6 +36,7 @@ public class DummyUtils {
     private final RequirementRepository requirementRepository;
     private final ApplicationRepository applicationRepository;
     private final MatchRepository matchRepository;
+    private final FcmRepository fcmRepository;
 
     private final GeoService geoService;
 
@@ -54,6 +55,7 @@ public class DummyUtils {
 
         for(int i=1; i<=50; i++){
             makeUser(i);
+            makeFcmToken(i);
         }
         for(int i=1; i<=200; i++){
             makeDog(i);
@@ -79,6 +81,13 @@ public class DummyUtils {
                         .reviewCount(0)
                         .totalRating(0)
                         .role("ROLE_USER")
+                .build());
+    }
+
+    public void makeFcmToken(int num){
+        fcmRepository.save(FcmToken.builder()
+                        .token("token_"+num)
+                        .user(new User(num+0L))
                 .build());
     }
 
@@ -116,7 +125,7 @@ public class DummyUtils {
     public void makeApplication(int num){
 
         Application application = Application.builder()
-                .user(new User(num % 50 + 1L))
+                .user(new User(num % 49 + 2L))
                 .createTime(LocalDateTime.now())
                 .description("app_" + num)
                 .status(num%3==0? MatchStatus.MATCHED:MatchStatus.NOT_MATCHED)

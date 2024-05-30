@@ -92,6 +92,9 @@ public class ApplicationService {
             throw new WrongApplicationException("this requirement is expired. id:" + requirementId);
         }
 
+        if(requirement.getUser().getId().equals(user.getId())){
+            throw new WrongApplicationException("can't apply the self-requirement. username:" + user.getUsername());
+        }
 
         for(Application application: requirement.getApplications()){
             if(application.getUser().getId().equals(user.getId())){

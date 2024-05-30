@@ -36,7 +36,7 @@ public class UserController {
         dummyUtils.makeDummy();
     }
 
-    @RequestMapping("/dummy")
+    @GetMapping("/dummy")
     @ResponseBody
     public String getUser(@RequestParam Long id){
         User user = userService.find(id);
