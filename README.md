@@ -187,8 +187,7 @@ text: "success change"
     "gender": 성별,
     "neutered": 중성화 여부,
     "age": 나이,
-    "size": 크기
-    "weight": 무게,
+    "size": 크기, (소형, 중형, 대형)
     "breed": 견종,
     "description": 설명,
     "image": 이미지(base 64 byte code)
@@ -317,12 +316,7 @@ text: "success change"
   ----------------
   Content-Disposition: form-data; name="size"
 
-  ${size value} :required
-  
-  ----------------
-  Content-Disposition: form-data; name="weight"
-
-  ${weight value} :required
+  ${size value} :required ("SMALL", "MEDIUM", "LARGE") 
   
   ----------------
   Content-Disposition: form-data; name="breed"
@@ -869,6 +863,18 @@ text: 해당 유저 accessToken
 }
 
 
+## 가장 빠른 매칭 정보 반환 
+### GET /match/upcoming
 
-
+### 응답
+{    
+    
+  "id": 매칭 id,  
+  "image": 애견 이미지,  
+  "breed": 견종,  
+  "careType": 케어 타입,   
+  "time": 일자,    
+  "status": 매칭 상태  
+  
+}
 
