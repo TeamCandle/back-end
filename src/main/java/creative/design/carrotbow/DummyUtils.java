@@ -19,6 +19,7 @@ import creative.design.carrotbow.profile.repository.DogRepository;
 import creative.design.carrotbow.profile.repository.UserRepository;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,8 @@ public class DummyUtils {
 
     private final JwtUtils jwtUtils;
 
-
+    @Value("${fcm.token}")
+    private String tokenValue;
 
     public String makeDummyToken(String username){
         return "Bearer " + jwtUtils.generateAccessToken(username);
@@ -86,7 +88,7 @@ public class DummyUtils {
 
     public void makeFcmToken(int num){
         fcmRepository.save(FcmToken.builder()
-                        .token("token_"+num)
+                        .token(tokenValue)
                         .user(new User(num+0L))
                 .build());
     }

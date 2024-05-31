@@ -40,8 +40,12 @@ public class RequirementService
     private final MessageUtils messageUtils;
 
     @Transactional
-    public Long registerRequirement(RequireRegisterForm requireRegisterForm){
+    public Long registerRequirement(RequireRegisterForm requireRegisterForm, AuthenticationUser user){
         Dog dog = dogService.find(requireRegisterForm.getDogId());
+
+        if(!dog.getOwner().getId().equals(user.getId())){
+            throw new InvalidAccessException("this access is not authorized");
+        }
 
         return requirementRepository.save(
                 Requirement.builder()

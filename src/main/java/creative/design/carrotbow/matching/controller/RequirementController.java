@@ -9,6 +9,7 @@ import creative.design.carrotbow.error.ErrorResponse;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.matching.service.RequirementService;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,7 +32,7 @@ public class RequirementController {
     private final RequirementService requirementService;
 
     @PostMapping("")
-    public ResponseEntity<?> registerRequirement(@Validated @RequestBody RequireRegisterForm requireRegisterForm, BindingResult bindingResult){
+    public ResponseEntity<?> registerRequirement(@Validated @RequestBody RequireRegisterForm requireRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -50,7 +51,7 @@ public class RequirementController {
             return ResponseEntity.badRequest().body(list);
         }
 
-        Long requirementId = requirementService.registerRequirement(requireRegisterForm);
+        Long requirementId = requirementService.registerRequirement(requireRegisterForm, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", requirementId);
