@@ -1,6 +1,7 @@
 package creative.design.carrotbow;
 
 import creative.design.carrotbow.external.fcm.FcmRepository;
+import creative.design.carrotbow.external.fcm.FcmService;
 import creative.design.carrotbow.external.fcm.FcmToken;
 import creative.design.carrotbow.external.geo.GeoService;
 import creative.design.carrotbow.matching.domain.Application;
@@ -37,7 +38,7 @@ public class DummyUtils {
     private final RequirementRepository requirementRepository;
     private final ApplicationRepository applicationRepository;
     private final MatchRepository matchRepository;
-    private final FcmRepository fcmRepository;
+    private final FcmService fcmService;
 
     private final GeoService geoService;
 
@@ -87,10 +88,7 @@ public class DummyUtils {
     }
 
     public void makeFcmToken(int num){
-        fcmRepository.save(FcmToken.builder()
-                        .token(tokenValue)
-                        .user(new User(num+0L))
-                .build());
+        fcmService.saveToken(tokenValue ,num+0L);
     }
 
     public void makeDog(int num){
