@@ -7,6 +7,8 @@ import creative.design.carrotbow.security.oauth2.provider.KakaoUserInfo;
 import creative.design.carrotbow.security.oauth2.provider.Oauth2UserInfo;
 import creative.design.carrotbow.profile.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
@@ -50,6 +53,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         User user = userService.findByUsername(username);
 
         if(user==null){
+
+            MDC.put("userId", username);
+            log.info("회원 가입");
+
             String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
             String email = oauth2UserInfo.getEmail();
             String phNum = oauth2UserInfo.getPhoneNumber();

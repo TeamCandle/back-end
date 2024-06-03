@@ -137,7 +137,7 @@ public class RequirementService
                     applications.add(ListAppDto.builder()
                             .id(application.getId())
                             .userId(application.getUser().getId())
-                            .rating(application.getUser().getReviewCount()!=0?application.getUser().getTotalRating()/application.getUser().getReviewCount():-1)
+                            .rating(application.getUser().getRating())
                             .name(application.getUser().getName())
                             .gender(application.getUser().getGender())
                             .image(s3Service.loadImage(application.getUser().getImage()))

@@ -30,12 +30,6 @@ public class UserController {
     private final DummyUtils dummyUtils;
 
 
-    //dummy - 테스트용
-    @PostConstruct
-    public void makeDummy(){
-        dummyUtils.makeDummy();
-    }
-
     @GetMapping("/dummy")
     @ResponseBody
     public String getUser(@RequestParam Long id){

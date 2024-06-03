@@ -8,6 +8,7 @@ import creative.design.carrotbow.error.ErrorResponse;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 @RequestMapping("/profile")
 public class ProfileController {
@@ -43,6 +45,8 @@ public class ProfileController {
     @GetMapping("/user/me")
     @ResponseBody
     public UserProfileDto getUserProfile(@AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("getUserProfile");
 
         return profileService.getUserProfile(principalDetails.getUser().getId());
     }

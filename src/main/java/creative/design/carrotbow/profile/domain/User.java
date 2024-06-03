@@ -71,6 +71,6 @@ public class User {
     }
 
     public float getRating(){
-        return totalRating/reviewCount;
+        return reviewCount!=0?totalRating/reviewCount:-1;
     }
 }

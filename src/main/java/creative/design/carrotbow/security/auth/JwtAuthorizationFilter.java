@@ -9,7 +9,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -29,8 +32,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("JwtAuthorizationFilter.JwtAuthorizationFilter");
+        //System.out.println("JwtAuthorizationFilter.JwtAuthorizationFilter");
 
+        MDC.put("sessionId", request.getSession().getId());
         String jwtHeader = request.getHeader("Authorization");
 
         if(jwtHeader != null && jwtHeader.startsWith("Bearer")){
@@ -48,6 +52,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                 ObjectMapper mapper = new ObjectMapper();
                 response.getWriter().write(mapper.writeValueAsString(body));
+
+                log.info("Unauthorized: Invalid or expired token");
             }
             else {
                 User userEntity = userService.findByUsername(username);
@@ -61,6 +67,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                                 .build());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                MDC.put("userId", username);
+
                 filterChain.doFilter(request, response);
             }
         }

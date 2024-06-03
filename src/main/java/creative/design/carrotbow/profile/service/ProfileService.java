@@ -49,6 +49,7 @@ public class ProfileService {
                 .name(user.getName())
                 .gender(user.getGender())
                 .age(age)
+                .rating(user.getRating())
                 .description(user.getDescription())
                 .image(s3Service.loadImage(user.getImage()))
                 .dogList(dogList)
