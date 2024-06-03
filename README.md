@@ -126,7 +126,8 @@ refreshToken이 만료됐을 경우
     "id": 유저 id,  
     "name": 이름,
     "gender": 성별,
-    "age": 나이,
+    "age": 나이,  
+    "rating": 평점,  (기록이 없을 경우 -1 반환)  
     "description": 설명,
     "image": 이미지(base 64 byte code),  
     애견 리스트
