@@ -538,7 +538,7 @@ text: "success delete"
 
 
 ## 요구 취소 
-### PUT /requirement/cancel?id=${등록 id}
+### PATCH /requirement/cancel?id=${등록 id}
 
 
 ### 응답
