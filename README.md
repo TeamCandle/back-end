@@ -710,7 +710,12 @@ text: "success cancel"
 302_redirection
 redriect: kakao 인증 페이지 
 
-- 인증 성공시 -> text: "success payment total: 결제금액"  
+- 인증 성공시 ->
+  {  
+    "payment cost": 결제 금액 (int),
+    "approve time": 승인 시간,
+    "payment type": 결제 방법
+  }
 - 인증 취소시 -> text: "cancel payment"
 - 인증 실패시 -> text: "fail payment"
 
@@ -720,7 +725,11 @@ redriect: kakao 인증 페이지
 
 ### 응답
 200_oK
-test: "refund payment total: 환불 금액"
+{  
+    "refund cost": 환불 금액 (int),
+    "approve time": 승인 시간,
+    "payment type": 결제 방법
+}
 
 
 
