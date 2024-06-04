@@ -6,6 +6,7 @@ import creative.design.carrotbow.profile.domain.dto.*;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProfileService {
@@ -60,6 +62,8 @@ public class ProfileService {
     public void changeUserDescription(AuthenticationUser authenticationUser, String description){
         User user = userService.find(authenticationUser.getId());
         user.changeDescription(description);
+
+        log.info("설명 변경");
     }
 
 
@@ -71,6 +75,8 @@ public class ProfileService {
         String objectKey = s3Service.saveUserImage(user.getUsername(), image);
 
         user.changeImage(objectKey);
+
+        log.info("이미지 변경");
     }
 
 
@@ -91,7 +97,11 @@ public class ProfileService {
                 .image(objectKey)
                 .build();
 
-        return dogService.register(new User(user.getId()), dog);
+        Long dogId = dogService.register(new User(user.getId()), dog);
+
+        log.info("애견 등록. 애견 Id={}", dogId);
+
+        return dogId;
     }
 
 
@@ -129,10 +139,14 @@ public class ProfileService {
         s3Service.deleteImage(dog.getImage());
         String objectKey = s3Service.saveDogImage(dog.getOwner().getUsername(), dogEdition.getName(), dogEdition.getImage());
         dog.changeAttr(dogEdition, objectKey);
+
+        log.info("애견 프로필 변경 dog Id={}", dog.getId());
     }
 
     @Transactional
     public void deleteDogProfile(Long id){
         dogService.delete(id);
+
+        log.info("애견 프로필 삭제 dog Id={}", id);
     }
 }

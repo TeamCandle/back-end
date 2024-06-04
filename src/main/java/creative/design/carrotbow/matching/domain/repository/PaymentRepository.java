@@ -27,4 +27,12 @@ public class PaymentRepository {
                 .setParameter("id", id)
                 .getResultStream().findFirst();
     }
+
+    public Optional<Payment> findWithMatchByMatchId(Long matchId){
+        return em.createQuery("select p from Payment p " +
+                        " left join fetch p.match m" +
+                        " where m.id=:matchId", Payment.class)
+                .setParameter("matchId", matchId)
+                .getResultStream().findFirst();
+    }
 }

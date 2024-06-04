@@ -15,6 +15,7 @@ import creative.design.carrotbow.matching.domain.repository.MatchRepository;
 import creative.design.carrotbow.matching.domain.repository.PaymentRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 @Transactional
 public class PaymentService {
@@ -73,11 +75,14 @@ public class PaymentService {
                 .user(requirement.getUser())
                 .status(PaymentStatus.NOT_APPROVED)
                 .amount(match.getRequirement().getReward())
+                .match(match)
                 .build();
 
-        paymentRepository.save(payment);
+        Long paymentId = paymentRepository.save(payment);
 
-        match.setPayment(payment);
+        log.info("페이먼트 생성. 페이먼트 Id={}", paymentId);
+
+
         String orderId = payment.getId().toString();
 
         HashMap<String,String> map=new HashMap<>();
@@ -110,8 +115,9 @@ public class PaymentService {
         payment.setTid(readyResponse.getTid());
         payment.setCreatedTime(readyResponse.getCreated_at());
 
-        return readyResponse;
+        log.info("결제 준비. 페이먼트 Id={}", orderId);
 
+        return readyResponse;
     }
 
     public PayApproveResponseDto payApprove(String orderId, String pgToken) {
@@ -149,15 +155,14 @@ public class PaymentService {
         payment.setApproveTime(approveResponse.getApproved_at());
         payment.changeStatus(PaymentStatus.APPROVED);
 
+        log.info("결제 승인. 페이먼트 Id={}", orderId);
+
         return approveResponse;
     }
 
     public PayCancelResponseDto payRefund(Long matchId, AuthenticationUser user) {
-
-
-        MatchEntity match = matchRepository.findWithPaymentById(matchId).orElseThrow(()->new NotFoundException("can't find match. id:" + matchId));
-        Payment payment = match.getPayment();
-
+        Payment payment = paymentRepository.findWithMatchByMatchId(matchId).orElseThrow(() -> new NotFoundException("can't find payment. matchId:" + matchId));
+        MatchEntity match = payment.getMatch();
 
         //테스트 용도 주석처리
 
@@ -194,6 +199,8 @@ public class PaymentService {
         match.changeStatus(MatchEntityStatus.CANCELLED);
         payment.changeStatus(PaymentStatus.REFUNDED);
         payment.setCancelTime(cancelResponse.getCanceled_at());
+
+        log.info("환불 승인. 페이먼트 Id={}", payment.getId());
 
         return cancelResponse;
     }

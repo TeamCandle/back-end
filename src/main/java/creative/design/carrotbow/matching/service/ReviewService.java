@@ -11,6 +11,7 @@ import creative.design.carrotbow.error.NotFoundException;
 import creative.design.carrotbow.matching.domain.repository.ReviewRepository;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReviewService {
@@ -39,13 +41,17 @@ public class ReviewService {
         User reviewedUser = match.getApplication().getUser();
         reviewedUser.addReview(reviewRegisterForm.getRating());
 
-        return reviewRepository.save(Review.builder()
+        Long reviewId = reviewRepository.save(Review.builder()
                 .match(match)
                 .reviewedUser(reviewedUser)
                 .text(reviewRegisterForm.getText())
                 .rating(reviewRegisterForm.getRating())
                 .createdAt(LocalDateTime.now())
                 .build());
+
+        log.info("리뷰 작성. 리뷰 Id={}", reviewId);
+
+        return reviewId;
     }
 
 
@@ -61,6 +67,8 @@ public class ReviewService {
         reviewedUser.subReview(review.getRating());
 
         reviewRepository.delete(review);
+
+        log.info("리뷰 삭제. 리뷰 Id={}", id);
     }
 
 

@@ -27,6 +27,8 @@ public class TokenRepository {
     }
 
     public void deleteAll(Long userId){
+
+
         em.createQuery("delete from RefreshToken r where r.user.id =:userId")
                 .setParameter("userId", userId)
                 .executeUpdate();

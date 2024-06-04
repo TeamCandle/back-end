@@ -25,10 +25,6 @@ public class MatchEntity {
     @JoinColumn(name = "application_id")
     private Application application;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
-
     @Enumerated(EnumType.STRING)
     private MatchEntityStatus status;
 
@@ -51,8 +47,4 @@ public class MatchEntity {
         this.status= status;
     }
 
-    public void setPayment(Payment payment){
-        this.payment=payment;
-        payment.linkMatch(this);
-    }
 }

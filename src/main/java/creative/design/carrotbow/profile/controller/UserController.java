@@ -10,6 +10,7 @@ import creative.design.carrotbow.profile.service.UserService;
 import creative.design.carrotbow.security.jwt.JwtUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@Slf4j(topic = "LOGIN_LOG")
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
@@ -29,6 +31,11 @@ public class UserController {
 
     private final DummyUtils dummyUtils;
 
+
+    @PostConstruct
+    public void makeDummyData(){
+        dummyUtils.makeDummy();
+    }
 
     @GetMapping("/dummy")
     @ResponseBody
@@ -41,11 +48,17 @@ public class UserController {
 
     @GetMapping("/login/kakao")
     public String loginKakao(){
+
+        log.info("/login/kakao");
+
         return "redirect:/oauth2/authorization/kakao";
     }
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logOut(@AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("/logout");
+
         AuthenticationUser user = principalDetails.getUser();
         userService.logout(user);
         return ResponseEntity.status(HttpStatus.OK).body("success logout ");
@@ -53,6 +66,8 @@ public class UserController {
 
     @PostMapping("/accessToken")
     public ResponseEntity<?> refreshAccessToken(@RequestBody(required = false) JSONObject jsonRequest, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("/accessToken");
 
         String refreshToken = jsonRequest != null ? (String)jsonRequest.get("refreshToken") : null;
 

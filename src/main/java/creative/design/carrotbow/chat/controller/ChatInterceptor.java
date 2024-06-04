@@ -14,6 +14,7 @@ import creative.design.carrotbow.external.fcm.FcmService;
 import creative.design.carrotbow.external.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
@@ -28,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 @Component
-@Slf4j
+@Slf4j(topic = "CHAT_LOG")
 @RequiredArgsConstructor
 public class ChatInterceptor implements ChannelInterceptor {
 
@@ -47,9 +48,11 @@ public class ChatInterceptor implements ChannelInterceptor {
         System.out.println("startAccessor: " + accessor);
         */
 
+        MDC.put("sessionId", accessor.getSessionId());
 
         // 연결 요청시 JWT 검증
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+
             // Authorization 헤더 추출
             String jwtHeader = accessor.getFirstNativeHeader("Authorization");
 
@@ -60,7 +63,6 @@ public class ChatInterceptor implements ChannelInterceptor {
                 if (username == null) {
                     throw new InvalidAccessException("Invalid or Expired token");
                 } else {
-
                     User userEntity = userService.findByUsername(username);
                     PrincipalDetails principalDetails = new PrincipalDetails(
                             AuthenticationUser.builder()
@@ -74,6 +76,9 @@ public class ChatInterceptor implements ChannelInterceptor {
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                     accessor.getSessionAttributes().put("Authentication", authentication);
                     accessor.getSessionAttributes().put("name", userEntity.getName());
+
+                    MDC.put("userId", username);
+                    log.info("소켓 컨넥션 생성");
                 }
             }
             else{
@@ -113,6 +118,10 @@ public class ChatInterceptor implements ChannelInterceptor {
             accessor.getSessionAttributes().put("roomId", roomId);
             accessor.getSessionAttributes().put("target", targetToken);
 
+            MDC.put("userId", user.getUsername());
+            MDC.put("roomId", roomId.toString());
+            log.info("채팅방 입장.");
+
             //redis에 추가
             redisService.addSets("room_"+roomId, user.getId().toString());
         }
@@ -140,6 +149,10 @@ public class ChatInterceptor implements ChannelInterceptor {
 
             //redis에서 삭제
             redisService.deleteSets("room_"+roomId, user.getId().toString());
+
+            MDC.put("userId", user.getUsername());
+            MDC.put("roomId", roomId.toString());
+            log.info("채팅방 퇴장.");
         }
 
         return message;

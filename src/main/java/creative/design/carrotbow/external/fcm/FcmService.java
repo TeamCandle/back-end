@@ -12,6 +12,7 @@ import creative.design.carrotbow.profile.domain.User;
 import creative.design.carrotbow.error.NotFoundException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 public class FcmService {
 
@@ -117,6 +119,8 @@ public class FcmService {
         }
 
         redisService.setValues("user_"+userId, token);
+
+        log.info("FCM 토큰 저장. 토큰 ID={}", fcmToken.getId());
 
         return fcmToken.getId();
     }

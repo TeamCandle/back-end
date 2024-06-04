@@ -19,6 +19,7 @@ import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.external.geo.GeoService;
 import creative.design.carrotbow.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RequirementService
@@ -43,12 +45,11 @@ public class RequirementService
     public Long registerRequirement(RequireRegisterForm requireRegisterForm, AuthenticationUser user){
         Dog dog = dogService.find(requireRegisterForm.getDogId());
 
-
         if(!dog.getOwner().getId().equals(user.getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
 
-        return requirementRepository.save(
+        Long requirementId = requirementRepository.save(
                 Requirement.builder()
                         .user(dog.getOwner())
                         .dog(dog)
@@ -61,6 +62,10 @@ public class RequirementService
                         .createTime(LocalDateTime.now())
                         .reward(requireRegisterForm.getReward())
                         .build());
+
+        log.info("요구사항 등록. 요구사항 Id={}", requirementId);
+
+        return requirementId;
     }
 
     public List<ListMatchDto> getRequirementsByUser(int offset, AuthenticationUser authenticationUser){
@@ -85,6 +90,10 @@ public class RequirementService
     }
 
     public List<ListMatchDto> getRequirementsByLocation(RequirementCondForm condForm, int offset){
+
+
+        log.info("조회 요청 위치 x:{}, y:{}, radius:{}", condForm.getLocation().getX(), condForm.getLocation().getY(), condForm.getRadius());
+
         List<Requirement> requirementList = requirementRepository.findListByLocation(condForm, offset);
 
         List<ListMatchDto> requirements = new ArrayList<>();
@@ -179,10 +188,11 @@ public class RequirementService
             throw new InvalidAccessException("this access is not authorized");
         }
 
-        if(!requirement.getActualStatus().equals(Requirement.RECRUITING)){        //not matched & current time
+        if(!requirement.getActualStatus().equals(Requirement.RECRUITING)){
             throw new WrongApplicationException("this requirement is expired. id:" + id);
         }
 
+        log.info("요구사항 취소. id={}", id);
 
         requirement.changeStatus(MatchStatus.CANCELLED);
 

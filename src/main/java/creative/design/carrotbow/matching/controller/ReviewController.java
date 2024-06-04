@@ -6,6 +6,7 @@ import creative.design.carrotbow.error.ErrorResponse;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.matching.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j(topic = "ACCESS_LOG")
 @RequestMapping("/review")
 @RequiredArgsConstructor
 public class ReviewController {
@@ -29,6 +31,9 @@ public class ReviewController {
 
     @PostMapping("")
     public ResponseEntity<?> writeReview(@Validated @RequestBody ReviewRegisterForm reviewRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("POST /review?matchId={}", reviewRegisterForm.getMatchId());
+
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
@@ -56,6 +61,9 @@ public class ReviewController {
 
     @DeleteMapping("")
     public ResponseEntity<?> deleteReview(@RequestParam Long id, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("DELETE /review?id={}", id);
+
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
@@ -82,11 +90,16 @@ public class ReviewController {
     @GetMapping("")
     @ResponseBody
     public HashMap<String,String> getReview(@RequestParam Long matchId){
+        log.info("GET /review?matchId={}", matchId);
+
         return reviewService.getReviewByMatch(matchId);
     }
 
     @GetMapping("/list")
     public ResponseEntity<?> getReviewList(@RequestParam Long userId, @RequestParam int offset){
+
+        log.info("GET /review/list?userId={}", userId);
+
         List<ReviewDto> reviews = reviewService.getReviewsByUser(offset, userId);
 
         Map<String, Object> result = new HashMap<>();

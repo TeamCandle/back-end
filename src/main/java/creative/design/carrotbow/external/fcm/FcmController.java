@@ -3,6 +3,7 @@ package creative.design.carrotbow.external.fcm;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Slf4j(topic = "ACCESS_LOG")
 @RequestMapping("/fcm")
 @RequiredArgsConstructor
 public class FcmController {
@@ -36,6 +38,9 @@ public class FcmController {
 
     @PostMapping("/token")
     public ResponseEntity<?> registerToken(@RequestBody(required = false) JSONObject jsonRequest, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("POST /fcm/token");
+
         String fcmToken = jsonRequest != null ? (String)jsonRequest.get("token") : null;
         Long userId = principalDetails.getUser().getId();
 

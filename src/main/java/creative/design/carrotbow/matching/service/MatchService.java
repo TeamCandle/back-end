@@ -20,6 +20,7 @@ import creative.design.carrotbow.external.fcm.FcmService;
 import creative.design.carrotbow.external.redis.RedisService;
 import creative.design.carrotbow.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MatchService {
@@ -152,12 +154,17 @@ public class MatchService {
         String token = fcmService.getToken(matchedApplication.getUser().getId());
         fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message, token);
 
-        return matchRepository.save(MatchEntity.builder()
+        Long matchId = matchRepository.save(MatchEntity.builder()
                 .requirement(requirement)
                 .application(matchedApplication)
                 .status(MatchEntityStatus.WAITING_PAYMENT)
                 .createTime(LocalDateTime.now())
                 .build());
+
+
+        log.info("신청 수락 & 매칭. 요구사항 Id={}, 신청 Id={}, 매칭 Id={}", requirementId, applicationId, matchId);
+
+        return matchId;
     }
 
     @Transactional
@@ -174,6 +181,8 @@ public class MatchService {
         }
 
         match.changeStatus(MatchEntityStatus.COMPLETED);
+
+        log.info("요구사항 완료. 매칭 Id={}", id);
     }
 
     @Transactional
@@ -189,6 +198,8 @@ public class MatchService {
         }
 
         match.changeStatus(MatchEntityStatus.CANCELLED);
+
+        log.info("매칭 취소. 매칭 Id={}", id);
     }
 
 }

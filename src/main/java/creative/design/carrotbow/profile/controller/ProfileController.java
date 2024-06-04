@@ -46,7 +46,7 @@ public class ProfileController {
     @ResponseBody
     public UserProfileDto getUserProfile(@AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        log.info("getUserProfile");
+        log.info("GET /profile/user/me");
 
         return profileService.getUserProfile(principalDetails.getUser().getId());
     }
@@ -55,6 +55,8 @@ public class ProfileController {
     @ResponseBody
     public UserProfileDto getUserProfile(@RequestParam Long id){
 
+        log.info("GET /profile/user?id={}", id);
+
         return profileService.getUserProfile(id);
     }
 
@@ -62,12 +64,16 @@ public class ProfileController {
     public ResponseEntity<String> changeUserDescription(@RequestBody(required = false) JSONObject jsonRequest, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String description = jsonRequest != null ? (String)jsonRequest.get("description") : null;
 
+        log.info("PATCH /profile/user");
+
         profileService.changeUserDescription(principalDetails.getUser(), description);
         return ResponseEntity.status(HttpStatus.OK).body("success change");
     }
 
     @PatchMapping(value = "/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> changeUserImage(@RequestPart(value = "image") MultipartFile image, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        log.info("PATCH /profile/user");
+
         profileService.changeUserImage(principalDetails.getUser(), image);
         return ResponseEntity.status(HttpStatus.OK).body("success change");
     }
@@ -76,11 +82,16 @@ public class ProfileController {
     @GetMapping("/dog")
     @ResponseBody
     public DogProfileDto getDogProfile(@RequestParam Long id){
+
+        log.info("GET /profile/dog?id=id");
         return profileService.getDogProfile(id);
     }
 
     @GetMapping("/dog/list")
     public ResponseEntity<?> getDogList(@AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("GET /profile/dog/list");
+
         List<ListDogDto> dogs = profileService.getDogProfileListByUserId(principalDetails.getUser().getId());
 
         Map<String, Object> result = new HashMap<>();
@@ -90,6 +101,8 @@ public class ProfileController {
 
     @PostMapping("/dog")
     public ResponseEntity<?> registerDogProfile(@Validated @ModelAttribute DogRegisterForm dogRegisterForm, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("POST /profile/dog");
 
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -115,8 +128,10 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/dog")
+    @PutMapping("/dog")
     public ResponseEntity<?> changeDogProfile(@Validated @ModelAttribute DogRegisterForm dogRegisterForm, BindingResult bindingResult){
+
+        log.info("PUT /profile/dog?id={}", dogRegisterForm.getId());
 
         if(bindingResult.getTarget()!=null) {
             ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "id", "required");
@@ -145,6 +160,9 @@ public class ProfileController {
 
     @DeleteMapping("/dog")
     public ResponseEntity<String> deleteDogProfile(@RequestParam Long id){
+
+        log.info("DELETE /profile/dog?id={}", id);
+
         profileService.deleteDogProfile(id);
         return ResponseEntity.status(HttpStatus.OK).body("success delete");
     }

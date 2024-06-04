@@ -17,6 +17,7 @@ import creative.design.carrotbow.external.geo.GeoService;
 import creative.design.carrotbow.external.fcm.FcmService;
 import creative.design.carrotbow.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ApplicationService {
@@ -88,7 +90,6 @@ public class ApplicationService {
 
         Requirement requirement = requirementRepository.findWithApplicationsById(requirementId).orElseThrow(() -> new NotFoundException("can't find requirement. id:" + requirementId));
 
-
         if(!requirement.getActualStatus().equals(Requirement.RECRUITING)){
             throw new WrongApplicationException("this requirement is expired. id:" + requirementId);
         }
@@ -116,7 +117,11 @@ public class ApplicationService {
         String token = fcmService.getToken(user.getId());
         fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message ,token);
 
-        return applicationRepository.save(application);
+        Long applicationId = applicationRepository.save(application);
+
+        log.info("요구사항 신청. 요구사항 Id={}, 신청 Id={}", requirementId, applicationId);
+
+        return applicationId;
     }
 
 
@@ -132,6 +137,8 @@ public class ApplicationService {
         if(!application.getActualStatus().equals(Application.WAITING)){
             throw new WrongApplicationException("this application is expired. id:" + id);
         }
+
+        log.info("신청 취소. 신청 Id={}", id);
 
         application.changeStatus(MatchStatus.CANCELLED);
     }

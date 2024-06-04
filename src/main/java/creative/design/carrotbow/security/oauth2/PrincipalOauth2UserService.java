@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-@Slf4j(topic = "ACCESS_LOG")
+@Slf4j(topic = "LOGIN_LOG")
 @RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 

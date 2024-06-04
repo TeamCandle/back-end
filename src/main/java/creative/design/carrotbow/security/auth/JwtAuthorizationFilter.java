@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j(topic = "ACCESS_LOG")
+@Slf4j(topic = "LOGIN_LOG")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 

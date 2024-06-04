@@ -8,12 +8,14 @@ import creative.design.carrotbow.security.jwt.JwtUtils;
 import creative.design.carrotbow.security.jwt.RefreshToken;
 import creative.design.carrotbow.security.jwt.TokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
 @Service
+@Slf4j(topic = "LOGIN_LOG")
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
@@ -39,6 +41,8 @@ public class UserService {
 
     public void logout(AuthenticationUser user){
         tokenRepository.deleteAll(user.getId());
+
+        log.info("로그아웃");
     }
 
     public void saveRefreshToken(String refreshToken, AuthenticationUser user){
@@ -65,6 +69,7 @@ public class UserService {
         tokenRepository.delete(token);
         tokenRepository.save(new RefreshToken(newRefreshToken, new User(user.getId())));
 
+        log.info("access token 갱신");
 
         return keys;
     }

@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 
 import java.io.IOException;
 
-@Slf4j(topic = "ACCESS_LOG")
+@Slf4j(topic = "LOGIN_LOG")
 public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private JwtUtils jwtUtils;

@@ -9,6 +9,8 @@ import creative.design.carrotbow.external.redis.RedisService;
 import creative.design.carrotbow.security.auth.AuthenticationUser;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ import java.util.Set;
 
 
 @Controller
+@Slf4j(topic = "CHAT_LOG")
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -77,6 +80,13 @@ public class ChatController {
             fcmService.sendMessageByToken(senderName, message, token);
         }
 
+
+        MDC.put("sessionId", accessor.getSessionId());
+        MDC.put("userId", user.getUsername());
+        MDC.put("roomId", roomId.toString());
+
+
+        log.info("메시지: {}_{}", messageDto.getMessage(), messageDto.getCreateAt());
 
         return message;
     }

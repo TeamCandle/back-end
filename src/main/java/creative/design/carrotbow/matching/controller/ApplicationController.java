@@ -7,6 +7,7 @@ import creative.design.carrotbow.matching.domain.dto.MatchDto;
 import creative.design.carrotbow.security.auth.PrincipalDetails;
 import creative.design.carrotbow.matching.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j(topic = "ACCESS_LOG")
 @RequiredArgsConstructor
 @RequestMapping("/application")
 public class ApplicationController {
@@ -27,6 +29,8 @@ public class ApplicationController {
 
     @GetMapping("/list")
     public ResponseEntity<?> getApplicationList(@RequestParam int offset, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("GET /application/list/me?offset={}",offset);
 
         List<ListMatchDto> applications = applicationService.getApplications(offset, principalDetails.getUser());
 
@@ -39,6 +43,8 @@ public class ApplicationController {
     @GetMapping("")
     public ResponseEntity<?> getApplication(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
+        log.info("GET /requirement/?id={}", id);
+
         MatchDto application = applicationService.getApplication(id, principalDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(application);
@@ -48,8 +54,9 @@ public class ApplicationController {
     @PostMapping("")
     public ResponseEntity<?> applyRequirement(@RequestParam Long requirementId, @AuthenticationPrincipal PrincipalDetails principalDetails) throws FirebaseMessagingException {
 
-        Long applicationId = applicationService.apply(requirementId, principalDetails.getUser());
+        log.info("Post /application/?requirementId={}", requirementId);
 
+        Long applicationId = applicationService.apply(requirementId, principalDetails.getUser());
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", applicationId);
@@ -58,8 +65,11 @@ public class ApplicationController {
     }
 
 
-    @PutMapping("/cancel")
+    @PatchMapping("/cancel")
     public ResponseEntity<?> cancelApplication(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("Patch /application/cancel?id={}", id);
+
         applicationService.cancelApplication(id, principalDetails.getUser());
         return ResponseEntity.ok().body("success cancel");
     }

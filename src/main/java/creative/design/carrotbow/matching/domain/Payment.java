@@ -38,21 +38,20 @@ public class Payment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "match_id")
     private MatchEntity match;
 
 
+
     @Builder
-    public Payment(Integer amount, PaymentStatus status, User user) {
+    public Payment(Integer amount, PaymentStatus status, User user, MatchEntity match) {
         this.amount = amount;
         this.status = status;
         this.user = user;
-    }
-
-
-    public void linkMatch(MatchEntity match){
         this.match = match;
     }
+
 
     public void changeStatus(PaymentStatus status){
         this.status=status;
