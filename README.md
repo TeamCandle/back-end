@@ -284,7 +284,7 @@ text: "success change"
 
 
 ## 애견 프로필 변경
-### PATCH /profile/dog
+### PUT /profile/dog
 - content-type: multipart/form-data
 
   ----------------  
