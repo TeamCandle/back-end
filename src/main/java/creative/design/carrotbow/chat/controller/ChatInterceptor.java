@@ -120,7 +120,7 @@ public class ChatInterceptor implements ChannelInterceptor {
 
             MDC.put("userId", user.getUsername());
             MDC.put("roomId", roomId.toString());
-            log.info("채팅방 입장.");
+            log.info("채팅방 입장");
 
             //redis에 추가
             redisService.addSets("room_"+roomId, user.getId().toString());
@@ -152,7 +152,7 @@ public class ChatInterceptor implements ChannelInterceptor {
 
             MDC.put("userId", user.getUsername());
             MDC.put("roomId", roomId.toString());
-            log.info("채팅방 퇴장.");
+            log.info("채팅방 퇴장");
         }
 
         return message;

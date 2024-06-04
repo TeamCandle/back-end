@@ -96,7 +96,7 @@ public class MatchService {
 
         MatchDto details = MatchDto.builder()
                 .id(match.getId())
-                .userId(requestPerson.equals(requirePerson) ? requirePerson : applyPerson)
+                .userId(requestPerson.equals(requirePerson) ? applyPerson : requirePerson)
                 .dogId(match.getRequirement().getDog().getId())
                 .dogImage(s3Service.loadImage(match.getRequirement().getDog().getImage()))
                 .careType(match.getRequirement().getCareType().getActualName())
