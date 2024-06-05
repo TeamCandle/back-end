@@ -284,7 +284,7 @@ text: "success change"
 
 
 ## 애견 프로필 변경
-### PATCH /profile/dog
+### PUT /profile/dog
 - content-type: multipart/form-data
 
   ----------------  
@@ -538,7 +538,7 @@ text: "success delete"
 
 
 ## 요구 취소 
-### PUT /requirement/cancel?id=${등록 id}
+### PATCH /requirement/cancel?id=${등록 id}
 
 
 ### 응답
@@ -604,7 +604,7 @@ text: "success cancel"
 
 
 ## 신청 취소
-### GET /application/cancel?id=${신청 id}
+### PATCH /application/cancel?id=${신청 id}
 
 
 ### 응답
@@ -687,7 +687,7 @@ text: "success cancel"
 
 
 ## 매칭 완료 
-### GET /match/complete?id=${매칭 id}
+### PATCH /match/complete?id=${매칭 id}
 
 ### 응답
 200_ok
@@ -695,7 +695,7 @@ text: "success complete"
 
 
 ## 매칭 취소 (= 매칭이 WAITING_PAYMENT 상태일 때 취소 동작)
-### GET /match/cancel?id=${매칭 id}
+### PATCH /match/cancel?id=${매칭 id}
 
 ### 응답
 200_ok
@@ -721,7 +721,7 @@ redriect: kakao 인증 페이지
 
 
 ## 결제 취소 (= 매칭이 NOT_COMPLETED 상태일 때 취소 동작 
-### GET /payment/refund?matchId=${매칭 id}
+### PATCH /payment/refund?matchId=${매칭 id}
 
 ### 응답
 200_oK
