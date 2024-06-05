@@ -55,9 +55,18 @@ public class PaymentService {
 
     public PayReadyResponseDto payReady(Long matchId, AuthenticationUser user){
 
-        MatchEntity match = matchRepository.findWithRequirementById(matchId).orElseThrow(()->new NotFoundException("can't find match. id:" + matchId));
 
-        Requirement requirement = match.getRequirement();
+        Payment payment = paymentRepository.findWithMatchByMatchId(matchId).orElse(null);
+        MatchEntity match;
+        Requirement requirement;
+
+        if(payment==null){
+            match = matchRepository.findWithRequirementById(matchId).orElseThrow(()->new NotFoundException("can't find match. id:" + matchId));
+        }
+        else{
+            match= payment.getMatch();
+        }
+        requirement = match.getRequirement();
 
 
         //테스트 용도로 주석처리
@@ -66,12 +75,9 @@ public class PaymentService {
             throw new InvalidAccessException("this access is not authorized");
         }
 
-
         if(match.getStatus()!= MatchEntityStatus.WAITING_PAYMENT){
             throw new InvalidAccessException("this access is not authorized");
         }
-
-        Payment payment = paymentRepository.findWithMatchByMatchId(matchId).orElse(null);
 
         Long paymentId;
 
@@ -85,7 +91,7 @@ public class PaymentService {
 
             paymentId = paymentRepository.save(payment);
 
-          log.info("페이먼트 생성. 페이먼트 Id={}", paymentId);
+            log.info("페이먼트 생성. 페이먼트 Id={}", paymentId);
         }
 
         paymentId = payment.getId();
