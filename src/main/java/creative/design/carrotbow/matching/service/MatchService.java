@@ -176,9 +176,10 @@ public class MatchService {
             throw new InvalidAccessException("this access is not authorized");
         }
 
+        /*
         if(match.getStatus()!=MatchEntityStatus.NOT_COMPLETED){
             throw new InvalidAccessException("this access is not authorized");
-        }
+        }*/
 
         match.changeStatus(MatchEntityStatus.COMPLETED);
 
