@@ -32,7 +32,7 @@ public class PaymentController {
     @GetMapping("/ready")
     public String payReady(@RequestParam Long matchId, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        log.info("GET /payment/ready?matchId={}"/*, matchId*/);
+        log.info("GET /payment/ready?matchId={}", matchId);
 
         PayReadyResponseDto readyResponse = paymentService.payReady(matchId, principalDetails.getUser());
 

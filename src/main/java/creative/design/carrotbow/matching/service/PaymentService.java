@@ -71,19 +71,27 @@ public class PaymentService {
             throw new InvalidAccessException("this access is not authorized");
         }
 
-        Payment payment = Payment.builder()
-                .user(requirement.getUser())
-                .status(PaymentStatus.NOT_APPROVED)
-                .amount(match.getRequirement().getReward())
-                .match(match)
-                .build();
+        Payment payment = paymentRepository.findWithMatchByMatchId(matchId).orElse(null);
 
-        Long paymentId = paymentRepository.save(payment);
+        Long paymentId;
 
-        log.info("페이먼트 생성. 페이먼트 Id={}", paymentId);
+        if(payment==null){
+            payment = Payment.builder()
+                    .user(requirement.getUser())
+                    .status(PaymentStatus.NOT_APPROVED)
+                    .amount(match.getRequirement().getReward())
+                    .match(match)
+                    .build();
 
+            paymentId = paymentRepository.save(payment);
 
-        String orderId = payment.getId().toString();
+          log.info("페이먼트 생성. 페이먼트 Id={}", paymentId);
+        }
+
+        paymentId = payment.getId();
+        log.info("페이먼트 조회. 페이먼트 Id={}", paymentId);
+
+        String orderId = paymentId.toString();
 
         HashMap<String,String> map=new HashMap<>();
         map.put("cid",cid);
