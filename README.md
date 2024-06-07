@@ -18,7 +18,7 @@ Authorization: Bearer ${accessToken value}
       "message": "Not logged in",
       "status": 401
     }
-
+```
 유효하지 않은 accessToken일 경우   
 401_Unauthorizaed  
   {
