@@ -11,13 +11,13 @@ Authorization: Bearer ${accessToken value}
 
 ### 응답 
 헤더에 Authorization이 없을 경우  
-401_Unauthorized  
-  {
-    
-    "error": "Unauthorized",
-    "message": "Not logged in",
-    "status": 401
-  }
+  ```
+  401_Unauthorized  
+    {  
+      "error": "Unauthorized",
+      "message": "Not logged in",
+      "status": 401
+    }
 
 유효하지 않은 accessToken일 경우   
 401_Unauthorizaed  
