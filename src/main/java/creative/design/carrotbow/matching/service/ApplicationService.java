@@ -115,7 +115,7 @@ public class ApplicationService {
         String message = messageUtils.generateApplyMessage(requirement.getStartTime());
 
         String token = fcmService.getToken(user.getId());
-        fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message ,token);
+        fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message , requirementId.toString(), token);
 
         Long applicationId = applicationRepository.save(application);
 

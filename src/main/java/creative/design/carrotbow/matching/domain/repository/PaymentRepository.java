@@ -30,7 +30,9 @@ public class PaymentRepository {
 
     public Optional<Payment> findWithMatchByMatchId(Long matchId){
         return em.createQuery("select p from Payment p " +
-                        " left join fetch p.match m" +
+                        " join fetch p.match m" +
+                        " join fetch m.requirement r" +
+                        " join fetch m.application a" +
                         " where m.id=:matchId", Payment.class)
                 .setParameter("matchId", matchId)
                 .getResultStream().findFirst();

@@ -148,12 +148,6 @@ public class MatchService {
         requirement.changeStatus(MatchStatus.MATCHED);
         matchedApplication.changeStatus(MatchStatus.MATCHED);
 
-
-        String message = messageUtils.generateAcceptMessage(requirement.getStartTime());
-
-        String token = fcmService.getToken(matchedApplication.getUser().getId());
-        fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message, token);
-
         Long matchId = matchRepository.save(MatchEntity.builder()
                 .requirement(requirement)
                 .application(matchedApplication)
@@ -161,6 +155,10 @@ public class MatchService {
                 .createTime(LocalDateTime.now())
                 .build());
 
+        String message = messageUtils.generateAcceptMessage(requirement.getStartTime());
+
+        String token = fcmService.getToken(matchedApplication.getUser().getId());
+        fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message, matchId.toString(), token);
 
         log.info("신청 수락 & 매칭. 요구사항 Id={}, 신청 Id={}, 매칭 Id={}", requirementId, applicationId, matchId);
 

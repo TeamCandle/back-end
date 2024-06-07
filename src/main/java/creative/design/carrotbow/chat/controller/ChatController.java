@@ -77,7 +77,7 @@ public class ChatController {
             rabbitTemplate.convertAndSend("chat.exchange", "*.room." + roomId, messageDto);
         }else{
             String token = (String) accessor.getSessionAttributes().get("target");
-            fcmService.sendMessageByToken(senderName, message, token);
+            fcmService.sendChatMessageByToken(senderName, message, token);
         }
 
 

@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j(topic = "ACCESS_LOG")
@@ -134,9 +136,62 @@ public class PaymentService {
         return readyResponse;
     }
 
-    public PayApproveResponseDto payApprove(String orderId, String pgToken) {
+    //대체용
+    public HashMap<String, String> alternateApprove(Long matchId, AuthenticationUser user){
+        Payment payment = paymentRepository.findWithMatchByMatchId(matchId).orElseThrow(() -> new NotFoundException("can't find payment. matchId:" + matchId));
+        MatchEntity match = payment.getMatch();
 
-        Payment payment = paymentRepository.findWithMatchById(Long.parseLong(orderId)).orElseThrow(() -> new NotFoundException("can't find payment. id:" + orderId));
+        if(!user.getId().equals(payment.getUser().getId())){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        if(payment.getStatus()!=PaymentStatus.NOT_APPROVED){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        match.changeStatus(MatchEntityStatus.NOT_COMPLETED);
+        payment.setPaymentMethod("MONEY");
+        payment.setApproveTime(LocalDateTime.now());
+        payment.changeStatus(PaymentStatus.APPROVED);
+
+        log.info("결제 승인. 페이먼트 Id={}", payment.getId());
+
+        HashMap<String, String> result = new HashMap<>();
+        result.put("payment cost", payment.getAmount().toString());
+        result.put("approve time", payment.getApproveTime().toString());
+
+        return result;
+    }
+
+    public HashMap<String, String> alternateRefund(Long matchId, AuthenticationUser user){
+        Payment payment = paymentRepository.findWithMatchByMatchId(matchId).orElseThrow(() -> new NotFoundException("can't find payment. matchId:" + matchId));
+        MatchEntity match = payment.getMatch();
+
+        if(!user.getId().equals(payment.getUser().getId()) && !user.getId().equals(match.getApplication().getUser().getId())){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        if(match.getStatus()!=MatchEntityStatus.NOT_COMPLETED){
+            throw new InvalidAccessException("this access is not authorized");
+        }
+
+        match.changeStatus(MatchEntityStatus.CANCELLED);
+        payment.changeStatus(PaymentStatus.REFUNDED);
+        payment.setCancelTime(LocalDateTime.now());
+        log.info("환불 승인. 페이먼트 Id={}", payment.getId());
+
+
+        HashMap<String, String> result = new HashMap<>();
+        result.put("payment cost", payment.getAmount().toString());
+        result.put("approve time", payment.getApproveTime().toString());
+
+        return result;
+    }
+
+
+    public PayApproveResponseDto payApprove(Long orderId, String pgToken) {
+
+        Payment payment = paymentRepository.findWithMatchById(orderId).orElseThrow(() -> new NotFoundException("can't find payment. id:" + orderId));
         MatchEntity match = payment.getMatch();
 
         if(payment.getStatus()!=PaymentStatus.NOT_APPROVED){
@@ -146,7 +201,7 @@ public class PaymentService {
         HashMap<String, String> parameters = new HashMap<>();
         parameters.put("cid", cid);
         parameters.put("tid", payment.getTid());
-        parameters.put("partner_order_id", orderId);
+        parameters.put("partner_order_id", orderId.toString());
         parameters.put("partner_user_id", payment.getUser().getUsername());
         parameters.put("pg_token", pgToken);
 
