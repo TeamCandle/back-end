@@ -182,7 +182,7 @@ public class PaymentService {
 
 
         HashMap<String, String> result = new HashMap<>();
-        result.put("payment cost", payment.getAmount().toString());
+        result.put("refund cost", payment.getAmount().toString());
         result.put("approve time", payment.getApproveTime().toString());
 
         return result;
