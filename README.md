@@ -23,7 +23,6 @@ Authorization: Bearer ${accessToken value}
 ```
 401_Unauthorizaed  
   {
-    
     "error": "Unauthorized",
     "message": "Invalid or expried token",
     "status": 401
