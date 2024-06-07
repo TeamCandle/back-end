@@ -20,6 +20,7 @@ Authorization: Bearer ${accessToken value}
     }
 ```
 유효하지 않은 accessToken일 경우   
+```
 401_Unauthorizaed  
   {
     
@@ -27,7 +28,7 @@ Authorization: Bearer ${accessToken value}
     "message": "Invalid or expried token",
     "status": 401
   }
-
+```
 
 ## 로그인
 ### GET /user/login/kakao
