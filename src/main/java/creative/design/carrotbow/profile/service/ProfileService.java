@@ -40,6 +40,7 @@ public class ProfileService {
             dogList.add(ListDogDto.builder()
                             .id(dog.getId())
                             .name(dog.getName())
+                            .breed(dog.getBreed())
                             .gender(dog.getGender())
                             .image(s3Service.loadImage(dog.getImage()))
                     .build());
@@ -128,6 +129,7 @@ public class ProfileService {
         return dogList.stream().map(dog -> ListDogDto.builder()
                 .id(dog.getId())
                 .name(dog.getName())
+                .breed(dog.getBreed())
                 .gender(dog.getGender())
                 .image(s3Service.loadImage(dog.getImage()))
                 .build()).collect(Collectors.toList());
