@@ -60,26 +60,9 @@ public class ReviewController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> deleteReview(@RequestParam Long id, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public ResponseEntity<?> deleteReview(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         log.info("DELETE /review?id={}", id);
-
-        if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
-            List<ErrorResponse> list = new ArrayList<>();
-
-            for (FieldError fieldError : fieldErrors) {
-                list.add(ErrorResponse.builder()
-                        .message(fieldError.getDefaultMessage())
-                        .field(fieldError.getField())
-                        .rejectedValue(fieldError.getRejectedValue())
-                        .code(fieldError.getCode())
-                        .build());
-            }
-
-            return ResponseEntity.badRequest().body(list);
-        }
 
         reviewService.deleteReview(id, principalDetails.getUser());
 
