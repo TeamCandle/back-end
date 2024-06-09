@@ -69,7 +69,7 @@ public class FcmService {
     }*/
 
     // 받은 token을 이용하여 fcm를 보내는 메서드
-    public void sendMessageByToken(String title, String body, String targetId, String token) throws FirebaseMessagingException {
+    public void sendMessageByToken(String title, String body, String targetId, String type, String token) throws FirebaseMessagingException {
 
         /*
         FirebaseMessaging.getInstance().send(Message.builder()
@@ -86,6 +86,7 @@ public class FcmService {
                 .putData("title", title)
                 .putData("body", body)
                 .putData("targetId", targetId)
+                .putData("type", type)
                 .setToken(token)
                 .build());
     }

@@ -45,6 +45,7 @@ public class RequirementService
     public Long registerRequirement(RequireRegisterForm requireRegisterForm, AuthenticationUser user){
         Dog dog = dogService.find(requireRegisterForm.getDogId());
 
+
         if(!dog.getOwner().getId().equals(user.getId())){
             throw new InvalidAccessException("this access is not authorized");
         }
@@ -197,7 +198,5 @@ public class RequirementService
         requirement.changeStatus(MatchStatus.CANCELLED);
 
     }
-
-
 
 }

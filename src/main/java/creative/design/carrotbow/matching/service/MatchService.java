@@ -158,7 +158,7 @@ public class MatchService {
         String message = messageUtils.generateAcceptMessage(requirement.getStartTime());
 
         String token = fcmService.getToken(matchedApplication.getUser().getId());
-        fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message, matchId.toString(), token);
+        fcmService.sendMessageByToken(requirement.getCareType().getActualName(), message, matchId.toString(), "accepted", token);
 
         log.info("신청 수락 & 매칭. 요구사항 Id={}, 신청 Id={}, 매칭 Id={}", requirementId, applicationId, matchId);
 
@@ -174,10 +174,10 @@ public class MatchService {
             throw new InvalidAccessException("this access is not authorized");
         }
 
-        /*
+
         if(match.getStatus()!=MatchEntityStatus.NOT_COMPLETED){
             throw new InvalidAccessException("this access is not authorized");
-        }*/
+        }
 
         match.changeStatus(MatchEntityStatus.COMPLETED);
 
