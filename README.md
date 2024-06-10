@@ -1,4 +1,41 @@
-# @ while testing
+# 애견 케어 매칭 서비스
+![Screenshot_20240607_170037](https://github.com/TeamCandle/back-end/assets/69377952/f3e4aa33-584d-47c9-8a4b-62e796e074a7)
+ 
+
+# 기본 기술 스택 
+```
+- sdk: jdk 17
+
+- 프레임워크: spring boot 3.2.4
+
+- DB: Mysql
+
+- 배포: aws ec2 
+
+```
+
+# 기타 서비스 
+```
+- 메시징 미들 웨어: rabbitMQ
+
+- 인메모리 캐시: redis
+
+- 저장소: s3 bucket
+
+- 로그인 인증: kakao login
+
+- 백그라운드 메시징: firebase cloud messaging
+
+```
+
+# 구성
+
+![nc](https://github.com/TeamCandle/back-end/assets/69377952/5eb7774b-786e-4f17-9585-9da8774f861a)
+
+
+# DB 구성
+
+![cc](https://github.com/TeamCandle/back-end/assets/69377952/0a9750e1-0cbd-414c-94e4-d3be99fccc23)
 
 
 # API 명세
