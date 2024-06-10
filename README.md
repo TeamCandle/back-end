@@ -28,7 +28,7 @@
 
 ```
 
-# 구성
+# 시스템 구성
 
 ![nc](https://github.com/TeamCandle/back-end/assets/69377952/5eb7774b-786e-4f17-9585-9da8774f861a)
 
@@ -36,6 +36,20 @@
 # DB 구성
 
 ![cc](https://github.com/TeamCandle/back-end/assets/69377952/0a9750e1-0cbd-414c-94e4-d3be99fccc23)
+
+
+# 디렉터리 구성
+
+```
+carrotbow - root 디렉터리
+
+chat - 채팅 서비스 디렉터리
+error - 에러 디렉터리
+external - 외부 서비스 모음 (rabbitMq, fcm, redis 등)
+matching - 주요 매칭 서비스 디렉터리
+profile - 프로필 디렉터리
+security - 인증 디렉터리
+```
 
 
 # API 명세
