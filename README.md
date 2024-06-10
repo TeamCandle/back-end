@@ -714,6 +714,7 @@ text: "success cancel"
 }
 ```
 
+```
 ▶ "requester" -> true (요구 등록자라는 뜻)  
 - status: WAITING_PAYMENT -> 결제 버튼 표시
 - status: NOT_COMPLETED -> 완료 버튼 표시
@@ -724,7 +725,7 @@ text: "success cancel"
 ▶ "requester" -> false (요구 지원자라는 뜻)  
 - status: COMPLETED -> 리뷰 버튼 표시   
 - status: 그 외 -> 상태 표시
-
+```
 
 ## 매칭 완료 
 ### PATCH /match/complete?id=${매칭 id}
@@ -754,6 +755,7 @@ text: "success cancel"
 redriect: kakao 인증 페이지 
 ```
 
+```
 - 인증 성공시 ->
   {  
     "payment cost": 결제 금액 (int),
@@ -762,7 +764,7 @@ redriect: kakao 인증 페이지
   }
 - 인증 취소시 -> text: "cancel payment"
 - 인증 실패시 -> text: "fail payment"
-
+```
 
 ## 결제 취소 (= 매칭이 NOT_COMPLETED 상태일 때 취소 동작 
 ### PATCH /payment/refund?matchId=${매칭 id}
@@ -852,13 +854,14 @@ text: "success delete"
 ```
 
 이전 매칭 조회 결과 requester 필드에 따른 후속 동작
+```
 ▶ "requester" -> true (요구 등록자라는 뜻)  
 - id: null -> 리뷰 작성 페이지
 - id: not null -> 리뷰 표시 & 삭제 버튼 활성화 
 
 ▶ "requester" -> false (요구 지원자라는 뜻)  
 - 항상 리뷰 표시 
-
+```
 
 
 ## 리뷰 리스트 조회
