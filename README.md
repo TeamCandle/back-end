@@ -3,8 +3,48 @@
  
 # 서비스 개요 
 
-## 1. 로그인
+## 0. 사용 시나리오 
+![0](https://github.com/TeamCandle/back-end/assets/69377952/e1993e5d-c009-4e1f-bf0a-d7d0833af94a)
 
+
+## 1. 로그인 및 프로필 관리 
+![1](https://github.com/TeamCandle/back-end/assets/69377952/08ef8256-473f-4232-8394-ba32b5c44eae)
+```
+카카오 기반 로그인
+```
+
+
+## 2. 주위 요구사항 확인 
+![2](https://github.com/TeamCandle/back-end/assets/69377952/f5c58cd4-d8d6-4cb1-aef7-4fa277d15cee)
+```
+일정 거리 내에 있는 요구사항 탐색 및 신청
+```
+
+
+## 3. 요구사항 등록
+![3](https://github.com/TeamCandle/back-end/assets/69377952/1d325129-c675-4634-bac8-2ef264eeed23)
+```
+요구 사항 입력 및 등록, 받은 신청 확인 및 수락
+```
+
+
+## 4. 매칭 성사
+![4](https://github.com/TeamCandle/back-end/assets/69377952/48fe4b2b-08fc-467b-a7ad-7f09ff4c697e)
+```
+성사된 매칭 확인 및 채팅
+```
+
+## 5. 매칭 완료 
+![5](https://github.com/TeamCandle/back-end/assets/69377952/106017bf-8f74-47ff-8d37-4c3414441f2a)
+```
+요구사항 완료 확인 및 정산
+```
+
+## 6. 리뷰
+![6](https://github.com/TeamCandle/back-end/assets/69377952/9e8f115a-14a0-4ba1-9693-057aedef988f)
+```
+리뷰 작성 및 확인 
+```
 
 
 # 기본 기술 스택 
