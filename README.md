@@ -1,6 +1,11 @@
 # 애견 케어 매칭 서비스
 ![Screenshot_20240607_170037](https://github.com/TeamCandle/back-end/assets/69377952/f3e4aa33-584d-47c9-8a4b-62e796e074a7)
  
+# 서비스 개요 
+
+## 1. 로그인
+
+
 
 # 기본 기술 스택 
 ```
