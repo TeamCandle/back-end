@@ -55,7 +55,7 @@ security - 인증 디렉터리
 # API 명세
 
 ## Host
-### 현재 배포 중단
+### 배포 중단
 
 모든 요청은 헤더에 Authorization을 포함 해야함 (로그아웃, accessToken 재발급 제외)   
 Authorization: Bearer ${accessToken value}
