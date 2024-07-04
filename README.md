@@ -46,6 +46,16 @@
 리뷰 작성 및 확인 
 ```
 
+# 성능 테스트
+## 1. 시나리오 
+![image](https://github.com/TeamCandle/back-end/assets/69377952/3052574e-0601-4adf-abac-b455e8f6f0d3)
+
+## 2. 결과 
+![image](https://github.com/TeamCandle/back-end/assets/69377952/d6c96901-804a-4523-9c20-e226a163d995)
+![image](https://github.com/TeamCandle/back-end/assets/69377952/665973e3-d3f2-4e5c-9c3a-8d792ef0bcdc)
+
+
+
 
 # 기본 기술 스택 
 ```
