@@ -13,6 +13,7 @@
 - [디렉터리 구성](#디렉터리-구성)
 - [서비스 개요](#서비스-개요)
 - [성능 테스트 결과](#성능-테스트-결과)
+- [주요 로직](#주요-로직)
 - [API](#API)
   
 
@@ -114,8 +115,30 @@ security - 인증 디렉터리
 ![image](https://github.com/TeamCandle/back-end/assets/69377952/d6c96901-804a-4523-9c20-e226a163d995)
 ![image](https://github.com/TeamCandle/back-end/assets/69377952/665973e3-d3f2-4e5c-9c3a-8d792ef0bcdc)
 
+# ▶주요 로직
 
+## ▷위치 기반 탐색
+![x1](https://github.com/user-attachments/assets/f17e5aee-6ae5-4f0c-a3f3-cfe0f2c2c341)
+```
+요구사항의 위치를 point 좌표로 저장 
+```
+![x2](https://github.com/user-attachments/assets/9d968d89-a440-46b6-98f7-c57d539b1f5f)
+![x3](https://github.com/user-attachments/assets/7fb43380-a9e3-4c04-b82f-08e4ea56d329)
+![x4](https://github.com/user-attachments/assets/134e7592-12cc-4bb1-8703-88f3e9115ba1)
 
+```
+mysql에서는 이런 각 공간데이터를 MBR(Minimum Bounding Rectangle)로 감싸고, 이런 MBR들의 포함관계들로 R-tree 기반 공간 인덱스를 구성
+```
+
+![x5](https://github.com/user-attachments/assets/90d7bb02-50a0-453f-9fc4-49967af865fb)
+![x6](https://github.com/user-attachments/assets/dccd2110-5cc6-4d3c-801d-46a9ea383a88)
+
+```
+실제 조회 시에는 공간 함수를 이용해 R-tree 기반으로 조회하여 DB 단에서 단순 조회 보다 훨씬 빠르게 일정 범위 내의 요구사항들을 조회 가능 
+
+ST_Buffer(Point, Radius) - Point를 중심으로 Radius를 반지름으로 가지는 원 생성
+ST_Contains(goem(B),goem(A)) - B가 A에 포함되면 true 아니라면 false
+```
 
 # ▶API 
 
