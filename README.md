@@ -140,6 +140,18 @@ ST_Buffer(Point, Radius) - Point를 중심으로 Radius를 반지름으로 가�
 ST_Contains(goem(B),goem(A)) - B가 A에 포함되면 true 아니라면 false
 ```
 
+## ▷채팅
+![ch0](https://github.com/user-attachments/assets/3232d264-6ff6-4553-aede-a098c1710e65)
+![ch2](https://github.com/user-attachments/assets/1c6bdc86-e8cf-4ea4-843c-785fb79d4930)
+![ch3](https://github.com/user-attachments/assets/cf149d0f-7be4-4b6d-b294-1fa35cc6aee7)
+
+```
+socket 컨넥트 과정에서 jwt 검증 및 인증 user 정보를 세션 저장
+topic subscribe 과정에서 실제 채팅 참가자인지 검증(DB 조회), 성공시 대상 채팅방 id를 세션에 저장, id를 기반으로 rabbitMq에 임시 토픽 생성 & redis에 현재 참가자 id를 저장
+publish 과정에서 채팅 참가자인지 검증(세션 조회), 성공시 해당 채팅 토픽으로 메시지 전송, redis를 조회해 상대 참가자가 없다면 fcm으로 메시지 추가 전송 
+```
+
+
 # ▶API 
 
 ## Host
