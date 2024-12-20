@@ -1,4 +1,4 @@
-# 애견 케어 매칭 서비스
+# ▶애견 케어 매칭 서비스
 ![Screenshot_20240607_170037](https://github.com/TeamCandle/back-end/assets/69377952/f3e4aa33-584d-47c9-8a4b-62e796e074a7)
 
 ```
@@ -6,7 +6,17 @@
        두 사람의 맞물리는 니즈를 연결시켜주는 것을 목적으로 하는 매칭 어플리케이션
 ```
 
-# 기술 
+# ▶목차 
+- [기술](#기술)
+- [시스템 구성](#시스템-구성)
+- [DB 구성](#DB-구성)
+- [디렉터리 구성](#디렉터리-구성)
+- [서비스 개요](#서비스-개요)
+- [성능 테스트 결과](#성능-테스트-결과)
+- [API](#API)
+  
+
+# ▶기술 
 ```
 - jdk 17: 개발 환경
 
@@ -27,17 +37,17 @@
 - firebase cloud messaging: 백그라운드 메시징
 ```
 
-# 시스템 구성
+# ▶시스템 구성
 
 ![nc](https://github.com/TeamCandle/back-end/assets/69377952/5eb7774b-786e-4f17-9585-9da8774f861a)
 
 
-# DB 구성
+# ▶DB 구성
 
 ![cc](https://github.com/TeamCandle/back-end/assets/69377952/0a9750e1-0cbd-414c-94e4-d3be99fccc23)
 
 
-# 디렉터리 구성
+# ▶디렉터리 구성
 
 ```
 carrotbow - root 디렉터리
@@ -51,7 +61,7 @@ security - 인증 디렉터리
 ```
 
  
-# 서비스 개요 
+# ▶서비스 개요 
 
 ## 0. 사용 시나리오 
 ![0](https://github.com/TeamCandle/back-end/assets/69377952/e1993e5d-c009-4e1f-bf0a-d7d0833af94a)
@@ -96,7 +106,7 @@ security - 인증 디렉터리
 리뷰 작성 및 확인 
 ```
 
-# 성능 테스트
+# ▶성능 테스트
 ## 1. 시나리오 
 ![image](https://github.com/TeamCandle/back-end/assets/69377952/3052574e-0601-4adf-abac-b455e8f6f0d3)
 
@@ -107,7 +117,7 @@ security - 인증 디렉터리
 
 
 
-# API 명세
+# ▶API 
 
 ## Host
 ### 배포 중단
