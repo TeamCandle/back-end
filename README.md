@@ -1,5 +1,52 @@
 # 애견 케어 매칭 서비스
 ![Screenshot_20240607_170037](https://github.com/TeamCandle/back-end/assets/69377952/f3e4aa33-584d-47c9-8a4b-62e796e074a7)
+
+
+
+# 기술 
+```
+- jdk 17: 개발 환경
+
+- spring boot 3.2.x: 개발 프레임 워크
+
+- mysql: 서버 db
+
+- aws ec2, docker: 서버 배포
+
+- rabbit mq: 웹소켓 stomp 외부 브로커
+
+- redis: 인증 토큰 저장
+
+- s3 bucket: 이미지 저장
+
+- kakao login: 외부 로그인 연동
+
+- firebase cloud messaging: 백그라운드 메시징
+```
+
+# 시스템 구성
+
+![nc](https://github.com/TeamCandle/back-end/assets/69377952/5eb7774b-786e-4f17-9585-9da8774f861a)
+
+
+# DB 구성
+
+![cc](https://github.com/TeamCandle/back-end/assets/69377952/0a9750e1-0cbd-414c-94e4-d3be99fccc23)
+
+
+# 디렉터리 구성
+
+```
+carrotbow - root 디렉터리
+
+chat - 채팅 서비스 디렉터리
+error - 에러 디렉터리
+external - 외부 서비스 모음 (rabbitMq, fcm, redis 등)
+matching - 주요 매칭 서비스 디렉터리
+profile - 프로필 디렉터리
+security - 인증 디렉터리
+```
+
  
 # 서비스 개요 
 
@@ -55,56 +102,6 @@
 ![image](https://github.com/TeamCandle/back-end/assets/69377952/665973e3-d3f2-4e5c-9c3a-8d792ef0bcdc)
 
 
-
-
-# 기본 기술 스택 
-```
-- sdk: jdk 17
-
-- 프레임워크: spring boot 3.2.4
-
-- DB: Mysql
-
-- 배포: aws ec2 
-
-```
-
-# 기타 서비스 
-```
-- 메시징 미들 웨어: rabbitMQ
-
-- 인메모리 캐시: redis
-
-- 저장소: s3 bucket
-
-- 로그인 인증: kakao login
-
-- 백그라운드 메시징: firebase cloud messaging
-
-```
-
-# 시스템 구성
-
-![nc](https://github.com/TeamCandle/back-end/assets/69377952/5eb7774b-786e-4f17-9585-9da8774f861a)
-
-
-# DB 구성
-
-![cc](https://github.com/TeamCandle/back-end/assets/69377952/0a9750e1-0cbd-414c-94e4-d3be99fccc23)
-
-
-# 디렉터리 구성
-
-```
-carrotbow - root 디렉터리
-
-chat - 채팅 서비스 디렉터리
-error - 에러 디렉터리
-external - 외부 서비스 모음 (rabbitMq, fcm, redis 등)
-matching - 주요 매칭 서비스 디렉터리
-profile - 프로필 디렉터리
-security - 인증 디렉터리
-```
 
 
 # API 명세
