@@ -127,7 +127,7 @@ security - 인증 디렉터리
 ![x4](https://github.com/user-attachments/assets/134e7592-12cc-4bb1-8703-88f3e9115ba1)
 
 ```
-mysql에서는 이런 각 공간데이터를 MBR(Minimum Bounding Rectangle)로 감싸고, 이런 MBR들의 포함관계들로 R-tree 기반 공간 인덱스를 구성
+mysql은 이런 공간데이터들을 MBR(Minimum Bounding Rectangle)로 감싸고, 각 MBR들의 포함관계들로 R-tree 기반 공간 인덱스를 구성
 ```
 
 ![x5](https://github.com/user-attachments/assets/90d7bb02-50a0-453f-9fc4-49967af865fb)
