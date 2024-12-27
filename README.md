@@ -141,7 +141,7 @@ ST_Contains(goem(B),goem(A)) - B가 A에 포함되면 true 아니라면 false
 ```
 
 ## ▷채팅
-![ch0](https://github.com/user-attachments/assets/3232d264-6ff6-4553-aede-a098c1710e65)
+![b](https://github.com/user-attachments/assets/d313f6be-3047-415f-a2c9-06bfb76a25bd)
 ![ch2](https://github.com/user-attachments/assets/1c6bdc86-e8cf-4ea4-843c-785fb79d4930)
 ![ch3](https://github.com/user-attachments/assets/cf149d0f-7be4-4b6d-b294-1fa35cc6aee7)
 
